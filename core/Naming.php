@@ -1,7 +1,6 @@
 <?php
 
-namespace Core\Utils;
-
+namespace Core;
 
 class Naming
 {
