@@ -1,0 +1,8 @@
+CREATE TABLE users (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  surname VARCHAR(50) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  password VARCHAR(64) NOT NULL,
+  UNIQUE KEY email (email)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;

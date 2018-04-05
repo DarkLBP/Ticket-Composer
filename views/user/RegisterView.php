@@ -1,3 +1,8 @@
+<?php
+if (!empty($error)) {
+    echo "<p>$error</p>";
+}
+?>
 <form method="post" action="/user/register">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name">
