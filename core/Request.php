@@ -4,8 +4,8 @@ namespace Core;
 
 class Request
 {
-    private $controller = '';
-    private $action = '';
+    private $controller = DEFAULT_CONTROLLER;
+    private $action = DEFAULT_ACTION;
     private $actionParameters = [];
 
     public function __construct()
@@ -15,15 +15,11 @@ class Request
         $requestSegments = explode("/", $request);
 
         if (!empty($requestSegments[0])) {
-            $this->controller = Naming::getController($requestSegments[0]);
-        } else {
-            $this->controller = Naming::getController(DEFAULT_CONTROLLER);
+            $this->controller = $requestSegments[0];
         }
 
         if (!empty($requestSegments[1])) {
-            $this->action = Naming::getAction($requestSegments[1]);
-        } else {
-            $this->action = Naming::getAction(DEFAULT_ACTION);
+            $this->action = $requestSegments[1];
         }
 
         if (count($requestSegments) > 2) {
@@ -41,66 +37,43 @@ class Request
         /**
          * @var $instance Controller
          */
-        if (class_exists($this->controller)) {
-            $instance = new $this->controller($this);
-            if (method_exists($instance, $this->action)) {
-                $return = $instance->{$this->action}($this->actionParameters);
+        $controller = Naming::getController($this->controller);
+        $action = Naming::getAction($this->action);
+        if (class_exists($controller)) {
+            $instance = new $controller($this);
+            if (method_exists($instance, $action)) {
+                $return = $instance->{$action}($this->actionParameters);
                 if ($return !== false) {
                     return;
                 }
             }
         }
-        $defaultClass = Naming::getController(DEFAULT_CONTROLLER);
-        $defaultMethod = Naming::getAction("error");
-        (new $defaultClass($this))->$defaultMethod();
+        $errorView = new View('error');
+        $errorView->show();
     }
 
-    public function getGetParam(string $param, bool $trim = true): string
+    public function getGetParam(string $param, bool $trim = false): string
     {
-        if (isset($_GET[$param])) {
-            if ($trim) {
-                return trim($_GET[$param]);
-            }
-            return $_GET[$param];
+        if (!empty($_GET[$param])) {
+            return $trim ? trim($_GET[$param]) : $_GET[$param];
         }
         return '';
     }
 
-    public function getPostParam(string $param, bool $trim = true): string
+    public function getPostParam(string $param, bool $trim = false): string
     {
-        if (isset($_POST[$param])) {
-            if ($trim) {
-                return trim($_POST[$param]);
-            }
-            return $_POST[$param];
+        if (!empty($_POST[$param])) {
+            return $trim ? trim($_POST[$param]) : $_POST[$param];
         }
         return '';
     }
 
-    public function hasPostParam($params): bool
+    public function getSessionParam(string $param)
     {
-        if (is_array($params)) {
-            foreach ($params as $param) {
-                if (empty($_POST[$param])) {
-                    return false;
-                }
-            }
-            return true;
+        if (!empty($_SESSION[$param])) {
+            return $_SESSION[$param];
         }
-        return !empty($_POST[$params]);
-    }
-
-    public function hasGetParam($params): bool
-    {
-        if (is_array($params)) {
-            foreach ($params as $param) {
-                if (empty($_GET[$param])) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return !empty($_GET[$params]);
+        return '';
     }
 
     public function isPost(): bool
@@ -111,6 +84,11 @@ class Request
     public function isGet(): bool
     {
         return $_SERVER["REQUEST_METHOD"] === "GET";
+    }
+
+    public function setSessionParam(string $param, $value)
+    {
+        $_SESSION[$param] = $value;
     }
 
     public function redirect($target)
