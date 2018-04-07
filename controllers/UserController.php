@@ -3,6 +3,7 @@ namespace Controllers;
 
 use Core\Controller;
 use Models\UsersModel;
+use Models\UsersValidationModel;
 
 class UserController extends Controller
 {
@@ -33,7 +34,8 @@ class UserController extends Controller
         if (isset($params[0]) && $params[0] === 'complete') {
             if ($this->request->getSessionParam('registered')) {
                 $this->request->setSessionParam('registered', false);
-                die("Thanks for registering");
+                $this->renderView('registerCompleted');
+                return;
             } else {
                 $this->request->redirect('/user/register');
             }
@@ -62,16 +64,46 @@ class UserController extends Controller
                 $error = 'Passwords do not match';
             } else {
                 $model = new UsersModel();
-                $model->insert([
-                    "name" => $name,
-                    "surname" => $surname,
-                    "email" => $email,
-                    "password" => password_hash($password, PASSWORD_DEFAULT)
-                ]);
-                $this->request->setSessionParam('registered', true);
-                $this->request->redirect('/user/register/complete');
+                //Find if email is in use
+                $existing = $model->findOne($email, 'email', ['email']);
+                if (empty($existing)) {
+                    try {
+                        $validationCode = bin2hex(random_bytes(16));
+                        $insertId = $model->insert([
+                            "name" => $name,
+                            "surname" => $surname,
+                            "email" => $email,
+                            "password" => password_hash($password, PASSWORD_DEFAULT)
+                        ]);
+                        $validation = new UsersValidationModel();
+                        $validation->insert([
+                            'id' =>  $validationCode,
+                            'userId' => $insertId
+                        ]);
+                        $link = $this->request->getURL('user', 'validate', [$validationCode]);
+                        mail($email, 'Account Validation', 'Please click this link to validate your account ' . $link);
+                        $this->request->setSessionParam('registered', true);
+                        $this->request->redirect('/user/register/complete');
+                    } catch (\Exception $e) {
+                        $error = 'Internal server error.';
+                    }
+                } else {
+                    $error = 'Email is already in use';
+                }
             }
         }
         $this->renderView("register", ["error" => $error]);
+    }
+
+    public function actionValidate($params = []) {
+        if (!empty($params[0])) {
+            $key = $params[0];
+            $validation = new UsersValidationModel();
+            $row = $validation->findOne($key);
+            if (!empty($row)) {
+                die("OK");
+            }
+        }
+        die("Invalid key");
     }
 }

@@ -4,5 +4,14 @@ CREATE TABLE users (
   surname VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL,
   password VARCHAR(64) NOT NULL,
+  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY email (email)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE users_validation (
+  id VARCHAR(32) PRIMARY KEY,
+  userId INT,
+  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY userId (userId),
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
