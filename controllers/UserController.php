@@ -99,9 +99,9 @@ class UserController extends Controller
         if (!empty($params[0])) {
             $key = $params[0];
             $validation = new UsersValidationModel();
-            $row = $validation->findOne($key);
-            if (!empty($row)) {
-                die("OK");
+            $row = $validation->count(['id' => $key]);
+            if ($row === 1) {
+                die("Valid key");
             }
         }
         die("Invalid key");
