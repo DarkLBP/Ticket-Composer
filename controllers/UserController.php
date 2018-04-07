@@ -17,21 +17,33 @@ class UserController extends Controller
             } else if (empty($password)) {
                 $error = 'Password is empty';
             } else {
-                $model = new UsersModel();
-                $user = $model->findOne($email, "email");
+                $userModel = new UsersModel();
+                $validationModel = new UsersValidationModel();
+                $userModel->join($validationModel, 'id', 'userId', 'left');
+                $user = $userModel->findOne($email, "email", [
+                    "$userModel->tableName.*",
+                    ["$validationModel->tableName.id", "validationId"]
+                ]);
                 if (!empty($user)) {
                     if (password_verify($password, $user["password"])) {
-                        die("Okey");
+                        if (empty($user["validationId"])) {
+                            die("Okey");
+                        } else {
+                            $error = 'Account pending for validation';
+                        }
+                    } else {
+                        $error = "Invalid credentials";
                     }
+                } else {
+                    $error = "Invalid credentials";
                 }
-                $error = "Invalid credentials";
             }
         }
         $this->renderView("login", ["error" => $error]);
     }
 
     public function actionRegister($params = []) {
-        if (isset($params[0]) && $params[0] === 'complete') {
+        if (isset($params[0]) && $params[0] === 'completed') {
             if ($this->request->getSessionParam('registered')) {
                 $this->request->setSessionParam('registered', false);
                 $this->renderView('registerCompleted');
@@ -83,7 +95,7 @@ class UserController extends Controller
                         $link = $this->request->getURL('user', 'validate', [$validationCode]);
                         mail($email, 'Account Validation', 'Please click this link to validate your account ' . $link);
                         $this->request->setSessionParam('registered', true);
-                        $this->request->redirect('/user/register/complete');
+                        $this->request->redirect('/user/register/completed');
                     } catch (\Exception $e) {
                         $error = 'Internal server error.';
                     }
@@ -101,9 +113,12 @@ class UserController extends Controller
             $validation = new UsersValidationModel();
             $row = $validation->count(['id' => $key]);
             if ($row === 1) {
-                die("Valid key");
+                $loginURL = $this->request->getURL('user', 'login');
+                $validation->delete(['id' => $key]);
+                $this->renderView('validateCompleted', ['loginURL' => $loginURL]);
+                return;
             }
         }
-        die("Invalid key");
+        $this->renderView('validateInvalid');
     }
 }
