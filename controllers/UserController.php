@@ -3,6 +3,7 @@ namespace Controllers;
 
 use Core\Controller;
 use Models\UsersModel;
+use Models\UsersSessionsModel;
 use Models\UsersValidationModel;
 
 class UserController extends Controller
@@ -21,13 +22,25 @@ class UserController extends Controller
                 $validationModel = new UsersValidationModel();
                 $userModel->join($validationModel, 'id', 'userId', 'left');
                 $user = $userModel->findOne($email, "email", [
-                    "$userModel->tableName.*",
+                    ["$userModel->tableName.id", 'userId'],
                     ["$validationModel->tableName.id", "validationId"]
                 ]);
                 if (!empty($user)) {
                     if (password_verify($password, $user["password"])) {
                         if (empty($user["validationId"])) {
-                            die("Okey");
+                            try {
+                                $sessionToken = bin2hex(random_bytes(32));
+                                $sessionModel = new UsersSessionsModel();
+                                $sessionModel->insert([
+                                    'id' => $sessionToken,
+                                    'userId' => $user['userId']
+                                ]);
+                                setcookie('userToken', "$user[id]-$sessionToken", time() + (3600 * 24 * 30), '/');
+                                $this->request->setSessionParam('user', $user['userId']);
+                                $this->request->redirect($this->request->getURL('ticket'));
+                            } catch (\Exception $e) {
+                                $error = 'Internal server error';
+                            }
                         } else {
                             $error = 'Account pending for validation';
                         }
@@ -39,18 +52,18 @@ class UserController extends Controller
                 }
             }
         }
-        $this->renderView("login", ["error" => $error]);
+        $this->request->setViewParam('error', $error);
+        $this->renderView("login");
     }
 
     public function actionRegister($params = []) {
-        if (isset($params[0]) && $params[0] === 'completed') {
-            if ($this->request->getSessionParam('registered')) {
+        if (isset($params[0])) {
+            if ($params[0] === 'completed' && $this->request->getSessionParam('registered')) {
                 $this->request->setSessionParam('registered', false);
                 $this->renderView('registerCompleted');
                 return;
-            } else {
-                $this->request->redirect('/user/register');
             }
+            $this->request->redirect('/user/register');
         }
         $error = '';
         if ($this->request->isPost()) {
@@ -80,7 +93,7 @@ class UserController extends Controller
                 $existing = $model->findOne($email, 'email', ['email']);
                 if (empty($existing)) {
                     try {
-                        $validationCode = bin2hex(random_bytes(16));
+                        $validationCode = bin2hex(random_bytes(32));
                         $insertId = $model->insert([
                             "name" => $name,
                             "surname" => $surname,
@@ -104,7 +117,8 @@ class UserController extends Controller
                 }
             }
         }
-        $this->renderView("register", ["error" => $error]);
+        $this->request->setViewParam('error', $error);
+        $this->renderView("register");
     }
 
     public function actionValidate($params = []) {
@@ -115,7 +129,8 @@ class UserController extends Controller
             if ($row === 1) {
                 $loginURL = $this->request->getURL('user', 'login');
                 $validation->delete(['id' => $key]);
-                $this->renderView('validateCompleted', ['loginURL' => $loginURL]);
+                $this->request->setViewParam('loginURL', $loginURL);
+                $this->renderView('validateCompleted');
                 return;
             }
         }

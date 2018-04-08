@@ -8,3 +8,9 @@
     <title>Your page</title>
 </head>
 <body>
+<header id="main-header">
+    <h1><?= SITE_TITLE ?></h1>
+</header>
+<nav id="main-nav">
+
+</nav>

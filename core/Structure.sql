@@ -21,9 +21,17 @@ CREATE TABLE users_departments (
   FOREIGN KEY (departmentId) REFERENCES departments(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
+CREATE TABLE users_sessions (
+  id VARCHAR(64),
+  userId INT NOT NULL,
+  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id, userId),
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+)
+
 CREATE TABLE users_validation (
-  id VARCHAR(32) PRIMARY KEY,
-  userId INT,
+  id VARCHAR(64) PRIMARY KEY,
+  userId INT NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY userId (userId),
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE

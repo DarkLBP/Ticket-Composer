@@ -1,1 +1,1 @@
-<h1>Welcome to the index page</h1>
+<p>Some things will be added here :D</p>
