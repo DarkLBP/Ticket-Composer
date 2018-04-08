@@ -7,6 +7,7 @@ class Request
     private $controller = DEFAULT_CONTROLLER;
     private $action = DEFAULT_ACTION;
     private $actionParameters = [];
+    private $viewParams = [];
 
     public function __construct()
     {
@@ -50,6 +51,19 @@ class Request
         }
         $errorView = new View('error');
         $errorView->show();
+    }
+
+    public function getViewParams(): array
+    {
+        return $this->viewParams + $_SESSION;
+    }
+
+    public function getCookieParam(string $param, bool $trim = false): string
+    {
+        if (isset($_COOKIE[$param])) {
+            return $trim ? trim($_COOKIE[$param]) : $_COOKIE[$param];
+        }
+        return '';
     }
 
     public function getGetParam(string $param, bool $trim = false): string
@@ -104,9 +118,19 @@ class Request
         return $_SERVER["REQUEST_METHOD"] === "GET";
     }
 
+    public function setCookieParam(string $param, $value, int $seconds)
+    {
+        setcookie($param, $value, $seconds);
+    }
+
     public function setSessionParam(string $param, $value)
     {
         $_SESSION[$param] = $value;
+    }
+
+    public function setViewParam(string $param, $value)
+    {
+        $this->viewParams[$param] = $value;
     }
 
     public function redirect($target)
