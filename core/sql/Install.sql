@@ -27,7 +27,7 @@ CREATE TABLE users_sessions (
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id, userId),
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE users_validation (
   id VARCHAR(64) PRIMARY KEY,
@@ -37,16 +37,24 @@ CREATE TABLE users_validation (
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
+CREATE TABLE tickets_statuses (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
 CREATE TABLE tickets (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(100) NOT NULL,
   createdBy INT NOT NULL,
   department INT,
   asignedTo INT,
+  open BIT(1) NOT NULL DEFAULT 1,
+  status INT,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (createdBy) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (department) REFERENCES departments(id) ON DELETE SET NULL,
-  FOREIGN KEY (asignedTo) REFERENCES users(id) ON DELETE SET NULL
+  FOREIGN KEY (asignedTo) REFERENCES users(id) ON DELETE SET NULL,
+  FOREIGN KEY (created) REFERENCES tickets_statuses ON DELETE NULL
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE tickets_posts (
