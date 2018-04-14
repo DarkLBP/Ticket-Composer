@@ -54,7 +54,7 @@ CREATE TABLE tickets (
   FOREIGN KEY (createdBy) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (department) REFERENCES departments(id) ON DELETE SET NULL,
   FOREIGN KEY (asignedTo) REFERENCES users(id) ON DELETE SET NULL,
-  FOREIGN KEY (created) REFERENCES tickets_statuses ON DELETE NULL
+  FOREIGN KEY (status) REFERENCES tickets_statuses(id) ON DELETE SET NULL
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE tickets_posts (
