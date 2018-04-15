@@ -24,7 +24,8 @@ class UserController extends Controller
                 $userModel->join($validationModel, 'id', 'userId', 'left');
                 $user = $userModel->findOne($email, "email", [
                     ["$userModel->tableName.id", 'userId'],
-                    ["$validationModel->tableName.id", "validationId"]
+                    ["$validationModel->tableName.id", "validationId"],
+                    "password"
                 ]);
                 if (!empty($user)) {
                     if (password_verify($password, $user["password"])) {
@@ -64,7 +65,7 @@ class UserController extends Controller
                 $this->renderView('registerCompleted');
                 return;
             }
-            $this->request->redirect('/user/register');
+            $this->request->redirect(Utils::getURL("user", "register"));
         }
         $error = '';
         if ($this->request->isPost()) {
@@ -109,7 +110,7 @@ class UserController extends Controller
                         $link = Utils::getURL('user', 'validate', [$validationCode]);
                         mail($email, 'Account Validation', 'Please click this link to validate your account ' . $link);
                         $this->request->setSessionParam('registered', true);
-                        $this->request->redirect('/user/register/completed');
+                        $this->request->redirect(Utils::getURL("user", "register", ["completed"]));
                     } catch (\Exception $e) {
                         $error = 'Internal server error.';
                     }
@@ -128,9 +129,7 @@ class UserController extends Controller
             $validation = new UsersValidationModel();
             $row = $validation->count(['id' => $key]);
             if ($row === 1) {
-                $loginURL = Utils::getURL('user', 'login');
                 $validation->delete(['id' => $key]);
-                $this->request->setViewParam('loginURL', $loginURL);
                 $this->renderView('validateCompleted');
                 return;
             }
