@@ -39,7 +39,7 @@ class UserController extends Controller
                                     'id' => $sessionToken,
                                     'userId' => $user['userId']
                                 ]);
-                                $this->request->setCookieParam('userToken', "$user[id]-$sessionToken", time() + (3600 * 24 * 30));
+                                $this->request->setCookieParam('userToken', "$user[userId]-$sessionToken", time() + (3600 * 24 * 30));
                                 $this->request->setSessionParam('user', $user['userId']);
                                 $this->request->redirect(Utils::getURL('tickets'));
                             } catch (\Exception $e) {

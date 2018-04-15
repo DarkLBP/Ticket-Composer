@@ -34,13 +34,14 @@ class SessionController extends Controller
     {
         $sessionModel = new UsersSessionsModel();
         $sessionModel->delete(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
+        $this->userToken = [];
         $this->request->setCookieParam('userToken', null);
     }
 
     public function initialize()
     {
         //Destroy token if logout
-        if ($this->controller === "user" && $this->action === "logout" && empty($this->userToken)) {
+        if ($this->controller === "user" && $this->action === "logout" && !empty($this->userToken)) {
             $this->destroyToken();
         }
 
@@ -73,10 +74,12 @@ class SessionController extends Controller
     private function redeemToken()
     {
         $sessionModel = new UsersSessionsModel();
-        $data = $sessionModel->find(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
-        if (!empty($data)) {
+        $data = $sessionModel->count(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
+        if ($data === 1) {
             $this->userId = $this->userToken['userId'];
             $this->request->setSessionParam('user', $this->userToken['userId']);
+        } else {
+            $this->destroyToken();
         }
     }
 }
