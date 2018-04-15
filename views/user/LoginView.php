@@ -1,12 +1,16 @@
 <?php
+
+use Core\Utils;
+
 if (!empty($error)) {
     echo "<p>$error</p>";
 }
 ?>
-<form action="/user/login" method="post">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email">
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password">
+<form action="<?= Utils::getURL("user", "login") ?>" method="post">
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br>
+    <a href="<?= Utils::getURL("user", "register") ?>">Create an account</a><br>
     <input type="submit" value="Login">
 </form>
