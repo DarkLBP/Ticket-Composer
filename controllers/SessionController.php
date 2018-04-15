@@ -17,7 +17,7 @@ class SessionController extends Controller
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->userId = $this->request->getSessionParam('user');
+        $this->userId = $this->request->getSessionParam('loggedUser');
         $userToken = $this->request->getCookieParam('userToken', true);
         if (!empty($userToken)) {
             $tokenSplit = explode("-", $userToken);
@@ -54,6 +54,11 @@ class SessionController extends Controller
         $this->makeRedirects();
     }
 
+    public function isLoggedIn()
+    {
+        return !empty($_SESSION['loggedUser']);
+    }
+
     private function makeRedirects()
     {
         if (empty($this->userId)) {
@@ -77,7 +82,7 @@ class SessionController extends Controller
         $data = $sessionModel->count(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
         if ($data === 1) {
             $this->userId = $this->userToken['userId'];
-            $this->request->setSessionParam('user', $this->userToken['userId']);
+            $this->request->setSessionParam('loggedUser', $this->userToken['userId']);
         } else {
             $this->destroyToken();
         }

@@ -40,7 +40,7 @@ class UserController extends Controller
                                     'userId' => $user['userId']
                                 ]);
                                 $this->request->setCookieParam('userToken', "$user[userId]-$sessionToken", time() + (3600 * 24 * 30));
-                                $this->request->setSessionParam('user', $user['userId']);
+                                $this->request->setSessionParam('loggedUser', $user['userId']);
                                 $this->request->redirect(Utils::getURL('tickets'));
                             } catch (\Exception $e) {
                                 $errors[] = 'Internal server error';
@@ -62,7 +62,7 @@ class UserController extends Controller
 
     public function actionLogout()
     {
-        $this->request->setSessionParam('user', null);
+        $this->request->setSessionParam('loggedUser', null);
         $this->request->redirect(Utils::getURL());
     }
 

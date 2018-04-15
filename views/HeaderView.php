@@ -14,8 +14,24 @@ use Core\Utils;
 </head>
 <body>
 <header id="main-header">
-    <h1><?= SITE_TITLE ?></h1>
+    <h1>
+        <a href="<?= Utils::getURL() ?>"><?= SITE_TITLE ?></a>
+    </h1>
 </header>
 <nav id="main-nav">
-
+    <?php
+    /**
+     * @var bool $loggedIn
+     * @var string $controller
+     * @var string $action
+     */
+    if ($controller !== 'user' || $action !== 'login' && $action !== 'register') {
+        if ($loggedIn){
+            echo "<a href='" . Utils::getURL('user', 'logout') . "'>Logout</a>";
+        } else {
+            echo "<a href='" . Utils::getURL('user', 'login') . "'>Log In</a>";
+            echo "<a href='" . Utils::getURL('user', 'register') . "'>Register</a>";
+        }
+    }
+    ?>
 </nav>
