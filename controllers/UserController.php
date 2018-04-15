@@ -2,6 +2,7 @@
 namespace Controllers;
 
 use Core\Controller;
+use Core\Utils;
 use Models\UsersModel;
 use Models\UsersSessionsModel;
 use Models\UsersValidationModel;
@@ -37,7 +38,7 @@ class UserController extends Controller
                                 ]);
                                 setcookie('userToken', "$user[id]-$sessionToken", time() + (3600 * 24 * 30), '/');
                                 $this->request->setSessionParam('user', $user['userId']);
-                                $this->request->redirect($this->request->getURL('tickets'));
+                                $this->request->redirect(Utils::getURL('tickets'));
                             } catch (\Exception $e) {
                                 $error = 'Internal server error';
                             }
@@ -105,7 +106,7 @@ class UserController extends Controller
                             'id' =>  $validationCode,
                             'userId' => $insertId
                         ]);
-                        $link = $this->request->getURL('user', 'validate', [$validationCode]);
+                        $link = Utils::getURL('user', 'validate', [$validationCode]);
                         mail($email, 'Account Validation', 'Please click this link to validate your account ' . $link);
                         $this->request->setSessionParam('registered', true);
                         $this->request->redirect('/user/register/completed');
@@ -127,7 +128,7 @@ class UserController extends Controller
             $validation = new UsersValidationModel();
             $row = $validation->count(['id' => $key]);
             if ($row === 1) {
-                $loginURL = $this->request->getURL('user', 'login');
+                $loginURL = Utils::getURL('user', 'login');
                 $validation->delete(['id' => $key]);
                 $this->request->setViewParam('loginURL', $loginURL);
                 $this->renderView('validateCompleted');
