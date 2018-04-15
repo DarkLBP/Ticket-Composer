@@ -2,8 +2,8 @@
 
 use Core\Utils;
 
-if (!empty($error)) {
-    echo "<p>$error</p>";
+if (!empty($errors)) {
+    echo '<p>' . implode('<br>', $errors) . '</p>';
 }
 ?>
 <form method="post" action="<?= Utils::getURL("user", "register") ?>">

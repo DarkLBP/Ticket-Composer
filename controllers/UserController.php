@@ -10,14 +10,14 @@ use Models\UsersValidationModel;
 class UserController extends Controller
 {
     public function actionLogin() {
-        $error = '';
+        $errors = [];
         if ($this->request->isPost()) {
             $email = $this->request->getPostParam('email', true);
             $password = $this->request->getPostParam('password');
             if (empty($email)) {
-                $error = 'Email is empty';
+                $errors[] = 'Email is empty';
             } else if (empty($password)) {
-                $error = 'Password is empty';
+                $errors[] = 'Password is empty';
             } else {
                 $userModel = new UsersModel();
                 $validationModel = new UsersValidationModel();
@@ -41,20 +41,20 @@ class UserController extends Controller
                                 $this->request->setSessionParam('user', $user['userId']);
                                 $this->request->redirect(Utils::getURL('tickets'));
                             } catch (\Exception $e) {
-                                $error = 'Internal server error';
+                                $errors[] = 'Internal server error';
                             }
                         } else {
-                            $error = 'Account pending for validation';
+                            $errors[] = 'Account pending for validation';
                         }
                     } else {
-                        $error = "Invalid credentials";
+                        $errors[] = "Invalid credentials";
                     }
                 } else {
-                    $error = "Invalid credentials";
+                    $errors[] = "Invalid credentials";
                 }
             }
         }
-        $this->request->setViewParam('error', $error);
+        $this->request->setViewParam('errors', $errors);
         $this->renderView("login");
     }
 
@@ -67,7 +67,7 @@ class UserController extends Controller
             }
             $this->request->redirect(Utils::getURL("user", "register"));
         }
-        $error = '';
+        $errors = [];
         if ($this->request->isPost()) {
             $name = $this->request->getPostParam("name", true);
             $surname = $this->request->getPostParam("surname", true);
@@ -76,19 +76,19 @@ class UserController extends Controller
             $confirm = $this->request->getPostParam("confirm");
 
             if (empty($name)) {
-                $error = 'Name is empty';
+                $errors[] = 'Name is empty';
             } else if (empty($surname)) {
-                $error = 'Surname is empty';
+                $errors[] = 'Surname is empty';
             } else if (empty($email)) {
-                $error = 'Email is empty';
+                $errors[] = 'Email is empty';
             } else if (empty($password)) {
-                $error = 'Password is empty';
+                $errors[] = 'Password is empty';
             } else if (empty($confirm)) {
-                $error = 'Password confirmation is empty';
+                $errors[] = 'Password confirmation is empty';
             } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $error = 'Invalid email';
+                $errors[] = 'Invalid email';
             } else if ($password !== $confirm) {
-                $error = 'Passwords do not match';
+                $errors[] = 'Passwords do not match';
             } else {
                 $model = new UsersModel();
                 //Find if email is in use
@@ -112,14 +112,14 @@ class UserController extends Controller
                         $this->request->setSessionParam('registered', true);
                         $this->request->redirect(Utils::getURL("user", "register", ["completed"]));
                     } catch (\Exception $e) {
-                        $error = 'Internal server error.';
+                        $errors[] = 'Internal server error.';
                     }
                 } else {
-                    $error = 'Email is already in use';
+                    $errors[] = 'Email is already in use';
                 }
             }
         }
-        $this->request->setViewParam('error', $error);
+        $this->request->setViewParam('errors', $errors);
         $this->renderView("register");
     }
 
