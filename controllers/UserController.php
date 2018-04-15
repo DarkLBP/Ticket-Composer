@@ -5,11 +5,56 @@ namespace Controllers;
 use Core\Controller;
 use Core\Utils;
 use Models\UsersModel;
+use Models\UsersRecoverModel;
 use Models\UsersSessionsModel;
 use Models\UsersValidationModel;
 
 class UserController extends Controller
 {
+    public function actionForgot($params = [])
+    {
+        if (isset($params[0])) {
+            if ($params[0] === 'completed' && $this->request->getSessionParam('forgot')) {
+                $this->request->setSessionParam('forgot', false);
+                $this->renderView('forgotCompleted');
+                return;
+            }
+            $this->request->redirect(Utils::getURL("user", "login"));
+        }
+        if ($this->request->isPost()) {
+            $email = $this->request->getPostParam('email', true);
+            $errors = [];
+            if (empty($email)) {
+                $errors[] = 'Email is empty';
+            } else {
+                $userModel = new UsersModel();
+                $exists = $userModel->findOne($email, 'email', ['id']);
+                if (!empty($exists)) {
+                    try {
+                        $recoverToken = bin2hex(random_bytes(32));
+                        $recoverModel = new UsersRecoverModel();
+                        $recoverModel->insert([
+                            'id' => $recoverToken,
+                            'userId' => $exists['id']
+                        ]);
+                        $link = Utils::getURL('user', 'recover', [$exists['id'], $recoverToken]);
+                        mail($email, 'Account Recovery', 'Please click this link to recover your account ' . $link);
+                        $this->request->setSessionParam('forgot', true);
+                        $this->request->redirect(Utils::getURL("user", "forgot", ["completed"]));
+                    } catch (\Exception $e) {
+                        $errors[] = 'Internal server error';
+                    }
+                } else {
+                    $errors[] = 'No user found';
+                }
+            }
+            $this->request->setViewParam('errors', $errors);
+            $this->renderView('forgot');
+        } else {
+            $this->renderView('forgot');
+        }
+    }
+
     public function actionLogin()
     {
         $errors = [];
@@ -64,6 +109,50 @@ class UserController extends Controller
     {
         $this->request->setSessionParam('loggedUser', null);
         $this->request->redirect(Utils::getURL());
+    }
+
+    public function actionRecover($params = [])
+    {
+        if (isset($params[0])) {
+            if ($params[0] === 'completed') {
+                if ($this->request->getSessionParam('recovered')) {
+                    $this->request->setSessionParam('recovered', false);
+                    $this->renderView('recoverCompleted');
+                    return;
+                } else {
+                    $this->request->redirect(Utils::getURL("user", "login"));
+                }
+            }
+        }
+        if (count($params) === 2) {
+            $user = $params[0];
+            $key = $params[1];
+            $recover = new UsersRecoverModel();
+            $data = $recover->count(['id' => $key, 'userId' => $user]);
+            if ($data === 1) {
+                if ($this->request->isGet()) {
+                    $this->request->setViewParam('params', $params);
+                    $this->renderView('recover');
+                } else {
+                    $errors = [];
+                    $password = $this->request->getPostParam("password");
+                    $confirm = $this->request->getPostParam("confirm");
+                    if (empty($password)) {
+                        $errors[] = 'Password is empty';
+                    } else if (empty($confirm)) {
+                        $errors[] = 'Password confirmation is empty';
+                    } else {
+                        $userModel = new UsersModel();
+                        $userModel->update(['password' => password_hash($password, PASSWORD_DEFAULT)], ['id' => $user]);
+                        $recover->delete(['id' => $key, 'userId' => $user]);
+                        $this->request->setSessionParam('recovered', true);
+                        $this->request->redirect(Utils::getURL("user", "recover", ["completed"]));
+                    }
+                }
+                return;
+            }
+        }
+        $this->renderView('recoverInvalid');
     }
 
     public function actionRegister($params = [])

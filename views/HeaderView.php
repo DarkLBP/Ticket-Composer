@@ -29,7 +29,7 @@ use Core\Utils;
         if ($loggedIn){
             echo "<a href='" . Utils::getURL('user', 'logout') . "'>Logout</a>";
         } else {
-            echo "<a href='" . Utils::getURL('user', 'login') . "'>Log In</a>";
+            echo "<a href='" . Utils::getURL('user', 'login') . "'>Log In</a> ";
             echo "<a href='" . Utils::getURL('user', 'register') . "'>Register</a>";
         }
     }

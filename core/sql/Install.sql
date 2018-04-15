@@ -29,6 +29,14 @@ CREATE TABLE users_sessions (
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
+CREATE TABLE users_recover (
+  id VARCHAR(64) NOT NULL,
+  userId INT NOT NULL,
+  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id, userId),
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
 CREATE TABLE users_validation (
   id VARCHAR(64) NOT NULL,
   userId INT NOT NULL,
