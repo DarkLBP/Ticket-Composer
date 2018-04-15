@@ -26,5 +26,13 @@ class SessionController extends Controller
                 }
             }
         }
+
+        //Redirect to login if user tries to enter to pages where login is required
+        if (empty($this->request->getSessionParam('user'))) {
+            $controller = $this->request->getController();
+            if ($controller !== "index" && $controller !== "user") {
+                $this->request->redirect($this->request->getURL("user", "login"));
+            }
+        }
     }
 }

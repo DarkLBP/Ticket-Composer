@@ -37,7 +37,7 @@ class UserController extends Controller
                                 ]);
                                 setcookie('userToken', "$user[id]-$sessionToken", time() + (3600 * 24 * 30), '/');
                                 $this->request->setSessionParam('user', $user['userId']);
-                                $this->request->redirect($this->request->getURL('ticket'));
+                                $this->request->redirect($this->request->getURL('tickets'));
                             } catch (\Exception $e) {
                                 $error = 'Internal server error';
                             }
