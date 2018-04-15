@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers;
 
 use Core\Controller;
@@ -9,7 +10,8 @@ use Models\UsersValidationModel;
 
 class UserController extends Controller
 {
-    public function actionLogin() {
+    public function actionLogin()
+    {
         $errors = [];
         if ($this->request->isPost()) {
             $email = $this->request->getPostParam('email', true);
@@ -37,7 +39,7 @@ class UserController extends Controller
                                     'id' => $sessionToken,
                                     'userId' => $user['userId']
                                 ]);
-                                setcookie('userToken', "$user[id]-$sessionToken", time() + (3600 * 24 * 30), '/');
+                                $this->request->setCookieParam('userToken', "$user[id]-$sessionToken", time() + (3600 * 24 * 30));
                                 $this->request->setSessionParam('user', $user['userId']);
                                 $this->request->redirect(Utils::getURL('tickets'));
                             } catch (\Exception $e) {
@@ -58,7 +60,14 @@ class UserController extends Controller
         $this->renderView("login");
     }
 
-    public function actionRegister($params = []) {
+    public function actionLogout()
+    {
+        $this->request->setSessionParam('user', null);
+        $this->request->redirect(Utils::getURL());
+    }
+
+    public function actionRegister($params = [])
+    {
         if (isset($params[0])) {
             if ($params[0] === 'completed' && $this->request->getSessionParam('registered')) {
                 $this->request->setSessionParam('registered', false);
@@ -104,10 +113,10 @@ class UserController extends Controller
                         ]);
                         $validation = new UsersValidationModel();
                         $validation->insert([
-                            'id' =>  $validationCode,
+                            'id' => $validationCode,
                             'userId' => $insertId
                         ]);
-                        $link = Utils::getURL('user', 'validate', [$validationCode]);
+                        $link = Utils::getURL('user', 'validate', [$insertId, $validationCode]);
                         mail($email, 'Account Validation', 'Please click this link to validate your account ' . $link);
                         $this->request->setSessionParam('registered', true);
                         $this->request->redirect(Utils::getURL("user", "register", ["completed"]));
@@ -123,13 +132,15 @@ class UserController extends Controller
         $this->renderView("register");
     }
 
-    public function actionValidate($params = []) {
-        if (!empty($params[0])) {
-            $key = $params[0];
+    public function actionValidate($params = [])
+    {
+        if (count($params) === 2) {
+            $user = $params[0];
+            $key = $params[1];
             $validation = new UsersValidationModel();
-            $row = $validation->count(['id' => $key]);
-            if ($row === 1) {
-                $validation->delete(['id' => $key]);
+            $data = $validation->count(['id' => $key, 'userId' => $user]);
+            if ($data === 1) {
+                $validation->delete(['id' => $key, 'userId' => $user]);
                 $this->renderView('validateCompleted');
                 return;
             }
