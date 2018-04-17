@@ -2,6 +2,7 @@
 namespace Controllers;
 
 use Core\Controller;
+use Models\DepartmentsModel;
 
 class TicketsController extends Controller
 {
@@ -12,6 +13,11 @@ class TicketsController extends Controller
 
     public function actionCreate()
     {
-
+        if ($this->request->isGet()) {
+            $departmentModel = new DepartmentsModel();
+            $departments = $departmentModel->find();
+            $this->request->setViewParam('departments', $departments);
+            $this->renderView('create');
+        }
     }
 }
