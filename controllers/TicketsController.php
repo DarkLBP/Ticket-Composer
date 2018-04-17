@@ -9,4 +9,9 @@ class TicketsController extends Controller
     {
         echo "Here should appear a list of tickets if there are any";
     }
+
+    public function actionCreate()
+    {
+
+    }
 }

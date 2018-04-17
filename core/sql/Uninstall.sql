@@ -5,6 +5,5 @@ DROP TABLE users_validation;
 DROP TABLE tickets_attachments;
 DROP TABLE tickets_posts;
 DROP TABLE tickets;
-DROP TABLE tickets_statuses;
 DROP TABLE users;
 DROP TABLE departments;
