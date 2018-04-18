@@ -127,8 +127,8 @@ class UserController extends Controller
             $recover = new UsersRecoverModel();
             $data = $recover->count(['id' => $key, 'userId' => $user]);
             if ($data === 1) {
+                $this->request->setViewParam('params', $params);
                 if ($this->request->isGet()) {
-                    $this->request->setViewParam('params', $params);
                     $this->renderView('recover');
                 }
                 $errors = [];
@@ -141,7 +141,7 @@ class UserController extends Controller
                     $errors[] = 'Password confirmation is empty';
                 }
                 if ($password != $confirm) {
-                    $errors[] = 'Password do not match';
+                    $errors[] = 'Passwords do not match';
                 }
                 if (empty($errors)) {
                     $userModel = new UsersModel();
@@ -150,6 +150,8 @@ class UserController extends Controller
                     $this->request->setSessionParam('recovered', true);
                     $this->request->redirect(Utils::getURL("user", "recover", ["completed"]));
                 }
+                $this->request->setViewParam('errors', $errors);
+                $this->renderView('recover');
             }
         }
         $this->renderView('recoverInvalid');
