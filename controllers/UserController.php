@@ -17,7 +17,6 @@ class UserController extends Controller
             if ($params[0] === 'completed' && $this->request->getSessionParam('forgot')) {
                 $this->request->setSessionParam('forgot', false);
                 $this->renderView('forgotCompleted');
-                return;
             }
             $this->request->redirect(Utils::getURL("user", "login"));
         }
@@ -47,25 +46,25 @@ class UserController extends Controller
                 } else {
                     $errors[] = 'No user found';
                 }
+                $this->request->setViewParam('errors', $errors);
             }
-            $this->request->setViewParam('errors', $errors);
-            $this->renderView('forgot');
-        } else {
-            $this->renderView('forgot');
         }
+        $this->renderView('forgot');
     }
 
     public function actionLogin()
     {
-        $errors = [];
         if ($this->request->isPost()) {
+            $errors = [];
             $email = $this->request->getPostParam('email', true);
             $password = $this->request->getPostParam('password');
             if (empty($email)) {
                 $errors[] = 'Email is empty';
-            } else if (empty($password)) {
+            }
+            if (empty($password)) {
                 $errors[] = 'Password is empty';
-            } else {
+            }
+            if (empty($errors)) {
                 $userModel = new UsersModel();
                 $validationModel = new UsersValidationModel();
                 $userModel->join($validationModel, 'id', 'userId', 'left');
@@ -100,8 +99,8 @@ class UserController extends Controller
                     $errors[] = "Invalid credentials";
                 }
             }
+            $this->request->setViewParam('errors', $errors);
         }
-        $this->request->setViewParam('errors', $errors);
         $this->renderView("login");
     }
 
@@ -149,7 +148,6 @@ class UserController extends Controller
                         $this->request->redirect(Utils::getURL("user", "recover", ["completed"]));
                     }
                 }
-                return;
             }
         }
         $this->renderView('recoverInvalid');
@@ -165,8 +163,8 @@ class UserController extends Controller
             }
             $this->request->redirect(Utils::getURL("user", "register"));
         }
-        $errors = [];
         if ($this->request->isPost()) {
+            $errors = [];
             $name = $this->request->getPostParam("name", true);
             $surname = $this->request->getPostParam("surname", true);
             $email = $this->request->getPostParam("email", true);
@@ -175,23 +173,30 @@ class UserController extends Controller
 
             if (empty($name)) {
                 $errors[] = 'Name is empty';
-            } else if (empty($surname)) {
+            }
+            if (empty($surname)) {
                 $errors[] = 'Surname is empty';
-            } else if (empty($email)) {
+            }
+            if (empty($email)) {
                 $errors[] = 'Email is empty';
-            } else if (empty($password)) {
+            }
+            if (empty($password)) {
                 $errors[] = 'Password is empty';
-            } else if (empty($confirm)) {
+            }
+            if (empty($confirm)) {
                 $errors[] = 'Password confirmation is empty';
-            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = 'Invalid email';
-            } else if ($password !== $confirm) {
+            }
+            if ($password !== $confirm) {
                 $errors[] = 'Passwords do not match';
-            } else {
+            }
+            if (empty($errors)) {
                 $model = new UsersModel();
                 //Find if email is in use
-                $existing = $model->findOne($email, 'email', ['email']);
-                if (empty($existing)) {
+                $existing = $model->count(["email" => $email]);
+                if ($existing === 0) {
                     try {
                         $validationCode = bin2hex(random_bytes(32));
                         $insertId = $model->insert([
@@ -216,8 +221,8 @@ class UserController extends Controller
                     $errors[] = 'Email is already in use';
                 }
             }
+            $this->request->setViewParam('errors', $errors);
         }
-        $this->request->setViewParam('errors', $errors);
         $this->renderView("register");
     }
 
@@ -231,7 +236,6 @@ class UserController extends Controller
             if ($data === 1) {
                 $validation->delete(['id' => $key, 'userId' => $user]);
                 $this->renderView('validateCompleted');
-                return;
             }
         }
         $this->renderView('validateInvalid');
