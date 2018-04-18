@@ -117,10 +117,8 @@ class UserController extends Controller
                 if ($this->request->getSessionParam('recovered')) {
                     $this->request->setSessionParam('recovered', false);
                     $this->renderView('recoverCompleted');
-                    return;
-                } else {
-                    $this->request->redirect(Utils::getURL("user", "login"));
                 }
+                $this->request->redirect(Utils::getURL("user", "login"));
             }
         }
         if (count($params) === 2) {
@@ -132,21 +130,25 @@ class UserController extends Controller
                 if ($this->request->isGet()) {
                     $this->request->setViewParam('params', $params);
                     $this->renderView('recover');
-                } else {
-                    $errors = [];
-                    $password = $this->request->getPostParam("password");
-                    $confirm = $this->request->getPostParam("confirm");
-                    if (empty($password)) {
-                        $errors[] = 'Password is empty';
-                    } else if (empty($confirm)) {
-                        $errors[] = 'Password confirmation is empty';
-                    } else {
-                        $userModel = new UsersModel();
-                        $userModel->update(['password' => password_hash($password, PASSWORD_DEFAULT)], ['id' => $user]);
-                        $recover->delete(['id' => $key, 'userId' => $user]);
-                        $this->request->setSessionParam('recovered', true);
-                        $this->request->redirect(Utils::getURL("user", "recover", ["completed"]));
-                    }
+                }
+                $errors = [];
+                $password = $this->request->getPostParam("password");
+                $confirm = $this->request->getPostParam("confirm");
+                if (empty($password)) {
+                    $errors[] = 'Password is empty';
+                }
+                if (empty($confirm)) {
+                    $errors[] = 'Password confirmation is empty';
+                }
+                if ($password != $confirm) {
+                    $errors[] = 'Password do not match';
+                }
+                if (empty($errors)) {
+                    $userModel = new UsersModel();
+                    $userModel->update(['password' => password_hash($password, PASSWORD_DEFAULT)], ['id' => $user]);
+                    $recover->delete(['id' => $key, 'userId' => $user]);
+                    $this->request->setSessionParam('recovered', true);
+                    $this->request->redirect(Utils::getURL("user", "recover", ["completed"]));
                 }
             }
         }
@@ -159,7 +161,6 @@ class UserController extends Controller
             if ($params[0] === 'completed' && $this->request->getSessionParam('registered')) {
                 $this->request->setSessionParam('registered', false);
                 $this->renderView('registerCompleted');
-                return;
             }
             $this->request->redirect(Utils::getURL("user", "register"));
         }
