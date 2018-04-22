@@ -73,7 +73,7 @@ CREATE TABLE tickets_posts (
 CREATE TABLE tickets_attachments (
   id INT PRIMARY KEY AUTO_INCREMENT,
   postId INT NOT NULL,
-  filePath VARCHAR(100) NOT NULL,
+  filePath VARCHAR(150) NOT NULL,
   uploaded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (postId) REFERENCES tickets_posts(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
