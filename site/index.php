@@ -5,6 +5,7 @@ $request = new \Core\Request();
 $session = new \Controllers\SessionController($request);
 $session->initialize();
 $request->setViewParam('loggedIn', $session->isLoggedIn());
+$request->setViewParam('loggedUser', $session->getLoggedUser());
 $request->setViewParam('controller', $request->getController());
 $request->setViewParam('action', $request->getAction());
 $request->dispatch();

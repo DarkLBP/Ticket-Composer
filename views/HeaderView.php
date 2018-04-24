@@ -24,9 +24,11 @@ use Core\Utils;
      * @var bool $loggedIn
      * @var string $controller
      * @var string $action
+     * @var array $loggedUser
      */
     if ($controller !== 'user' || $action !== 'login' && $action !== 'register') {
         if ($loggedIn){
+            echo "Welcome $loggedUser[name] $loggedUser[surname]<br>";
             echo "<a href='" . Utils::getURL('user', 'logout') . "'>Logout</a>";
         } else {
             echo "<a href='" . Utils::getURL('user', 'login') . "'>Log In</a> ";
