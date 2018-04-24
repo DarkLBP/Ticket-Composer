@@ -1,4 +1,5 @@
 <?php
+use Core\Utils;
 /**
  * @var array $tickets
  */
@@ -18,7 +19,7 @@
     <?php
         foreach ($tickets as $ticket) {
             echo "<tr>";
-            echo "<td>$ticket[id]</td>";
+            echo "<td><a href='" . Utils::getURL('tickets', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
             echo "<td>$ticket[title]</td>";
             echo "<td>$ticket[departmentName]</td>";
             if (!empty($ticket["asignedTo"])) {

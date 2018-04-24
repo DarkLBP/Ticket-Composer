@@ -7,22 +7,10 @@ use Models\DepartmentsModel;
 use Models\TicketsAttachmentsModel;
 use Models\TicketsModel;
 use Models\TicketsPostsModel;
+use Models\UsersModel;
 
 class TicketsController extends Controller
 {
-    public function actionIndex()
-    {
-        $ticketsModel = new TicketsModel();
-        $departmentsModel = new DepartmentsModel();
-        $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
-        $tickets = $ticketsModel->find([], [
-            "$ticketsModel->tableName.*",
-            ["$departmentsModel->tableName.name", "departmentName"]
-        ]);
-        $this->request->setViewParam('tickets', $tickets);
-        $this->renderView('index');
-    }
-
     public function actionCreate()
     {
         if ($this->request->isPost()) {
@@ -72,6 +60,19 @@ class TicketsController extends Controller
         $this->renderView('create');
     }
 
+    public function actionIndex()
+    {
+        $ticketsModel = new TicketsModel();
+        $departmentsModel = new DepartmentsModel();
+        $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
+        $tickets = $ticketsModel->find([], [
+            "$ticketsModel->tableName.*",
+            ["$departmentsModel->tableName.name", "departmentName"]
+        ]);
+        $this->request->setViewParam('tickets', $tickets);
+        $this->renderView('index');
+    }
+
     private function uploadFile($file)
     {
         $fileHash = hash_file('sha256', $file['tmp_name']);
@@ -88,8 +89,35 @@ class TicketsController extends Controller
         return $relativePath;
     }
 
-    public function actionView()
+    public function actionView($params = [])
     {
-        //TODO View the given ticket :D
+        if (isset($params[0])) {
+            $ticketId = $params[0];
+            $ticketsModel = new TicketsModel();
+            $usersModel = new UsersModel();
+            $departmentsModel = new DepartmentsModel();
+            $ticketsModel->join($usersModel, 'createdBy', 'id', 'left');
+            $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
+            $ticket = $ticketsModel->findOne($ticketId, "$ticketsModel->tableName.id", [
+                "$ticketsModel->tableName.*",
+                ["$usersModel->tableName.name", "createdName"],
+                ["$usersModel->tableName.surname", "createdSurname"],
+                ["$departmentsModel->tableName.name", "departmentName"]
+            ]);
+            if (!empty($ticket)) {
+                $ticketPostsModel = new TicketsPostsModel();
+                $ticketPostsModel->join($usersModel, 'userId', 'id', 'left');
+                $ticketPosts = $ticketPostsModel->find(['ticketId' => $ticketId], [
+                    "$ticketPostsModel->tableName.*",
+                    ["$usersModel->tableName.name", "createdName"],
+                    ["$usersModel->tableName.surname", "createdSurname"],
+                    ["$usersModel->tableName.id", "createdId"]
+                ]);
+                $this->request->setViewParam('ticket', $ticket);
+                $this->request->setViewParam('ticketPosts', $ticketPosts);
+                $this->renderView('ticket');
+            }
+        }
+        $this->renderView('invalidTicket');
     }
 }
