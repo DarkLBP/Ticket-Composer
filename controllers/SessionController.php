@@ -65,11 +65,11 @@ class SessionController extends Controller
             $this->redeemToken();
         }
 
-        //Make proper redirects
-        $this->makeRedirects();
-
         //Get user data
         $this->getUserData();
+
+        //Make proper redirects
+        $this->makeRedirects();
     }
 
     public function isLoggedIn()
