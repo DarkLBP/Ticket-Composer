@@ -12,7 +12,15 @@ class TicketsController extends Controller
 {
     public function actionIndex()
     {
-        echo "Here should appear a list of tickets if there are any";
+        $ticketsModel = new TicketsModel();
+        $departmentsModel = new DepartmentsModel();
+        $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
+        $tickets = $ticketsModel->find([], [
+            "$ticketsModel->tableName.*",
+            ["$departmentsModel->tableName.name", "departmentName"]
+        ]);
+        $this->request->setViewParam('tickets', $tickets);
+        $this->renderView('index');
     }
 
     public function actionCreate()
