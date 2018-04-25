@@ -66,8 +66,10 @@ class TicketsController extends Controller
         $departmentsModel = new DepartmentsModel();
         $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
         $tickets = $ticketsModel->find([], [
-            "$ticketsModel->tableName.*",
-            ["$departmentsModel->tableName.name", "departmentName"]
+            "$ticketsModel.*",
+            ["$departmentsModel.name", "departmentName"]
+        ], [
+            'created' => 'desc'
         ]);
         $this->request->setViewParam('tickets', $tickets);
         $this->renderView('index');
@@ -98,20 +100,22 @@ class TicketsController extends Controller
             $departmentsModel = new DepartmentsModel();
             $ticketsModel->join($usersModel, 'createdBy', 'id', 'left');
             $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
-            $ticket = $ticketsModel->findOne($ticketId, "$ticketsModel->tableName.id", [
-                "$ticketsModel->tableName.*",
-                ["$usersModel->tableName.name", "createdName"],
-                ["$usersModel->tableName.surname", "createdSurname"],
-                ["$departmentsModel->tableName.name", "departmentName"]
+            $ticket = $ticketsModel->findOne($ticketId, "$ticketsModel.id", [
+                "$ticketsModel.*",
+                ["$usersModel.name", "createdName"],
+                ["$usersModel.surname", "createdSurname"],
+                ["$departmentsModel.name", "departmentName"]
             ]);
             if (!empty($ticket)) {
                 $ticketPostsModel = new TicketsPostsModel();
                 $ticketPostsModel->join($usersModel, 'userId', 'id', 'left');
                 $ticketPosts = $ticketPostsModel->find(['ticketId' => $ticketId], [
-                    "$ticketPostsModel->tableName.*",
-                    ["$usersModel->tableName.name", "createdName"],
-                    ["$usersModel->tableName.surname", "createdSurname"],
-                    ["$usersModel->tableName.id", "createdId"]
+                    "$ticketPostsModel.*",
+                    ["$usersModel.name", "createdName"],
+                    ["$usersModel.surname", "createdSurname"],
+                    ["$usersModel.id", "createdId"]
+                ], [
+                    "$ticketPostsModel.created" => 'asc'
                 ]);
                 $this->request->setViewParam('ticket', $ticket);
                 $this->request->setViewParam('ticketPosts', $ticketPosts);
