@@ -60,6 +60,39 @@ class TicketsController extends Controller
         $this->renderView('create');
     }
 
+    public function actionEditPost($params = [])
+    {
+        if (isset($params[0])) {
+            $postId = $params[0];
+            $postsModel = new TicketsPostsModel();
+            $post = $postsModel->findOne($postId, 'id');
+            if ($post['userId'] !== $this->request->getSessionParam('loggedUser')) {
+                $this->renderView('notYours');
+            }
+            if (!empty($post)) {
+                if ($this->request->isGet()) {
+                    $this->request->setViewParam('post', $post);
+                    $this->renderView('postEdit');
+                } else if ($this->request->isPost()) {
+                    $message = $this->request->getPostParam('message', true);
+                    if (!empty($message)) {
+                        $postsModel->update([
+                            'content' => $message
+                        ], [
+                            'id' => $postId
+                        ]);
+                        $this->request->redirect(Utils::getURL('tickets', 'view', [$post['ticketId']]));
+                    }
+                    $this->request->setViewParam('error', 'Message is empty');
+                    $this->renderView('postEdit');
+                } else {
+                    $this->renderView('error');
+                }
+            }
+        }
+        $this->renderView('invalidPost');
+    }
+
     public function actionIndex()
     {
         $ticketsModel = new TicketsModel();

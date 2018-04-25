@@ -4,6 +4,7 @@ use Core\Utils;
  * @var array $ticket
  * @var array $ticketPosts
  * @var string $error
+ * @var array $loggedUser
  */
 ?>
 <h2>Ticket #<?= $ticket['id'] ?></h2>
@@ -18,6 +19,9 @@ foreach ($ticketPosts as $post) {
     echo "<small>Created on $post[created]</small>";
     echo "</header>";
     echo "<p>" . str_replace(["\n", "\r\n"], '<br>', htmlspecialchars($post['content'])) . "</p>";
+    if ($post['userId'] == $loggedUser['id']) {
+        echo "<a href='" . Utils::getURL('tickets', 'editPost', [$post["id"]]) . "'>Edit</a>";
+    }
     echo "</article><hr>";
 }
 echo empty($error) ? '' : "<p>$error</p>";
