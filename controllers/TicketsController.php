@@ -75,24 +75,37 @@ class TicketsController extends Controller
         $this->renderView('index');
     }
 
-    private function uploadFile($file)
+    public function actionPost($params = [])
     {
-        $fileHash = hash_file('sha256', $file['tmp_name']);
-        $folderName = date('Y-m');
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $fileName = $fileHash . (!empty($extension) ? '.' . $extension : '');
-        $relativePath = $folderName . '/' . $fileName;
-        $fullDir = __DIR__ . '/../site/uploads/' . $folderName . '/';
-        if (!is_dir($fullDir)) {
-            mkdir($fullDir, 0755, true);
+        if (isset($params[0])) {
+            $ticketId = $params[0];
+            $ticketsModel = new TicketsModel();
+            $exists = $ticketsModel->count(['id' => $ticketId]);
+            if ($exists === 1) {
+                $content = $this->request->getPostParam('message', true);
+                if (!empty($content)) {
+                    $ticketPostsModel = new TicketsPostsModel();
+                    $ticketPostsModel->insert([
+                        'ticketId' => $ticketId,
+                        'userId' => $this->request->getSessionParam('loggedUser'),
+                        'content' => $content
+                    ]);
+                } else {
+                    $this->request->setSessionParam('postError', 'Message is empty');
+                }
+                $this->request->redirect(Utils::getURL('tickets', 'view', [$ticketId]));
+            }
         }
-        $fullPath = $fullDir . $fileName;
-        move_uploaded_file($file['tmp_name'], $fullPath);
-        return $relativePath;
+        $this->renderView('invalidTicket');
     }
 
     public function actionView($params = [])
     {
+        $error = $this->request->getSessionParam('postError');
+        if (!empty($error)) {
+            $this->request->setViewParam('error', $error);
+            $this->request->setSessionParam('postError', null);
+        }
         if (isset($params[0])) {
             $ticketId = $params[0];
             $ticketsModel = new TicketsModel();
@@ -123,5 +136,21 @@ class TicketsController extends Controller
             }
         }
         $this->renderView('invalidTicket');
+    }
+
+    private function uploadFile($file)
+    {
+        $fileHash = hash_file('sha256', $file['tmp_name']);
+        $folderName = date('Y-m');
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $fileName = $fileHash . (!empty($extension) ? '.' . $extension : '');
+        $relativePath = $folderName . '/' . $fileName;
+        $fullDir = __DIR__ . '/../site/uploads/' . $folderName . '/';
+        if (!is_dir($fullDir)) {
+            mkdir($fullDir, 0755, true);
+        }
+        $fullPath = $fullDir . $fileName;
+        move_uploaded_file($file['tmp_name'], $fullPath);
+        return $relativePath;
     }
 }

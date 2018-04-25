@@ -3,6 +3,7 @@ use Core\Utils;
 /**
  * @var array $ticket
  * @var array $ticketPosts
+ * @var string $error
  */
 ?>
 <h2>Ticket #<?= $ticket['id'] ?></h2>
@@ -19,4 +20,10 @@ foreach ($ticketPosts as $post) {
     echo "<p>" . str_replace(["\n", "\r\n"], '<br>', htmlspecialchars($post['content'])) . "</p>";
     echo "</article><hr>";
 }
+echo empty($error) ? '' : "<p>$error</p>";
 ?>
+<form action="<?= Utils::getURL('tickets', 'post', [$ticket["id"]]) ?>" method="post">
+    <label for="message">Message:</label><br>
+    <textarea id="message" name="message"></textarea><br>
+    <input type="submit" value="Post">
+</form>
