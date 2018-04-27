@@ -21,13 +21,12 @@ use Core\Utils;
 <nav id="main-nav">
     <?php
     /**
-     * @var bool $loggedIn
      * @var string $controller
      * @var string $action
      * @var array $loggedUser
      */
     if ($controller !== 'user' || $action !== 'login' && $action !== 'register') {
-        if ($loggedIn){
+        if ($loggedUser){
             echo "Welcome $loggedUser[name] $loggedUser[surname]<br>";
             echo "<a href='" . Utils::getURL('user', 'logout') . "'>Logout</a>";
         } else {

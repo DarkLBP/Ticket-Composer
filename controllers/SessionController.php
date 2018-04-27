@@ -10,7 +10,6 @@ use Models\SessionsModel;
 
 class SessionController extends Controller
 {
-    private $user = [];
     private $userToken = [];
     private $controller = '';
     private $action = '';
@@ -32,25 +31,13 @@ class SessionController extends Controller
 
     private function destroyToken()
     {
+        if (empty($this->userToken)) {
+            return;
+        }
         $sessionModel = new SessionsModel();
         $sessionModel->delete(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
         $this->userToken = [];
         $this->request->setCookieParam('userToken', null);
-    }
-
-    public function getLoggedUser(): array
-    {
-        if ($this->isLoggedIn()) {
-            return $this->user;
-        }
-        return [];
-    }
-
-    private function getUserData(): void
-    {
-        $userId = $this->request->getSessionParam('loggedUser');
-        $usersModel = new UsersModel();
-        $this->user = $usersModel->findOne($userId, 'id', ['id', 'name', 'surname', 'email']);
     }
 
     public function initialize()
@@ -58,28 +45,19 @@ class SessionController extends Controller
         //Destroy token if logout
         if ($this->controller === "user" && $this->action === "logout") {
             $this->destroyToken();
+            return;
         }
 
         //Redeem user token from cookie to recover session
-        if (!$this->isLoggedIn() && !empty($this->userToken)) {
-            $this->redeemToken();
-        }
-
-        //Get user data
-        $this->getUserData();
+        $this->redeemToken();
 
         //Make proper redirects
         $this->makeRedirects();
     }
 
-    public function isLoggedIn()
-    {
-        return !empty($this->user);
-    }
-
     private function makeRedirects()
     {
-        if (!$this->isLoggedIn()) {
+        if (!$this->request->getSessionParam('loggedUser')) {
             //Redirect to login if user tries to enter to pages where login is required
             if ($this->controller !== "main" && $this->controller !== "user") {
                 $this->request->redirect(Utils::getURL("user", "login"));
@@ -96,12 +74,23 @@ class SessionController extends Controller
 
     private function redeemToken()
     {
+        if (empty($this->userToken)) {
+            $this->request->setSessionParam('loggedUser', null);
+            return;
+        }
         $sessionModel = new SessionsModel();
-        $data = $sessionModel->count(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
-        if ($data === 1) {
-            $this->request->setSessionParam('loggedUser', $this->userToken['userId']);
+        $usersModel = new UsersModel();
+        $sessionModel->join($usersModel, 'userId', 'id', 'inner');
+        $data = $sessionModel->find([
+            "$sessionModel.id" => $this->userToken['sessionToken'],
+            "$sessionModel.userId" => $this->userToken['userId']
+        ], [
+            "$usersModel.name", "$usersModel.surname", "$usersModel.email", "$usersModel.id"
+        ]);
+        if (count($data) == 1) {
+            $this->request->setSessionParam('loggedUser', $data[0]);
         } else {
-            $this->destroyToken();
+            $this->request->setSessionParam('loggedUser', null);
         }
     }
 }
