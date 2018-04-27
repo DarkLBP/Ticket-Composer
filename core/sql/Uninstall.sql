@@ -1,9 +1,9 @@
 DROP TABLE users_departments;
-DROP TABLE users_sessions;
-DROP TABLE users_recover;
-DROP TABLE users_validation;
-DROP TABLE tickets_attachments;
-DROP TABLE tickets_posts;
+DROP TABLE sessions;
+DROP TABLE recovers;
+DROP TABLE validations;
+DROP TABLE attachments;
+DROP TABLE posts;
 DROP TABLE tickets;
 DROP TABLE users;
 DROP TABLE departments;

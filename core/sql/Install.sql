@@ -22,7 +22,7 @@ CREATE TABLE users_departments (
   FOREIGN KEY (departmentId) REFERENCES departments(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-CREATE TABLE users_sessions (
+CREATE TABLE sessions (
   id VARCHAR(64) NOT NULL,
   userId INT NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -30,7 +30,7 @@ CREATE TABLE users_sessions (
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-CREATE TABLE users_recover (
+CREATE TABLE recovers (
   id VARCHAR(64) NOT NULL,
   userId INT NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -38,7 +38,7 @@ CREATE TABLE users_recover (
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-CREATE TABLE users_validation (
+CREATE TABLE validations (
   id VARCHAR(64) NOT NULL,
   userId INT NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -59,7 +59,7 @@ CREATE TABLE tickets (
   FOREIGN KEY (asignedTo) REFERENCES users(id) ON DELETE SET NULL
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-CREATE TABLE tickets_posts (
+CREATE TABLE posts (
   id INT PRIMARY KEY AUTO_INCREMENT,
   ticketId INT NOT NULL,
   userId INT NOT NULL,
@@ -70,10 +70,11 @@ CREATE TABLE tickets_posts (
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-CREATE TABLE tickets_attachments (
+CREATE TABLE attachments (
   id INT PRIMARY KEY AUTO_INCREMENT,
   postId INT NOT NULL,
+  fileName VARCHAR(150) NOT NULL,
   filePath VARCHAR(150) NOT NULL,
   uploaded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (postId) REFERENCES tickets_posts(id) ON DELETE CASCADE
+  FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;

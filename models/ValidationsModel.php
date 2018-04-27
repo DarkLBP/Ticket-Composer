@@ -4,7 +4,7 @@ namespace Models;
 
 use Core\Model;
 
-class UsersRecoverModel extends Model
+class ValidationsModel extends Model
 {
 
 }

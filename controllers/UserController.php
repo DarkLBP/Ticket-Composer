@@ -5,9 +5,9 @@ namespace Controllers;
 use Core\Controller;
 use Core\Utils;
 use Models\UsersModel;
-use Models\UsersRecoverModel;
-use Models\UsersSessionsModel;
-use Models\UsersValidationModel;
+use Models\RecoversModel;
+use Models\SessionsModel;
+use Models\ValidationsModel;
 
 class UserController extends Controller
 {
@@ -31,7 +31,7 @@ class UserController extends Controller
                 if (!empty($exists)) {
                     try {
                         $recoverToken = bin2hex(random_bytes(32));
-                        $recoverModel = new UsersRecoverModel();
+                        $recoverModel = new RecoversModel();
                         $recoverModel->insert([
                             'id' => $recoverToken,
                             'userId' => $exists['id']
@@ -66,7 +66,7 @@ class UserController extends Controller
             }
             if (empty($errors)) {
                 $userModel = new UsersModel();
-                $validationModel = new UsersValidationModel();
+                $validationModel = new ValidationsModel();
                 $userModel->join($validationModel, 'id', 'userId', 'left');
                 $user = $userModel->findOne($email, "email", [
                     ["$userModel.id", 'userId'],
@@ -78,7 +78,7 @@ class UserController extends Controller
                         if (empty($user["validationId"])) {
                             try {
                                 $sessionToken = bin2hex(random_bytes(32));
-                                $sessionModel = new UsersSessionsModel();
+                                $sessionModel = new SessionsModel();
                                 $sessionModel->insert([
                                     'id' => $sessionToken,
                                     'userId' => $user['userId']
@@ -124,7 +124,7 @@ class UserController extends Controller
         if (count($params) === 2) {
             $user = $params[0];
             $key = $params[1];
-            $recover = new UsersRecoverModel();
+            $recover = new RecoversModel();
             $data = $recover->count(['id' => $key, 'userId' => $user]);
             if ($data === 1) {
                 $this->request->setViewParam('params', $params);
@@ -208,7 +208,7 @@ class UserController extends Controller
                             "email" => $email,
                             "password" => password_hash($password, PASSWORD_DEFAULT)
                         ]);
-                        $validation = new UsersValidationModel();
+                        $validation = new ValidationsModel();
                         $validation->insert([
                             'id' => $validationCode,
                             'userId' => $insertId
@@ -234,7 +234,7 @@ class UserController extends Controller
         if (count($params) === 2) {
             $user = $params[0];
             $key = $params[1];
-            $validation = new UsersValidationModel();
+            $validation = new ValidationsModel();
             $data = $validation->count(['id' => $key, 'userId' => $user]);
             if ($data === 1) {
                 $validation->delete(['id' => $key, 'userId' => $user]);

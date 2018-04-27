@@ -2,10 +2,9 @@
 
 namespace Models;
 
-
 use Core\Model;
 
-class TicketsPostsModel extends Model
+class SessionsModel extends Model
 {
 
 }

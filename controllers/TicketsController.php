@@ -4,9 +4,9 @@ namespace Controllers;
 use Core\Controller;
 use Core\Utils;
 use Models\DepartmentsModel;
-use Models\TicketsAttachmentsModel;
+use Models\AttachmentsModel;
 use Models\TicketsModel;
-use Models\TicketsPostsModel;
+use Models\PostsModel;
 use Models\UsersModel;
 
 class TicketsController extends Controller
@@ -26,7 +26,7 @@ class TicketsController extends Controller
                 $errors[] = "You have not selected a department";
             }
             if (empty($content)) {
-                $errors[] = "You have not wrote any content";
+                $errors[] = "You have not written any content";
             }
             if (empty($errors)) {
                 $userId = $this->request->getSessionParam('loggedUser');
@@ -36,7 +36,7 @@ class TicketsController extends Controller
                     'createdBy' => $userId,
                     'department' => $department,
                 ]);
-                $ticketPostModel = new TicketsPostsModel();
+                $ticketPostModel = new PostsModel();
                 $ticketPostId = $ticketPostModel->insert([
                     'ticketId' => $ticketId,
                     'userId' => $userId,
@@ -44,7 +44,7 @@ class TicketsController extends Controller
                 ]);
                 if (!empty($attachment)) {
                     $file = $this->uploadFile($attachment);
-                    $ticketAttachment = new TicketsAttachmentsModel();
+                    $ticketAttachment = new AttachmentsModel();
                     $ticketAttachment->insert([
                         'postId' => $ticketPostId,
                         'filePath' => $file
@@ -63,7 +63,7 @@ class TicketsController extends Controller
     public function actionDeletePost($params = []) {
         if (isset($params[0])) {
             $postId = $params[0];
-            $postsModel = new TicketsPostsModel();
+            $postsModel = new PostsModel();
             $post = $postsModel->findOne($postId, 'id');
             if ($post['userId'] !== $this->request->getSessionParam('loggedUser')) {
                 $this->renderView('notYours');
@@ -89,7 +89,7 @@ class TicketsController extends Controller
     {
         if (isset($params[0])) {
             $postId = $params[0];
-            $postsModel = new TicketsPostsModel();
+            $postsModel = new PostsModel();
             $post = $postsModel->findOne($postId, 'id');
             if ($post['userId'] !== $this->request->getSessionParam('loggedUser')) {
                 $this->renderView('notYours');
@@ -142,7 +142,7 @@ class TicketsController extends Controller
             if ($exists === 1) {
                 $content = $this->request->getPostParam('message', true);
                 if (!empty($content)) {
-                    $ticketPostsModel = new TicketsPostsModel();
+                    $ticketPostsModel = new PostsModel();
                     $ticketPostsModel->insert([
                         'ticketId' => $ticketId,
                         'userId' => $this->request->getSessionParam('loggedUser'),
@@ -178,7 +178,7 @@ class TicketsController extends Controller
                 ["$departmentsModel.name", "departmentName"]
             ]);
             if (!empty($ticket)) {
-                $ticketPostsModel = new TicketsPostsModel();
+                $ticketPostsModel = new PostsModel();
                 $ticketPostsModel->join($usersModel, 'userId', 'id', 'left');
                 $ticketPosts = $ticketPostsModel->find(['ticketId' => $ticketId], [
                     "$ticketPostsModel.*",

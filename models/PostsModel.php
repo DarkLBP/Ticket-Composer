@@ -5,7 +5,7 @@ namespace Models;
 
 use Core\Model;
 
-class TicketsStatusesModel extends Model
+class PostsModel extends Model
 {
 
 }

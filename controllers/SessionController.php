@@ -6,7 +6,7 @@ use Core\Controller;
 use Core\Request;
 use Core\Utils;
 use Models\UsersModel;
-use Models\UsersSessionsModel;
+use Models\SessionsModel;
 
 class SessionController extends Controller
 {
@@ -32,7 +32,7 @@ class SessionController extends Controller
 
     private function destroyToken()
     {
-        $sessionModel = new UsersSessionsModel();
+        $sessionModel = new SessionsModel();
         $sessionModel->delete(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
         $this->userToken = [];
         $this->request->setCookieParam('userToken', null);
@@ -96,7 +96,7 @@ class SessionController extends Controller
 
     private function redeemToken()
     {
-        $sessionModel = new UsersSessionsModel();
+        $sessionModel = new SessionsModel();
         $data = $sessionModel->count(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
         if ($data === 1) {
             $this->request->setSessionParam('loggedUser', $this->userToken['userId']);
