@@ -4,10 +4,6 @@ namespace Controllers;
 
 use Core\Controller;
 use Core\Utils;
-use Models\UsersModel;
-use Models\RecoversModel;
-use Models\SessionsModel;
-use Models\ValidationsModel;
 
 class UserController extends Controller
 {
@@ -26,12 +22,12 @@ class UserController extends Controller
             if (empty($email)) {
                 $errors[] = 'Email is empty';
             } else {
-                $userModel = new UsersModel();
+                $userModel = $this->getModel('users');
                 $exists = $userModel->findOne($email, 'email', ['id']);
                 if (!empty($exists)) {
                     try {
                         $recoverToken = bin2hex(random_bytes(32));
-                        $recoverModel = new RecoversModel();
+                        $recoverModel = $this->getModel('recovers');
                         $recoverModel->insert([
                             'id' => $recoverToken,
                             'userId' => $exists['id']
@@ -65,8 +61,8 @@ class UserController extends Controller
                 $errors[] = 'Password is empty';
             }
             if (empty($errors)) {
-                $userModel = new UsersModel();
-                $validationModel = new ValidationsModel();
+                $userModel = $this->getModel('users');
+                $validationModel = $this->getModel('validations');
                 $userModel->join($validationModel, 'id', 'userId', 'left');
                 $user = $userModel->findOne($email, "email", [
                     ["$userModel.id", 'userId'],
@@ -78,7 +74,7 @@ class UserController extends Controller
                         if (empty($user["validationId"])) {
                             try {
                                 $sessionToken = bin2hex(random_bytes(32));
-                                $sessionModel = new SessionsModel();
+                                $sessionModel = $this->getModel('sessions');
                                 $sessionModel->insert([
                                     'id' => $sessionToken,
                                     'userId' => $user['userId']
@@ -106,7 +102,7 @@ class UserController extends Controller
 
     public function actionLogout()
     {
-        $this->request->setSessionParam('loggedUser', null);
+        $this->request->setSessionParam('loggedUser');
         $this->request->redirect(Utils::getURL());
     }
 
@@ -124,7 +120,7 @@ class UserController extends Controller
         if (count($params) === 2) {
             $user = $params[0];
             $key = $params[1];
-            $recover = new RecoversModel();
+            $recover = $this->getModel('recovers');
             $data = $recover->count(['id' => $key, 'userId' => $user]);
             if ($data === 1) {
                 $this->request->setViewParam('params', $params);
@@ -144,7 +140,7 @@ class UserController extends Controller
                     $errors[] = 'Passwords do not match';
                 }
                 if (empty($errors)) {
-                    $userModel = new UsersModel();
+                    $userModel = $this->getModel('users');
                     $userModel->update(['password' => password_hash($password, PASSWORD_DEFAULT)], ['id' => $user]);
                     $recover->delete(['id' => $key, 'userId' => $user]);
                     $this->request->setSessionParam('recovered', true);
@@ -196,7 +192,7 @@ class UserController extends Controller
                 $errors[] = 'Passwords do not match';
             }
             if (empty($errors)) {
-                $model = new UsersModel();
+                $model = $this->getModel('users');
                 //Find if email is in use
                 $existing = $model->count(["email" => $email]);
                 if ($existing === 0) {
@@ -208,7 +204,7 @@ class UserController extends Controller
                             "email" => $email,
                             "password" => password_hash($password, PASSWORD_DEFAULT)
                         ]);
-                        $validation = new ValidationsModel();
+                        $validation = $this->getModel('validations');
                         $validation->insert([
                             'id' => $validationCode,
                             'userId' => $insertId
@@ -234,7 +230,7 @@ class UserController extends Controller
         if (count($params) === 2) {
             $user = $params[0];
             $key = $params[1];
-            $validation = new ValidationsModel();
+            $validation = $this->getModel('validations');
             $data = $validation->count(['id' => $key, 'userId' => $user]);
             if ($data === 1) {
                 $validation->delete(['id' => $key, 'userId' => $user]);

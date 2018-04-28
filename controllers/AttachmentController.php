@@ -2,8 +2,6 @@
 namespace Controllers;
 
 use Core\Controller;
-use Models\AttachmentsModel;
-use Models\PostsModel;
 
 class AttachmentController extends Controller
 {
@@ -11,8 +9,8 @@ class AttachmentController extends Controller
     {
         if (isset($params[0])) {
             $attachmentId = $params[0];
-            $attachmentModel = new AttachmentsModel();
-            $postModel = new PostsModel();
+            $attachmentModel = $this->getModel('attachments');
+            $postModel = $this->getModel('posts');
             $attachmentModel->join($postModel, 'postId', 'id');
             $attachment = $attachmentModel->findOne($attachmentId, "$attachmentModel.id", [
                 ["$postModel.userId", 'userId'],

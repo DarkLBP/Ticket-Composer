@@ -3,11 +3,6 @@ namespace Controllers;
 
 use Core\Controller;
 use Core\Utils;
-use Models\DepartmentsModel;
-use Models\AttachmentsModel;
-use Models\TicketsModel;
-use Models\PostsModel;
-use Models\UsersModel;
 
 class TicketsController extends Controller
 {
@@ -30,13 +25,13 @@ class TicketsController extends Controller
             }
             if (empty($errors)) {
                 $user = $this->request->getSessionParam('loggedUser');
-                $ticketModel = new TicketsModel();
+                $ticketModel = $this->getModel('tickets');
                 $ticketId = $ticketModel->insert([
                     'title' => $title,
                     'createdBy' => $user['id'],
                     'department' => $department,
                 ]);
-                $ticketPostModel = new PostsModel();
+                $ticketPostModel = $this->getModel('posts');
                 $ticketPostId = $ticketPostModel->insert([
                     'ticketId' => $ticketId,
                     'userId' => $user['id'],
@@ -44,7 +39,7 @@ class TicketsController extends Controller
                 ]);
                 if (!empty($attachment)) {
                     $file = $this->uploadFile($attachment);
-                    $ticketAttachment = new AttachmentsModel();
+                    $ticketAttachment = $this->getModel('attachments');
                     $ticketAttachment->insert([
                         'postId' => $ticketPostId,
                         'fileName' => $attachment['name'],
@@ -55,7 +50,7 @@ class TicketsController extends Controller
             }
             $this->request->setViewParam('errors', $errors);
         }
-        $departmentModel = new DepartmentsModel();
+        $departmentModel = $this->getModel('departments');
         $departments = $departmentModel->find();
         $this->request->setViewParam('departments', $departments);
         $this->renderView('create');
@@ -64,7 +59,7 @@ class TicketsController extends Controller
     public function actionDeletePost($params = []) {
         if (isset($params[0])) {
             $postId = $params[0];
-            $postsModel = new PostsModel();
+            $postsModel = $this->getModel('posts');
             $post = $postsModel->findOne($postId, 'id');
             if ($post['userId'] !== $this->request->getSessionParam('loggedUser')) {
                 $this->renderView('notYours');
@@ -90,7 +85,7 @@ class TicketsController extends Controller
     {
         if (isset($params[0])) {
             $postId = $params[0];
-            $postsModel = new PostsModel();
+            $postsModel = $this->getModel('posts');
             $post = $postsModel->findOne($postId, 'id');
             if ($post['userId'] !== $this->request->getSessionParam('loggedUser')) {
                 $this->renderView('notYours');
@@ -121,8 +116,8 @@ class TicketsController extends Controller
 
     public function actionIndex()
     {
-        $ticketsModel = new TicketsModel();
-        $departmentsModel = new DepartmentsModel();
+        $ticketsModel = $this->getModel('tickets');
+        $departmentsModel = $this->getModel('departments');
         $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
         $tickets = $ticketsModel->find([], [
             "$ticketsModel.*",
@@ -138,12 +133,12 @@ class TicketsController extends Controller
     {
         if (isset($params[0])) {
             $ticketId = $params[0];
-            $ticketsModel = new TicketsModel();
+            $ticketsModel = $this->getModel('tickets');
             $exists = $ticketsModel->count(['id' => $ticketId]);
             if ($exists === 1) {
                 $content = $this->request->getPostParam('message', true);
                 if (!empty($content)) {
-                    $ticketPostsModel = new PostsModel();
+                    $ticketPostsModel = $this->getModel('posts');
                     $ticketPostsModel->insert([
                         'ticketId' => $ticketId,
                         'userId' => $this->request->getSessionParam('loggedUser'),
@@ -163,13 +158,13 @@ class TicketsController extends Controller
         $error = $this->request->getSessionParam('postError');
         if (!empty($error)) {
             $this->request->setViewParam('error', $error);
-            $this->request->setSessionParam('postError', null);
+            $this->request->setSessionParam('postError');
         }
         if (isset($params[0])) {
             $ticketId = $params[0];
-            $ticketsModel = new TicketsModel();
-            $usersModel = new UsersModel();
-            $departmentsModel = new DepartmentsModel();
+            $ticketsModel = $this->getModel('tickets');
+            $usersModel = $this->getModel('users');
+            $departmentsModel = $this->getModel('departments');
             $ticketsModel->join($usersModel, 'createdBy', 'id', 'left');
             $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
             $ticket = $ticketsModel->findOne($ticketId, "$ticketsModel.id", [
@@ -179,7 +174,7 @@ class TicketsController extends Controller
                 ["$departmentsModel.name", "departmentName"]
             ]);
             if (!empty($ticket)) {
-                $ticketPostsModel = new PostsModel();
+                $ticketPostsModel = $this->getModel('posts');
                 $ticketPostsModel->join($usersModel, 'userId', 'id', 'left');
                 $ticketPosts = $ticketPostsModel->find(['ticketId' => $ticketId], [
                     "$ticketPostsModel.*",

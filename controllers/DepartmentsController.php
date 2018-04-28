@@ -4,7 +4,6 @@ namespace Controllers;
 
 use Core\Controller;
 use Core\Utils;
-use Models\DepartmentsModel;
 
 class DepartmentsController extends Controller
 {
@@ -21,7 +20,7 @@ class DepartmentsController extends Controller
                 $this->request->setViewParam('error', 'Department name is empty');
                 $this->renderView('create');
             }
-            $model = new DepartmentsModel();
+            $model = $this->getModel('departments');
             $model->insert([
                 'name' => $name
             ]);
@@ -52,7 +51,7 @@ class DepartmentsController extends Controller
                 $this->request->redirect(Utils::getURL('departments'));
             }
             $department = $params[0];
-            $model = new DepartmentsModel();
+            $model = $this->getModel('departments');
             $exists = $model->findOne($department);
             if (!empty($exists)) {
                 if ($this->request->isGet()) {
@@ -80,7 +79,7 @@ class DepartmentsController extends Controller
                 $this->request->redirect(Utils::getURL('departments'));
             }
             $department = $params[0];
-            $model = new DepartmentsModel();
+            $model = $this->getModel('departments');
             $exists = $model->findOne($department);
             if (!empty($exists)) {
                 if ($this->request->isGet()) {

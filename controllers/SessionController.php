@@ -5,8 +5,6 @@ namespace Controllers;
 use Core\Controller;
 use Core\Request;
 use Core\Utils;
-use Models\UsersModel;
-use Models\SessionsModel;
 
 class SessionController extends Controller
 {
@@ -34,7 +32,7 @@ class SessionController extends Controller
         if (empty($this->userToken)) {
             return;
         }
-        $sessionModel = new SessionsModel();
+        $sessionModel = $this->getModel('sessions');
         $sessionModel->delete(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
         $this->userToken = [];
         $this->request->setCookieParam('userToken', null);
@@ -75,11 +73,11 @@ class SessionController extends Controller
     private function redeemToken()
     {
         if (empty($this->userToken)) {
-            $this->request->setSessionParam('loggedUser', null);
+            $this->request->setSessionParam('loggedUser');
             return;
         }
-        $sessionModel = new SessionsModel();
-        $usersModel = new UsersModel();
+        $sessionModel = $this->getModel('sessions');
+        $usersModel = $this->getModel('users');
         $sessionModel->join($usersModel, 'userId', 'id', 'inner');
         $data = $sessionModel->find([
             "$sessionModel.id" => $this->userToken['sessionToken'],
@@ -90,7 +88,7 @@ class SessionController extends Controller
         if (count($data) == 1) {
             $this->request->setSessionParam('loggedUser', $data[0]);
         } else {
-            $this->request->setSessionParam('loggedUser', null);
+            $this->request->setSessionParam('loggedUser');
         }
     }
 }
