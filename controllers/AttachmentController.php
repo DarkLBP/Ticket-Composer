@@ -21,6 +21,9 @@ class AttachmentController extends Controller
                 if ($userId != $this->request->getSessionParam('loggedUser')['id']) {
                     $this->renderView('notAuthorised');
                 }
+                $filePath = '../uploads/'.$attachment['filePath'];
+                $mimeType = mime_content_type($filePath);
+                $this->request->setHeader('Content-Type', $mimeType);
                 $this->request->setHeader("Content-Disposition", "attachment; filename=$attachment[fileName]");
                 readfile('../uploads/'.$attachment['filePath']);
                 exit;
