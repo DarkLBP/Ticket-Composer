@@ -25,7 +25,7 @@ class AttachmentController extends Controller
                 $mimeType = mime_content_type($filePath);
                 $this->request->setHeader('Content-Type', $mimeType);
                 $this->request->setHeader("Content-Disposition", "attachment; filename=$attachment[fileName]");
-                readfile('../uploads/'.$attachment['filePath']);
+                readfile($filePath);
                 exit;
             }
         }
