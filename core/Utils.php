@@ -3,6 +3,13 @@
 namespace Core;
 
 class Utils {
+    /**
+     * Generates an URL from a controller, an action, and the given params
+     * @param string $controller The controller name
+     * @param string $action The action name
+     * @param array $params The params that should be passed to the controller's action
+     * @return string The generated URL
+     */
     public static function getURL(string $controller = '', string $action = '', array $params = []) {
         $url = ($_SERVER["HTTPS"] ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/';
         if (!empty($controller)) {
@@ -19,5 +26,15 @@ class Utils {
             }
         }
         return $url;
+    }
+
+    /**
+     * Escapes the given data for HTML printing
+     * @param string $data The data to be escaped
+     * @return string The escaped string
+     */
+    public static function escapeData(string $data): string
+    {
+        return htmlspecialchars($data);
     }
 }
