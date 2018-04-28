@@ -29,17 +29,17 @@ class TicketsController extends Controller
                 $errors[] = "You have not written any content";
             }
             if (empty($errors)) {
-                $userId = $this->request->getSessionParam('loggedUser');
+                $user = $this->request->getSessionParam('loggedUser');
                 $ticketModel = new TicketsModel();
                 $ticketId = $ticketModel->insert([
                     'title' => $title,
-                    'createdBy' => $userId,
+                    'createdBy' => $user['id'],
                     'department' => $department,
                 ]);
                 $ticketPostModel = new PostsModel();
                 $ticketPostId = $ticketPostModel->insert([
                     'ticketId' => $ticketId,
-                    'userId' => $userId,
+                    'userId' => $user['id'],
                     'content' => $content
                 ]);
                 if (!empty($attachment)) {
@@ -47,6 +47,7 @@ class TicketsController extends Controller
                     $ticketAttachment = new AttachmentsModel();
                     $ticketAttachment->insert([
                         'postId' => $ticketPostId,
+                        'fileName' => $attachment['name'],
                         'filePath' => $file
                     ]);
                 }
@@ -203,7 +204,7 @@ class TicketsController extends Controller
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $fileName = $fileHash . (!empty($extension) ? '.' . $extension : '');
         $relativePath = $folderName . '/' . $fileName;
-        $fullDir = __DIR__ . '/../site/uploads/' . $folderName . '/';
+        $fullDir = __DIR__ . '/../uploads/' . $folderName . '/';
         if (!is_dir($fullDir)) {
             mkdir($fullDir, 0755, true);
         }
