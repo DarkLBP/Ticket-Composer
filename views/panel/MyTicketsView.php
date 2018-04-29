@@ -20,7 +20,7 @@ use Core\Utils;
     <?php
     foreach ($tickets as $ticket) {
         echo "<tr>";
-        echo "<td><a href='" . Utils::getURL('tickets', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
+        echo "<td><a href='" . Utils::getURL('ticket', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
         echo "<td>$ticket[title]</td>";
         echo "<td>$ticket[departmentName]</td>";
         if (!empty($ticket["asignedTo"])) {

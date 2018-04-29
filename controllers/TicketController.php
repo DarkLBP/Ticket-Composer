@@ -4,7 +4,7 @@ namespace Controllers;
 use Core\Controller;
 use Core\Utils;
 
-class TicketsController extends Controller
+class TicketController extends Controller
 {
     public function actionCreate()
     {
@@ -46,7 +46,7 @@ class TicketsController extends Controller
                         'filePath' => $file
                     ]);
                 }
-                $this->request->redirect(Utils::getURL('tickets', 'view', [$ticketId]));
+                $this->request->redirect(Utils::getURL('ticket', 'view', [$ticketId]));
             }
             $this->request->setViewParam('errors', $errors);
         }
@@ -72,7 +72,7 @@ class TicketsController extends Controller
                     $postsModel->delete([
                         'id' => $postId
                     ]);
-                    $this->request->redirect(Utils::getURL('tickets', 'view', [$post['ticketId']]));
+                    $this->request->redirect(Utils::getURL('ticket', 'view', [$post['ticketId']]));
                 } else {
                     $this->renderView('error');
                 }
@@ -102,7 +102,7 @@ class TicketsController extends Controller
                         ], [
                             'id' => $postId
                         ]);
-                        $this->request->redirect(Utils::getURL('tickets', 'view', [$post['ticketId']]));
+                        $this->request->redirect(Utils::getURL('ticket', 'view', [$post['ticketId']]));
                     }
                     $this->request->setViewParam('error', 'Message is empty');
                     $this->renderView('postEdit');
@@ -142,7 +142,7 @@ class TicketsController extends Controller
                 } else {
                     $this->request->setSessionParam('postError', 'Message is empty');
                 }
-                $this->request->redirect(Utils::getURL('tickets', 'view', [$ticketId]));
+                $this->request->redirect(Utils::getURL('ticket', 'view', [$ticketId]));
             }
         }
         $this->renderView('invalidTicket');

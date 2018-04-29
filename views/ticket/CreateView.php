@@ -10,7 +10,7 @@ if (!empty($errors)) {
     echo '<p>' . implode('<br>', $errors) . '</p>';
 }
 ?>
-<form action="<?= Utils::getURL('tickets', 'create')?>" method="post" enctype="multipart/form-data">
+<form action="<?= Utils::getURL('ticket', 'create')?>" method="post" enctype="multipart/form-data">
     <label for="title">Title:</label><br>
     <input type="text" name="title" id="title"><br>
     <label for="department">Department:</label><br>
