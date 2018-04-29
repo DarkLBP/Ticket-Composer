@@ -34,7 +34,7 @@ input[type=button],
 input[type=submit]{
     background-color: #4e6e5d;
     color: white;
-    border: 0;
+    border: none;
     border-radius: 2px;
     cursor: pointer;
     padding: 0.5em 0.7em;
@@ -81,6 +81,7 @@ input:out-of-range {
     border: 1px solid #bb0a13 !important;
 }
 
+input::-ms-input-placeholder,
 input::placeholder {
     color: #cfcfcf;
 }
