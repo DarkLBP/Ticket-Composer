@@ -17,22 +17,22 @@ use Core\Utils;
     <h1>
         <a href="<?= Utils::getURL() ?>"><?= SITE_TITLE ?></a>
     </h1>
-</header>
-<nav id="main-nav">
-    <?php
-    /**
-     * @var string $controller
-     * @var string $action
-     * @var array $loggedUser
-     */
-    if ($controller !== 'user' || $action !== 'login' && $action !== 'register') {
-        if ($loggedUser){
-            echo "Welcome $loggedUser[name] $loggedUser[surname]<br>";
-            echo "<a href='" . Utils::getURL('user', 'logout') . "'>Logout</a>";
-        } else {
-            echo "<a href='" . Utils::getURL('user', 'login') . "'>Log In</a> ";
-            echo "<a href='" . Utils::getURL('user', 'register') . "'>Register</a>";
+    <div id="user-box">
+        <?php
+        /**
+         * @var string $controller
+         * @var string $action
+         * @var array $loggedUser
+         */
+        if ($controller !== 'user') {
+            if ($loggedUser){
+                echo "Welcome $loggedUser[name] $loggedUser[surname]<br>";
+                echo "<a href='" . Utils::getURL('user', 'logout') . "'>Logout</a>";
+            } else {
+                echo "<a href='" . Utils::getURL('user', 'login') . "'>Log In</a> ";
+                echo "<a href='" . Utils::getURL('user', 'register') . "'>Register</a>";
+            }
         }
-    }
-    ?>
-</nav>
+        ?>
+    </div>
+</header>
