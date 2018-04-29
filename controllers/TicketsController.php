@@ -114,21 +114,6 @@ class TicketsController extends Controller
         $this->renderView('invalidPost');
     }
 
-    public function actionIndex()
-    {
-        $ticketsModel = $this->getModel('tickets');
-        $departmentsModel = $this->getModel('departments');
-        $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
-        $tickets = $ticketsModel->find([], [
-            "$ticketsModel.*",
-            ["$departmentsModel.name", "departmentName"]
-        ], [
-            'created' => 'desc'
-        ]);
-        $this->request->setViewParam('tickets', $tickets);
-        $this->renderView('index');
-    }
-
     public function actionPost($params = [])
     {
         if (isset($params[0])) {
