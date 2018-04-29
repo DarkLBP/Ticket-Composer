@@ -61,7 +61,7 @@ class TicketsController extends Controller
             $postId = $params[0];
             $postsModel = $this->getModel('posts');
             $post = $postsModel->findOne($postId, 'id');
-            if ($post['userId'] !== $this->request->getSessionParam('loggedUser')) {
+            if ($post['userId'] !== $this->request->getSessionParam('loggedUser')['id']) {
                 $this->renderView('notYours');
             }
             if (!empty($post)) {
@@ -87,7 +87,7 @@ class TicketsController extends Controller
             $postId = $params[0];
             $postsModel = $this->getModel('posts');
             $post = $postsModel->findOne($postId, 'id');
-            if ($post['userId'] !== $this->request->getSessionParam('loggedUser')) {
+            if ($post['userId'] !== $this->request->getSessionParam('loggedUser')['id']) {
                 $this->renderView('notYours');
             }
             if (!empty($post)) {
