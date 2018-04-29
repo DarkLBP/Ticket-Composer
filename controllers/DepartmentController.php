@@ -7,7 +7,7 @@ use Core\Utils;
 
 class DepartmentController extends Controller
 {
-    public function actionCreate($params = [])
+    public function actionCreate()
     {
         if ($this->request->isPost()) {
             $name = $this->request->getPostParam('name', true);
@@ -20,17 +20,7 @@ class DepartmentController extends Controller
                 'name' => $name
             ]);
             $this->request->setViewParam('department', $name);
-            $this->request->setSessionParam('completed', true);
-            $this->request->redirect(Utils::getURL('departments', 'create', ['completed']));
-        }
-        if (!empty($params[0]) && $params[0] === "completed" ) {
-            if ($this->request->getSessionParam('completed')) {
-                $this->request->setSessionParam('completed', false);
-                $this->renderView('created');
-                return;
-            } else {
-                $this->request->redirect(Utils::getURL('departments', 'create'));
-            }
+            $this->request->redirect(Utils::getURL('panel', 'departments'));
         }
         $this->renderView('create');
     }
@@ -38,26 +28,18 @@ class DepartmentController extends Controller
     public function actionDelete($params = [])
     {
         if (!empty($params[0])) {
-            if (!empty($params[1]) && $params[1] === "completed" ) {
-                if ($this->request->getSessionParam('completed')) {
-                    $this->request->setSessionParam('completed', false);
-                    $this->renderView('deleted');
-                }
-                $this->request->redirect(Utils::getURL('departments'));
-            }
             $department = $params[0];
             $model = $this->getModel('departments');
             $exists = $model->findOne($department);
             if (!empty($exists)) {
-                if ($this->request->isGet()) {
-                    $name = $exists["name"];
-                    $this->request->setViewParam('name', $name);
-                    $this->request->setViewParam('department', $department);
-                    $this->renderView('deleteConfirm');
+                if ($this->request->isPost()) {
+                    $model->delete(["id" => $department]);
+                    $this->request->redirect(Utils::getURL('panel', 'departments'));
                 }
-                $model->delete(["id" => $department]);
-                $this->request->setSessionParam('completed', true);
-                $this->request->redirect(Utils::getURL('departments', 'delete', [$department, 'completed']));
+                $name = $exists["name"];
+                $this->request->setViewParam('name', $name);
+                $this->request->setViewParam('department', $department);
+                $this->renderView('delete');
             }
         }
         $this->renderView('invalidDepartment');
@@ -66,32 +48,22 @@ class DepartmentController extends Controller
     public function actionEdit($params = [])
     {
         if (!empty($params[0])) {
-            if (!empty($params[1]) && $params[1] === "completed" ) {
-                if ($this->request->getSessionParam('completed')) {
-                    $this->request->setSessionParam('completed', false);
-                    $this->renderView('edited');
-                }
-                $this->request->redirect(Utils::getURL('departments'));
-            }
             $department = $params[0];
             $model = $this->getModel('departments');
             $exists = $model->findOne($department);
             if (!empty($exists)) {
-                if ($this->request->isGet()) {
-                    $this->request->setViewParam('name', $exists["name"]);
-                    $this->request->setViewParam('department', $department);
-                    $this->renderView('edit');
+                if ($this->request->isPost()) {
+                    $name = $this->request->getPostParam('department', true);
+                    if (empty($name)) {
+                        $this->request->setViewParam('department', $exists);
+                        $this->request->setViewParam('error', 'Department name is empty');
+                        $this->renderView('edit');
+                    }
+                    $model->update(["name" => $name], ["id" => $department]);
+                    $this->request->redirect(Utils::getURL('panel', 'departments'));
                 }
-                $name = $this->request->getPostParam('department', true);
-                if (empty($name)) {
-                    $this->request->setViewParam('name', $exists["name"]);
-                    $this->request->setViewParam('department', $department);
-                    $this->request->setViewParam('error', 'Department name is empty');
-                    $this->renderView('edit');
-                }
-                $model->update(["name" => $name], ["id" => $department]);
-                $this->request->setSessionParam('completed', true);
-                $this->request->redirect(Utils::getURL('departments', 'edit', [$department, 'completed']));
+                $this->request->setViewParam('department', $exists);
+                $this->renderView('edit');
             }
         }
         $this->renderView('invalidDepartment');
