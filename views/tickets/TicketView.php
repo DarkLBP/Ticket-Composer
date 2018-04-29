@@ -19,6 +19,13 @@ foreach ($ticketPosts as $post) {
     echo "<small>Created on $post[created]</small>";
     echo "</header>";
     echo "<p>" . str_replace(["\n", "\r\n"], '<br>', htmlspecialchars($post['content'])) . "</p>";
+    if (!empty($post['attachments'])) {
+        echo '<p><strong>Attachments:</strong><br>';
+        foreach ($post['attachments'] as $attachment) {
+            echo "<a href='" . Utils::getURL('attachment', 'download', [$attachment['id']]) . "'>$attachment[fileName]</a><br>";
+        }
+        echo '</p>';
+    }
     if ($post['userId'] == $loggedUser['id']) {
         echo "<a href='" . Utils::getURL('tickets', 'editPost', [$post["id"]]) . "'>Edit</a>";
     }

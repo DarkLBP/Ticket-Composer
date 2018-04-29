@@ -174,6 +174,7 @@ class TicketsController extends Controller
                 ["$departmentsModel.name", "departmentName"]
             ]);
             if (!empty($ticket)) {
+                //Retrieve ticket's posts
                 $ticketPostsModel = $this->getModel('posts');
                 $ticketPostsModel->join($usersModel, 'userId', 'id', 'left');
                 $ticketPosts = $ticketPostsModel->find(['ticketId' => $ticketId], [
@@ -184,6 +185,12 @@ class TicketsController extends Controller
                 ], [
                     "$ticketPostsModel.created" => 'asc'
                 ]);
+
+                //Retrieve attachments
+                $attachmensModel = $this->getModel('attachments');
+                foreach ($ticketPosts as &$post) {
+                    $post['attachments'] = $attachmensModel->find(['postId' => $post['id']]);
+                }
                 $this->request->setViewParam('ticket', $ticket);
                 $this->request->setViewParam('ticketPosts', $ticketPosts);
                 $this->renderView('ticket');
