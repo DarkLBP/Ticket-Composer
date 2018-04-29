@@ -33,8 +33,10 @@ foreach ($ticketPosts as $post) {
 }
 echo empty($error) ? '' : "<p>$error</p>";
 ?>
-<form action="<?= Utils::getURL('tickets', 'post', [$ticket["id"]]) ?>" method="post">
+<form action="<?= Utils::getURL('tickets', 'post', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
     <label for="message">Message:</label><br>
     <textarea id="message" name="message"></textarea><br>
+    <label for="attachment">Attachment:</label><br>
+    <input type="file" name="attachment" id="attachment"><br>
     <input type="submit" value="Post">
 </form>

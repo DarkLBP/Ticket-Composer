@@ -37,7 +37,7 @@ class TicketsController extends Controller
                     'userId' => $user['id'],
                     'content' => $content
                 ]);
-                if (!empty($attachment)) {
+                if (!empty($attachment) && $attachment['error'] === 0) {
                     $file = $this->uploadFile($attachment);
                     $ticketAttachment = $this->getModel('attachments');
                     $ticketAttachment->insert([
@@ -137,13 +137,23 @@ class TicketsController extends Controller
             $exists = $ticketsModel->count(['id' => $ticketId]);
             if ($exists === 1) {
                 $content = $this->request->getPostParam('message', true);
+                $attachment = $this->request->getSentFile('attachment');
                 if (!empty($content)) {
                     $ticketPostsModel = $this->getModel('posts');
-                    $ticketPostsModel->insert([
+                    $postId = $ticketPostsModel->insert([
                         'ticketId' => $ticketId,
-                        'userId' => $this->request->getSessionParam('loggedUser'),
+                        'userId' => $this->request->getSessionParam('loggedUser')['id'],
                         'content' => $content
                     ]);
+                    if (!empty($attachment) && $attachment['error'] === 0) {
+                        $file = $this->uploadFile($attachment);
+                        $ticketAttachment = $this->getModel('attachments');
+                        $ticketAttachment->insert([
+                            'postId' => $postId,
+                            'fileName' => $attachment['name'],
+                            'filePath' => $file
+                        ]);
+                    }
                 } else {
                     $this->request->setSessionParam('postError', 'Message is empty');
                 }
