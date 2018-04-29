@@ -5,13 +5,8 @@ namespace Controllers;
 use Core\Controller;
 use Core\Utils;
 
-class DepartmentsController extends Controller
+class DepartmentController extends Controller
 {
-    public function actionIndex()
-    {
-        echo "Here should appear a list of tickets if there are any";
-    }
-
     public function actionCreate($params = [])
     {
         if ($this->request->isPost()) {

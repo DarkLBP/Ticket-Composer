@@ -10,4 +10,12 @@ class PanelController extends Controller
     {
         $this->renderView('index');
     }
+
+    public function actionDepartments()
+    {
+        $departmentsModel = $this->getModel('departments');
+        $departments = $departmentsModel->find();
+        $this->request->setViewParam('departments', $departments);
+        $this->renderView('departments');
+    }
 }
