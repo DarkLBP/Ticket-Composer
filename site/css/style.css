@@ -1,0 +1,94 @@
+/*
+COLOR PALETTE
+#4d5057 Dark Grey
+#4e6e5d Dark Green
+#4da167 Medium Green
+#3bc14a Bright Green
+#cfcfcf Light Grey
+#bb0a13 Bright Red
+ */
+
+/*
+FONT IMPORT
+ */
+
+@font-face {
+    font-family: 'Metrophobic-Regular';
+    src: url('../fonts/Metrophobic-Regular.ttf') format('truetype');
+}
+
+/*
+COMPONENT STYLES
+ */
+
+* {
+    color: #4d5057;
+    font-size: 1rem;
+    font-family: 'Metrophobic-Regular', sans-serif;
+    box-sizing: border-box;
+}
+
+
+button,
+input[type=button],
+input[type=submit]{
+    background-color: #4e6e5d;
+    color: white;
+    border: 0;
+    border-radius: 2px;
+    cursor: pointer;
+    padding: 0.5em 0.7em;
+}
+
+button:hover,
+input[type=button]:hover,
+input[type=submit]:hover {
+    background-color: #4da167;
+
+}
+
+button:focus,
+input[type=button]:focus,
+input[type=submit]:focus {
+    outline: none;
+}
+
+button:active,
+input[type=button]:active,
+input[type=submit]:active {
+    background-color: #4d5057;
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+textarea {
+    padding: 0.3em;
+    border-radius: 2px;
+    outline: none;
+    border: 1px solid #cfcfcf;
+}
+
+input[type=text]:focus,
+input[type=email]:focus,
+input[type=password]:focus,
+textarea:focus {
+    border: 1px solid #3bc14a;
+}
+
+input:invalid,
+input:out-of-range {
+    border: 1px solid #bb0a13 !important;
+}
+
+input::placeholder {
+    color: #cfcfcf;
+}
+
+textarea {
+    resize: none;
+}
+
+input:disabled {
+    background-color: #cfcfcf;
+}
