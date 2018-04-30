@@ -1,5 +1,10 @@
 <?php
 use Core\Utils;
+/**
+ * @var string $controller
+ * @var string $action
+ * @var array $loggedUser
+ */
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,11 +24,6 @@ use Core\Utils;
     </h1>
     <div id="user-box">
         <?php
-        /**
-         * @var string $controller
-         * @var string $action
-         * @var array $loggedUser
-         */
         if ($controller !== 'user') {
             if ($loggedUser){
                 echo "Welcome $loggedUser[name] $loggedUser[surname]<br>";
@@ -39,12 +39,14 @@ use Core\Utils;
 <nav id="main-nav">
     <ul>
         <?php
-        echo "<li><a href='" . Utils::getURL('panel', 'tickets') . "'>Tickets</a></li>";
-        if ($loggedUser['op'] == 1) {
-            echo "<li><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
-            echo "<li><a href='" . Utils::getURL('panel', 'users') . "'>Users</a></li>";
+        if ($loggedUser) {
+            echo "<li><a href='" . Utils::getURL('panel', 'tickets') . "'>Tickets</a></li>";
+            if ($loggedUser['op'] == 1) {
+                echo "<li><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
+                echo "<li><a href='" . Utils::getURL('panel', 'users') . "'>Users</a></li>";
+            }
+            echo "<li><a href='" . Utils::getURL('panel', 'account') . "'>Account</a></li>";
         }
-        echo "<li><a href='" . Utils::getURL('panel', 'account') . "'>Tickets</a></li>";
         ?>
     </ul>
 </nav>
