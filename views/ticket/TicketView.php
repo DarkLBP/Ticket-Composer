@@ -27,13 +27,16 @@ foreach ($ticketPosts as $post) {
         echo '</p>';
     }
     if ($post['userId'] == $loggedUser['id']) {
-        echo "<a href='" . Utils::getURL('ticket', 'editPost', [$post["id"]]) . "'>Edit</a>";
+        echo "<a href='" . Utils::getURL('post', 'edit', [$post["id"]]) . "'>Edit</a>";
+    }
+    if ($loggedUser['op'] == 1) {
+        echo " <a href='" . Utils::getURL('post', 'delete', [$post["id"]]) . "'>Delete</a>";
     }
     echo "</article><hr>";
 }
 echo empty($error) ? '' : "<p>$error</p>";
 ?>
-<form action="<?= Utils::getURL('ticket', 'post', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
+<form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
     <label for="message">Message:</label><br>
     <textarea id="message" name="message"></textarea><br>
     <label for="attachment">Attachment:</label><br>

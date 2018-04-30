@@ -1,1 +1,0 @@
-<h2>This post is not yours</h2>

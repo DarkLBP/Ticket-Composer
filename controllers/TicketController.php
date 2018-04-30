@@ -56,97 +56,7 @@ class TicketController extends Controller
         $this->renderView('create');
     }
 
-    public function actionDeletePost($params = []) {
-        if (isset($params[0])) {
-            $postId = $params[0];
-            $postsModel = $this->getModel('posts');
-            $post = $postsModel->findOne($postId, 'id');
-            if ($post['userId'] !== $this->request->getSessionParam('loggedUser')['id']) {
-                $this->renderView('notYours');
-            }
-            if (!empty($post)) {
-                if ($this->request->isGet()) {
-                    $this->request->setViewParam('post', $post);
-                    $this->renderView('postDelete');
-                } else if ($this->request->isPost()) {
-                    $postsModel->delete([
-                        'id' => $postId
-                    ]);
-                    $this->request->redirect(Utils::getURL('ticket', 'view', [$post['ticketId']]));
-                } else {
-                    $this->renderView('error');
-                }
-            }
-        }
-        $this->renderView('invalidPost');
-    }
 
-    public function actionEditPost($params = [])
-    {
-        if (isset($params[0])) {
-            $postId = $params[0];
-            $postsModel = $this->getModel('posts');
-            $post = $postsModel->findOne($postId, 'id');
-            if ($post['userId'] !== $this->request->getSessionParam('loggedUser')['id']) {
-                $this->renderView('notYours');
-            }
-            if (!empty($post)) {
-                if ($this->request->isGet()) {
-                    $this->request->setViewParam('post', $post);
-                    $this->renderView('postEdit');
-                } else if ($this->request->isPost()) {
-                    $message = $this->request->getPostParam('message', true);
-                    if (!empty($message)) {
-                        $postsModel->update([
-                            'content' => $message
-                        ], [
-                            'id' => $postId
-                        ]);
-                        $this->request->redirect(Utils::getURL('ticket', 'view', [$post['ticketId']]));
-                    }
-                    $this->request->setViewParam('error', 'Message is empty');
-                    $this->renderView('postEdit');
-                } else {
-                    $this->renderView('error');
-                }
-            }
-        }
-        $this->renderView('invalidPost');
-    }
-
-    public function actionPost($params = [])
-    {
-        if (isset($params[0])) {
-            $ticketId = $params[0];
-            $ticketsModel = $this->getModel('tickets');
-            $exists = $ticketsModel->count(['id' => $ticketId]);
-            if ($exists === 1) {
-                $content = $this->request->getPostParam('message', true);
-                $attachment = $this->request->getSentFile('attachment');
-                if (!empty($content)) {
-                    $ticketPostsModel = $this->getModel('posts');
-                    $postId = $ticketPostsModel->insert([
-                        'ticketId' => $ticketId,
-                        'userId' => $this->request->getSessionParam('loggedUser')['id'],
-                        'content' => $content
-                    ]);
-                    if (!empty($attachment) && $attachment['error'] === 0) {
-                        $file = $this->uploadFile($attachment);
-                        $ticketAttachment = $this->getModel('attachments');
-                        $ticketAttachment->insert([
-                            'postId' => $postId,
-                            'fileName' => $attachment['name'],
-                            'filePath' => $file
-                        ]);
-                    }
-                } else {
-                    $this->request->setSessionParam('postError', 'Message is empty');
-                }
-                $this->request->redirect(Utils::getURL('ticket', 'view', [$ticketId]));
-            }
-        }
-        $this->renderView('invalidTicket');
-    }
 
     public function actionView($params = [])
     {
@@ -195,7 +105,7 @@ class TicketController extends Controller
                 $this->renderView('ticket');
             }
         }
-        $this->renderView('invalidTicket');
+        $this->renderView('invalid');
     }
 
     private function uploadFile($file)
