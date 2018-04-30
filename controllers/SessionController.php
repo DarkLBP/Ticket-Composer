@@ -83,10 +83,18 @@ class SessionController extends Controller
             "$sessionModel.id" => $this->userToken['sessionToken'],
             "$sessionModel.userId" => $this->userToken['userId']
         ], [
-            "$usersModel.name", "$usersModel.surname", "$usersModel.email", "$usersModel.id"
+            "$usersModel.name", "$usersModel.surname", "$usersModel.email", "$usersModel.id", "$usersModel.op"
         ]);
         if (count($data) == 1) {
-            $this->request->setSessionParam('loggedUser', $data[0]);
+            $user = $data[0];
+            $departmentsModel = $this->getModel('usersDepartments');
+            $departments = $departmentsModel->find([
+                'userId' => $user['id']
+            ]);
+            foreach ($departments as $department) {
+                $user['departments'][] = $department['departmentId'];
+            }
+            $this->request->setSessionParam('loggedUser', $user);
         } else {
             $this->request->setSessionParam('loggedUser');
         }
