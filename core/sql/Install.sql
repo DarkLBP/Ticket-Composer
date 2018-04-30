@@ -10,6 +10,7 @@ CREATE TABLE users (
   email VARCHAR(100) NOT NULL,
   password VARCHAR(64) NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  op BIT(1) NOT NULL DEFAULT 0,
   UNIQUE KEY email (email)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
