@@ -36,3 +36,15 @@ use Core\Utils;
         ?>
     </div>
 </header>
+<nav id="main-nav">
+    <ul>
+        <?php
+        echo "<li><a href='" . Utils::getURL('panel', 'tickets') . "'>Tickets</a></li>";
+        if ($loggedUser['op'] == 1) {
+            echo "<li><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
+            echo "<li><a href='" . Utils::getURL('panel', 'users') . "'>Users</a></li>";
+        }
+        echo "<li><a href='" . Utils::getURL('panel', 'account') . "'>Tickets</a></li>";
+        ?>
+    </ul>
+</nav>

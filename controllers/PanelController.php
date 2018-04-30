@@ -19,7 +19,7 @@ class PanelController extends Controller
         $this->renderView('departments');
     }
 
-    public function actionMyTickets()
+    public function actionTickets()
     {
         $ticketsModel = $this->getModel('tickets');
         $departmentsModel = $this->getModel('departments');
@@ -34,6 +34,6 @@ class PanelController extends Controller
             'created' => 'desc'
         ]);
         $this->request->setViewParam('tickets', $tickets);
-        $this->renderView('myTickets');
+        $this->renderView('tickets');
     }
 }

@@ -56,8 +56,6 @@ class TicketController extends Controller
         $this->renderView('create');
     }
 
-
-
     public function actionView($params = [])
     {
         $error = $this->request->getSessionParam('postError');
