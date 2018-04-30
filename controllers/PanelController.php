@@ -29,7 +29,7 @@ class PanelController extends Controller
             'createdBy' => $userId
         ], [
             "$ticketsModel.*",
-            ["$departmentsModel.name", "departmentName"]
+            ["$departmentsModel.name" => "departmentName"]
         ], [
             'created' => 'desc'
         ]);

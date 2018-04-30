@@ -13,7 +13,7 @@ class AttachmentController extends Controller
             $postModel = $this->getModel('posts');
             $attachmentModel->join($postModel, 'postId', 'id');
             $attachment = $attachmentModel->findOne($attachmentId, "$attachmentModel.id", [
-                ["$postModel.userId", 'userId'],
+                ["$postModel.userId" => 'userId'],
                 "$attachmentModel.*"
             ]);
             if (!empty($attachment)) {

@@ -65,8 +65,10 @@ class UserController extends Controller
                 $validationModel = $this->getModel('validations');
                 $userModel->join($validationModel, 'id', 'userId', 'left');
                 $user = $userModel->findOne($email, "email", [
-                    ["$userModel.id", 'userId'],
-                    ["$validationModel.id", "validationId"],
+                    [
+                        "$userModel.id" => 'userId',
+                        "$validationModel.id" => "validationId"
+                    ],
                     "password"
                 ]);
                 if (!empty($user)) {

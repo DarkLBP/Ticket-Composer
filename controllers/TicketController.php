@@ -164,9 +164,11 @@ class TicketController extends Controller
             $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
             $ticket = $ticketsModel->findOne($ticketId, "$ticketsModel.id", [
                 "$ticketsModel.*",
-                ["$usersModel.name", "createdName"],
-                ["$usersModel.surname", "createdSurname"],
-                ["$departmentsModel.name", "departmentName"]
+                [
+                    "$usersModel.name" => "createdName",
+                    "$usersModel.surname" => "createdSurname",
+                    "$departmentsModel.name", "departmentName"
+                ]
             ]);
             if (!empty($ticket)) {
                 //Retrieve ticket's posts
@@ -174,9 +176,11 @@ class TicketController extends Controller
                 $ticketPostsModel->join($usersModel, 'userId', 'id', 'left');
                 $ticketPosts = $ticketPostsModel->find(['ticketId' => $ticketId], [
                     "$ticketPostsModel.*",
-                    ["$usersModel.name", "createdName"],
-                    ["$usersModel.surname", "createdSurname"],
-                    ["$usersModel.id", "createdId"]
+                    [
+                        "$usersModel.name" => "createdName",
+                        "$usersModel.surname" => "createdSurname",
+                        "$usersModel.id" => "createdId"
+                    ]
                 ], [
                     "$ticketPostsModel.created" => 'asc'
                 ]);
