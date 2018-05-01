@@ -43,3 +43,4 @@ use Core\Utils;
     ?>
     </tbody>
 </table>
+<a href="<?= Utils::getURL('ticket', 'create') ?>">Create New Ticket</a>
