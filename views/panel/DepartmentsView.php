@@ -4,6 +4,7 @@ use Core\Utils;
  * @var array $departments
  */
 ?>
+<h2>Departments</h2>
 <table>
     <thead>
     <tr>
@@ -21,7 +22,7 @@ use Core\Utils;
         echo "<td>";
         echo "<a href='" . Utils::getURL('department', 'edit', [$department['id']]) . "'>Edit</a> ";
         echo "<a href='" . Utils::getURL('department', 'delete', [$department['id']]) . "'>Delete</a>";
-        echo "<tr>";
+        echo "</tr>";
     }
     ?>
     </tbody>

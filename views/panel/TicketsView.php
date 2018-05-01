@@ -5,7 +5,7 @@ use Core\Utils;
  */
 ?>
 <h2>My Tickets</h2>
-<table>
+<table class="tickets">
     <thead>
     <tr>
         <th>Ticket Id</th>
@@ -19,7 +19,11 @@ use Core\Utils;
     <tbody>
     <?php
     foreach ($tickets as $ticket) {
-        echo "<tr>";
+        if ($ticket["open"] == 1) {
+            echo "<tr class='open'>";
+        } else {
+            echo "<tr class='closed'>";
+        }
         echo "<td><a href='" . Utils::getURL('ticket', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
         echo "<td>$ticket[title]</td>";
         echo "<td>$ticket[departmentName]</td>";
@@ -30,11 +34,11 @@ use Core\Utils;
         }
         echo "<td>$ticket[created]</td>";
         if ($ticket["open"] == 1) {
-            echo "<td>Open</td>";
+            echo "<td class='open'>Open</td>";
         } else {
-            echo "<td>Closed</td>";
+            echo "<td class='closed'>Closed</td>";
         }
-        echo "<tr>";
+        echo "</tr>";
     }
     ?>
     </tbody>
