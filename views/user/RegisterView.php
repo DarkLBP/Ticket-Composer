@@ -1,13 +1,9 @@
 <?php
-
 use Core\Utils;
-
-if (!empty($errors)) {
-    echo '<p>' . implode('<br>', $errors) . '</p>';
-}
 ?>
 <div class="centered-form">
     <h2>Create New Account</h2>
+    <?= !empty($errors) ? '<p class="error-message">' . implode('<br>', $errors) . '</p>' : '' ?>
     <form method="post" action="<?= Utils::getURL("user", "register") ?>">
         <label for="name">Name</label><br>
         <input type="text" id="name" name="name"><br>

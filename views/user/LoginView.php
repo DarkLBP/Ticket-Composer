@@ -1,13 +1,9 @@
 <?php
-
 use Core\Utils;
-
-if (!empty($errors)) {
-    echo '<p>' . implode('<br>', $errors) . '</p>';
-}
 ?>
 <div class="centered-form">
     <h2>Log In</h2>
+    <?= !empty($errors) ? '<p class="error-message">' . implode('<br>', $errors) . '</p>' : '' ?>
     <form action="<?= Utils::getURL("user", "login") ?>" method="post" class="half">
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email"><br>
