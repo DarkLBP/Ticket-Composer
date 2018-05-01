@@ -23,9 +23,15 @@ COMPONENT STYLES
 
 * {
     color: #4d5057;
-    font-size: 1rem;
     font-family: 'Metrophobic-Regular', sans-serif;
     box-sizing: border-box;
+}
+
+label,
+input,
+textarea,
+button {
+    font-size: 1rem;
 }
 
 button,
