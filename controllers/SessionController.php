@@ -64,8 +64,10 @@ class SessionController extends Controller
             if ($this->controller === "user") {
                 //Redirect if the user is logged in and tries to access login or register pages
                 if ($this->action === "login" || $this->action === "register") {
-                    $this->request->redirect(Utils::getURL('tickets'));
+                    $this->request->redirect(Utils::getURL('panel'));
                 }
+            } else if ($this->controller === 'main') {
+                $this->request->redirect(Utils::getURL('panel'));
             }
         }
     }

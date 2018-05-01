@@ -18,13 +18,22 @@ FONT IMPORT
 }
 
 /*
-COMPONENT STYLES
+GENERIC STYLES
  */
 
 * {
     color: #4d5057;
     font-family: 'Metrophobic-Regular', sans-serif;
     box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1%;
+    align-items: center;
 }
 
 label,
@@ -100,3 +109,95 @@ textarea {
 input:disabled {
     background-color: #cfcfcf;
 }
+
+table {
+    width: 100%;
+}
+
+th {
+    text-align: left;
+}
+
+
+/*
+HEADER STYLES
+ */
+
+#main-header .title {
+    text-align: center;
+}
+
+#main-header .title a{
+    text-decoration: none;
+}
+
+/*
+NAVIGATION STYLES
+ */
+
+#main-nav {
+    max-width: 800px;
+    width: 100%;
+}
+
+#main-nav ul {
+    padding-left: 0;
+}
+
+#main-nav li {
+    padding: 0.5em;
+}
+
+#main-nav .navigation {
+    background-color: #4e6e5d;
+    position: relative;
+}
+
+#main-nav .navigation,
+#main-nav .navigation ul {
+    display: flex;
+    list-style: none;
+}
+
+#main-nav .navigation ul {
+    display: none;
+    background-color: #4e6e5d;
+}
+
+#main-nav .navigation li:last-child:not(:nth-child(2)) {
+    margin-left: auto;
+}
+
+#main-nav .navigation li:hover ul {
+    display: block;
+    position: absolute;
+    top: 100%;
+}
+
+#main-nav * {
+    color: white;
+    text-decoration: none;
+}
+
+/*
+CONTENT STYLES
+ */
+#main-content {
+    flex-grow: 1;
+    max-width: 800px;
+    width: 100%;
+}
+
+
+/*
+FOOTER STYLES
+ */
+
+#main-footer {
+    text-align: center;
+}
+
+/*
+RESPONSIVE STYLES
+ */
+

@@ -19,25 +19,12 @@ use Core\Utils;
 </head>
 <body>
 <header id="main-header">
-    <h1>
+    <h1 class="title">
         <a href="<?= Utils::getURL() ?>"><?= SITE_TITLE ?></a>
     </h1>
-    <div id="user-box">
-        <?php
-        if ($controller !== 'user') {
-            if ($loggedUser){
-                echo "Welcome $loggedUser[name] $loggedUser[surname]<br>";
-                echo "<a href='" . Utils::getURL('user', 'logout') . "'>Logout</a>";
-            } else {
-                echo "<a href='" . Utils::getURL('user', 'login') . "'>Log In</a> ";
-                echo "<a href='" . Utils::getURL('user', 'register') . "'>Register</a>";
-            }
-        }
-        ?>
-    </div>
 </header>
 <nav id="main-nav">
-    <ul>
+    <ul class="navigation">
         <?php
         if ($loggedUser) {
             echo "<li><a href='" . Utils::getURL('panel', 'tickets') . "'>Tickets</a></li>";
@@ -45,8 +32,17 @@ use Core\Utils;
                 echo "<li><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
                 echo "<li><a href='" . Utils::getURL('panel', 'users') . "'>Users</a></li>";
             }
-            echo "<li><a href='" . Utils::getURL('panel', 'account') . "'>Account</a></li>";
+            echo "<li>$loggedUser[name] $loggedUser[surname]";
+            echo '<ul>';
+            echo "<li><a href='" . Utils::getURL('user', 'edit') . "'>Edit Details</a></li>";
+            echo "<li><a href='" . Utils::getURL('user', 'logout') . "'>Logout</a></li>";
+            echo '</ul>';
+            echo '</li>';
+        } else {
+            echo "<li><a href='" . Utils::getURL('user', 'login') . "'>Login</a></li>";
+            echo "<li><a href='" . Utils::getURL('user', 'register') . "'>Register</a></li>";
         }
         ?>
     </ul>
 </nav>
+<main id="main-content">
