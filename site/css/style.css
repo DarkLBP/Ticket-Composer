@@ -102,6 +102,15 @@ input::placeholder {
     color: #cfcfcf;
 }
 
+input[type=submit] {
+    margin-top: 1em;
+}
+
+label {
+    display: inline-block;
+    margin-top: 0.5em;
+}
+
 textarea {
     resize: none;
 }
@@ -118,6 +127,19 @@ th {
     text-align: left;
 }
 
+/*
+CLASSES
+ */
+
+
+.centered-form {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.centered-form form * {
+    width: 100%;
+}
 
 /*
 HEADER STYLES

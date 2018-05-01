@@ -1,2 +1,2 @@
-<h1>Invalid Recovery Code</h1>
+<h2>Invalid Recovery Code</h2>
 <p>The recovery code is invalid or already used.</p>
