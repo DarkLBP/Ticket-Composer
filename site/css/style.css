@@ -106,6 +106,10 @@ input[type=submit] {
     margin-top: 1em;
 }
 
+fieldset {
+    margin-top: 1em;
+}
+
 label {
     display: inline-block;
     margin-top: 0.5em;

@@ -85,7 +85,7 @@ class SessionController extends Controller
             "$sessionModel.id" => $this->userToken['sessionToken'],
             "$sessionModel.userId" => $this->userToken['userId']
         ], [
-            "$usersModel.name", "$usersModel.surname", "$usersModel.email", "$usersModel.id", "$usersModel.op"
+            "$usersModel.*"
         ]);
         if (count($data) == 1) {
             $user = $data[0];

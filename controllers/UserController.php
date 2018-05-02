@@ -7,6 +7,61 @@ use Core\Utils;
 
 class UserController extends Controller
 {
+    public function actionEdit($params = [])
+    {
+        $userModel = $this->getModel('users');
+        if (isset($params[0])) {
+            $user = $userModel->findOne($params[0]);
+            if (empty($user)) {
+                $this->renderView('invalid');
+            }
+        } else {
+            $user = $this->request->getSessionParam('loggedUser');
+        }
+
+        if ($this->request->isPost()) {
+            $name = $this->request->getPostParam('name', true);
+            $surname = $this->request->getPostParam('surname', true);
+            $email = $this->request->getPostParam('email', true);
+            $newPassword = $this->request->getPostParam('new-password', false);
+            $newPasswordConfirm = $this->request->getPostParam('confirm-password', false);
+            $currentPassword = $this->request->getPostParam('current-password', false);
+            $errors = [];
+            if (empty($name)) {
+                $errors[] = 'The name is empty';
+            }
+            if (empty($surname)) {
+                $errors[] = 'The surname is empty';
+            }
+            if (empty($email)) {
+                $errors[] = 'The email is empty';
+            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'The email is invalid';
+            }
+            if (!empty($newPassword)) {
+                if (empty($currentPassword)) {
+                    $errors[] = 'Current password is empty';
+                }
+                if (empty($newPasswordConfirm)) {
+                    $errors[] = 'Password confirmation is empty';
+                }
+                if (!password_verify($currentPassword, $user['password'])) {
+                    $errors[] = 'Invalid password';
+                }
+            }
+            if (empty($errors)) {
+                $user['name'] = $name;
+                $user['surname'] = $surname;
+                $user['email'] = $email;
+                $user['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
+            } else {
+                $this->request->setViewParam('errors', $errors);
+            }
+        }
+
+        $this->request->setViewParam('user', $user);
+        $this->renderView('edit');
+    }
     public function actionForgot($params = [])
     {
         if (isset($params[0])) {
