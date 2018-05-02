@@ -3,12 +3,13 @@ use Core\Utils;
 
 /**
  * @var array $user
+ * @var array $loggedUser
  */
 ?>
 <div class="centered-form">
     <h2>Edit User</h2>
     <?= !empty($errors) ? '<p class="error-message">' . implode('<br>', $errors) . '</p>' : '' ?>
-    <form action="<?= Utils::getURL('user', 'edit') ?>" method="post">
+    <form action="<?= Utils::getURL('user', 'edit', [$user['id']]) ?>" method="post">
         <label for="name">Name</label><br>
         <input type="text" name="name" id="name" value="<?= Utils::escapeData($user['name']) ?>"><br>
         <label for="surname">Surname</label><br>
@@ -23,6 +24,13 @@ use Core\Utils;
             <label for="confirm-password">Confirm New Password</label><br>
             <input type="password" name="confirm-password" id="confirm-password"><br>
         </fieldset>
+        <?php
+        if ($loggedUser['op'] == 1 && $user['id'] != $loggedUser['id']) {
+            echo "<label for='op'>";
+            echo "<input type='checkbox' name='op' id='op' value='op' " . ($user['op'] == 1 ? 'checked' : '') . ">Op</label>";
+            echo "</label>";
+        }
+        ?>
         <input type="submit" value="Edit">
     </form>
 </div>

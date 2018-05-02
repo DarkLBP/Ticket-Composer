@@ -26,6 +26,7 @@ class UserController extends Controller
             $newPassword = $this->request->getPostParam('new-password', false);
             $newPasswordConfirm = $this->request->getPostParam('confirm-password', false);
             $currentPassword = $this->request->getPostParam('current-password', false);
+            $op = $this->request->getPostParam('op', false);
             $errors = [];
             if (empty($name)) {
                 $errors[] = 'The name is empty';
@@ -52,15 +53,25 @@ class UserController extends Controller
                 }
             }
             if (empty($errors)) {
-                $user['name'] = $name;
-                $user['surname'] = $surname;
-                $user['email'] = $email;
-                $user['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
+                $data['name'] = $name;
+                $data['surname'] = $surname;
+                $data['email'] = $email;
+                $loggedUser = $this->request->getSessionParam('loggedUser');
+                if (!empty($newPassword)) {
+                    $data['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
+                }
+                if ($loggedUser['op'] == 1 && $loggedUser['id'] != $user['id']) {
+                    $data['op'] = intval(!empty($op));
+                }
+                $userModel->update($data, ['id' => $user['id']]);
+                $user = array_merge($loggedUser, $data);
+                if ($loggedUser['id'] == $user['id']) {
+                    $this->request->setViewParam('loggedUser', $user);
+                }
             } else {
                 $this->request->setViewParam('errors', $errors);
             }
         }
-
         $this->request->setViewParam('user', $user);
         $this->renderView('edit');
     }

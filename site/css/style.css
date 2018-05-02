@@ -165,7 +165,9 @@ CLASSES
     margin: 0 auto;
 }
 
-.centered-form form * {
+.centered-form form label,
+.centered-form form textarea,
+.centered-form form input:not([type=checkbox]) {
     width: 100%;
 }
 
