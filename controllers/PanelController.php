@@ -36,4 +36,12 @@ class PanelController extends Controller
         $this->request->setViewParam('tickets', $tickets);
         $this->renderView('tickets');
     }
+
+    public function actionUsers()
+    {
+        $usersModel = $this->getModel('users');
+        $users = $usersModel->find();
+        $this->request->setViewParam('users', $users);
+        $this->renderView('users');
+    }
 }
