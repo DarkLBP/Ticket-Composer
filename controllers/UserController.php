@@ -44,6 +44,8 @@ class UserController extends Controller
                 }
                 if (empty($newPasswordConfirm)) {
                     $errors[] = 'Password confirmation is empty';
+                } else if ($newPassword != $newPasswordConfirm) {
+                    $errors[] = 'Password do not match';
                 }
                 if (!password_verify($currentPassword, $user['password'])) {
                     $errors[] = 'Invalid password';
