@@ -61,12 +61,14 @@ class UserController extends Controller
                     $data['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
                 }
                 if ($loggedUser['op'] == 1 && $loggedUser['id'] != $user['id']) {
-                    $data['op'] = intval(!empty($op));
+                    $data['op'] = boolval(!empty($op));
                 }
                 $userModel->update($data, ['id' => $user['id']]);
-                $user = array_merge($loggedUser, $data);
                 if ($loggedUser['id'] == $user['id']) {
+                    $user = array_merge($loggedUser, $data);
                     $this->request->setViewParam('loggedUser', $user);
+                } else {
+                    $user = array_merge($user, $data);
                 }
             } else {
                 $this->request->setViewParam('errors', $errors);
