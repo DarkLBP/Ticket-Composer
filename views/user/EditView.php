@@ -26,7 +26,7 @@ use Core\Utils;
         </fieldset>
         <?php
         if ($loggedUser['op'] == 1 && $user['id'] != $loggedUser['id']) {
-            if (!empty($departments)) {
+            if (!empty($departments) && $user['op'] != 1) {
                 echo "<label for='departments'>Departments</label><br>";
                 echo "<select name='departments[]' id='departments' multiple>";
                 foreach ($departments as $department) {

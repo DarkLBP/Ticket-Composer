@@ -88,7 +88,7 @@ class UserController extends Controller
                 $userDepartmentsModel->delete([
                     "userId" => $user['id']
                 ]);
-                if (!empty($departments)) {
+                if (!empty($departments) && $user['op'] != 1) {
                     foreach ($departments as $department) {
                         $userDepartmentsModel->insert([
                             'userId' => $user['id'],
@@ -96,7 +96,11 @@ class UserController extends Controller
                         ]);
                     }
                 }
-                $user['departments'] = $departments;
+                if (empty($departments)) {
+                    $user['departments'] = [];
+                } else {
+                    $user['departments'] = $departments;
+                }
             } else {
                 $this->request->setViewParam('errors', $errors);
             }
