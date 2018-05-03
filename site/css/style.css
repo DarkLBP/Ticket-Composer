@@ -167,7 +167,8 @@ CLASSES
 
 .centered-form form label,
 .centered-form form textarea,
-.centered-form form input:not([type=checkbox]) {
+.centered-form form input:not([type=checkbox]),
+.centered-form select {
     width: 100%;
 }
 
@@ -273,6 +274,7 @@ FOOTER STYLES
 
 #main-footer {
     text-align: center;
+    padding-top: 10px;
 }
 
 /*

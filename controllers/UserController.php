@@ -10,15 +10,30 @@ class UserController extends Controller
     public function actionEdit($params = [])
     {
         $userModel = $this->getModel('users');
+        $userDepartmentsModel = $this->getModel('usersDepartments');
+        $departmentsModel = $this->getModel('departments');
+        $loggedUser = $this->request->getSessionParam('loggedUser');;
+        $departmentList = $departmentsModel->find();
         if (isset($params[0])) {
+            if ($loggedUser['op'] != 1) {
+                $this->renderView('forbidden');
+            }
             $user = $userModel->findOne($params[0]);
             if (empty($user)) {
                 $this->renderView('invalid');
             }
+            $userDepartments = $userDepartmentsModel->find([
+                "userId" => $user['id']
+            ], [
+                "departmentId"
+            ]);
+            $user["departments"] = [];
+            foreach ($userDepartments as $department) {
+                $user["departments"][] = $department['departmentId'];
+            }
         } else {
-            $user = $this->request->getSessionParam('loggedUser');
+            $user = $loggedUser;
         }
-
         if ($this->request->isPost()) {
             $name = $this->request->getPostParam('name', true);
             $surname = $this->request->getPostParam('surname', true);
@@ -27,6 +42,7 @@ class UserController extends Controller
             $newPasswordConfirm = $this->request->getPostParam('confirm-password', false);
             $currentPassword = $this->request->getPostParam('current-password', false);
             $op = $this->request->getPostParam('op', false);
+            $departments = $this->request->getPostParam('departments');
             $errors = [];
             if (empty($name)) {
                 $errors[] = 'The name is empty';
@@ -70,11 +86,24 @@ class UserController extends Controller
                 } else {
                     $user = array_merge($user, $data);
                 }
+                $userDepartmentsModel->delete([
+                    "userId" => $user['id']
+                ]);
+                if (!empty($departments)) {
+                    foreach ($departments as $department) {
+                        $userDepartmentsModel->insert([
+                            'userId' => $user['id'],
+                            'departmentId' => $department
+                        ]);
+                    }
+                }
+                $user['departments'] = $departments;
             } else {
                 $this->request->setViewParam('errors', $errors);
             }
         }
         $this->request->setViewParam('user', $user);
+        $this->request->setViewParam('departments', $departmentList);
         $this->renderView('edit');
     }
     public function actionForgot($params = [])
