@@ -72,7 +72,6 @@ class UserController extends Controller
                 $data['name'] = $name;
                 $data['surname'] = $surname;
                 $data['email'] = $email;
-                $loggedUser = $this->request->getSessionParam('loggedUser');
                 if (!empty($newPassword)) {
                     $data['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
                 }
