@@ -61,7 +61,7 @@ class UserController extends Controller
                     $data['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
                 }
                 if ($loggedUser['op'] == 1 && $loggedUser['id'] != $user['id']) {
-                    $data['op'] = boolval(!empty($op));
+                    $data['op'] = intval(!empty($op));
                 }
                 $userModel->update($data, ['id' => $user['id']]);
                 if ($loggedUser['id'] == $user['id']) {
