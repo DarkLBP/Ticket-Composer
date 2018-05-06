@@ -156,6 +156,14 @@ thead th {
     color: white;
 }
 
+table > tbody > tr:hover {
+    background-color: #4d5057;
+}
+
+tbody > tr:hover * {
+    color: white;
+}
+
 tbody > tr:nth-child(even) {
     background-color: #cfcfcf;
 }
@@ -223,10 +231,6 @@ a.button {
 
 .tickets > tbody > tr.closed:hover {
     background-color: #bb0a13;
-}
-
-.tickets > tbody > tr:hover * {
-    color: white;
 }
 
 /*
