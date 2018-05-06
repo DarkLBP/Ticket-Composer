@@ -364,6 +364,10 @@ RESPONSIVE STYLES
         background-color: #4e6e5d;
     }
 
+    #main-nav > .navigation > li:last-child {
+        order: -1;
+    }
+
     #main-nav > #hamburger:checked ~ .navigation {
         display: flex;
         flex-direction: column;
@@ -385,6 +389,10 @@ RESPONSIVE STYLES
         display: flex;
         max-width: 800px;
         background-color: #4da167;
+    }
+
+    #main-nav > .navigation > li:last-child {
+        order: 0;
     }
 
     #main-nav > #hamburger:checked ~ .navigation {
