@@ -26,6 +26,8 @@ use Core\Utils;
     </h1>
 </header>
 <nav id="main-nav">
+    <input type="checkbox" id="hamburger">
+    <label for="hamburger">&#9776;</label>
     <ul class="navigation">
         <?php
         if ($loggedUser) {
@@ -43,6 +45,7 @@ use Core\Utils;
         } else {
             echo "<li" . ($action == 'login' && $controller == 'user' ? ' class="active"' : '') . "><a href='" . Utils::getURL('user', 'login') . "'>Login</a></li>";
             echo "<li" . ($action == 'register' && $controller == 'user' ? ' class="active"' : '') . "><a href='" . Utils::getURL('user', 'register') . "'>Register</a></li>";
+
         }
         ?>
     </ul>

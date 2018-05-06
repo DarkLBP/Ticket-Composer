@@ -118,7 +118,6 @@ fieldset {
 
 label {
     display: inline-block;
-    margin-top: 0.5em;
 }
 
 textarea {
@@ -189,8 +188,12 @@ a.button {
 }
 
 .centered-form {
-    width: 70%;
+    width: 90%;
     margin: 0 auto;
+}
+
+.centered-form form label {
+    margin-top: 0.5em;
 }
 
 .centered-form form label,
@@ -253,22 +256,44 @@ HEADER STYLES
 NAVIGATION STYLES
  */
 
+#hamburger {
+    display: none;
+}
+
+#hamburger ~ label{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 #main-nav {
+    display: flex;
     padding: 0 10px;
     background-color: #4da167;
+    width: 100%;
+    position: relative;
+    justify-content: flex-end;
+}
+
+#main-nav > .navigation {
     width: 100%;
 }
 
 #main-nav ul {
     padding-left: 0;
+    list-style: none;
 }
 
-#main-nav li {
+#main-nav li,
+#main-nav label,
+#main-nav a {
     cursor: pointer;
 }
 
 #main-nav li a,
-#main-nav span {
+#main-nav span,
+#main-nav label {
     display: block;
     padding: 0.5em;
 }
@@ -278,35 +303,19 @@ NAVIGATION STYLES
 }
 
 #main-nav .navigation {
-    max-width: 800px;
-    position: relative;
     margin: 0 auto;
-}
-
-#main-nav .navigation,
-#main-nav .navigation ul {
-    display: flex;
-    list-style: none;
 }
 
 #main-nav .navigation ul {
     display: none;
-    background-color: #4e6e5d;
-}
-
-#main-nav .navigation li:last-child:not(:nth-child(2)) {
-    margin-left: auto;
+    background-color: #4da167;
 }
 
 #main-nav .navigation li:hover ul {
     display: block;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 150px;
 }
 
-#main-nav .navigation li:hover {
+#main-nav li:hover {
     background-color: #4d5057;
 }
 
@@ -345,3 +354,60 @@ FOOTER STYLES
 RESPONSIVE STYLES
  */
 
+@media screen and (max-width: 768px) {
+    #main-nav > .navigation {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 100;
+        background-color: #4e6e5d;
+    }
+
+    #main-nav > #hamburger:checked ~ .navigation {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+@media screen and (min-width: 768px)  {
+    .centered-form {
+        width: 70%;
+    }
+
+    #hamburger ~ label {
+        display: none;
+    }
+
+    #main-nav > .navigation {
+        position: initial;
+        display: flex;
+        max-width: 800px;
+        background-color: #4da167;
+    }
+
+    #main-nav > #hamburger:checked ~ .navigation {
+        flex-direction: row;
+    }
+
+    #main-nav .navigation li {
+        position: relative;
+    }
+
+    #main-nav .navigation ul {
+        background-color: #4e6e5d;
+    }
+
+    #main-nav .navigation li:hover ul {
+        display: block;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 150px;
+    }
+
+    #main-nav .navigation li:last-child:not(:nth-child(2)) {
+        margin-left: auto;
+    }
+}

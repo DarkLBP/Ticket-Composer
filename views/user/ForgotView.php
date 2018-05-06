@@ -7,6 +7,6 @@ use Core\Utils;
     <form action="<?= Utils::getURL("user", "forgot") ?>" method="post">
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email"><br>
-        <input type="submit" value="Recover">
+        <input type="submit" value="Recover Password">
     </form>
 </div>
