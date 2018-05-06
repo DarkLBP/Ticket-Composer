@@ -89,7 +89,7 @@ class TicketController extends Controller
                         "$usersModel.surname" => "createdSurname",
                         "$usersModel.id" => "createdId"
                     ]
-                ], [
+                ], [], [
                     "$ticketPostsModel.created" => 'asc'
                 ]);
 

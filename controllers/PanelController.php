@@ -30,7 +30,7 @@ class PanelController extends Controller
         ], [
             "$ticketsModel.*",
             ["$departmentsModel.name" => "departmentName"]
-        ], [
+        ],[], [
             'created' => 'desc'
         ]);
         $this->request->setViewParam('tickets', $tickets);
