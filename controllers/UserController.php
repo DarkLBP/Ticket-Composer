@@ -7,6 +7,77 @@ use Core\Utils;
 
 class UserController extends Controller
 {
+    public function actionCreate()
+    {
+        $loggedUser = $this->request->getSessionParam('loggedUser');;
+        if ($loggedUser['op'] != 1) {
+            $this->renderView('forbidden');
+        }
+        if ($this->request->isPost()) {
+            $errors = [];
+            $name = $this->request->getPostParam("name", true);
+            $surname = $this->request->getPostParam("surname", true);
+            $email = $this->request->getPostParam("email", true);
+            $password = $this->request->getPostParam("password");
+            $confirm = $this->request->getPostParam("confirm");
+            $op = $this->request->getPostParam('op', false);
+            $departments = $this->request->getPostParam('departments');
+            if (empty($name)) {
+                $errors[] = 'Name is empty';
+            }
+            if (empty($surname)) {
+                $errors[] = 'Surname is empty';
+            }
+            if (empty($email)) {
+                $errors[] = 'Email is empty';
+            }
+            if (empty($password)) {
+                $errors[] = 'Password is empty';
+            }
+            if (empty($confirm)) {
+                $errors[] = 'Password confirmation is empty';
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Invalid email';
+            }
+            if ($password !== $confirm) {
+                $errors[] = 'Passwords do not match';
+            }
+            if (empty($errors)) {
+                $model = $this->getModel('users');
+                $userDepartmentsModel = $this->getModel('usersDepartments');
+
+                //Find if email is in use
+                $existing = $model->count(["email" => $email]);
+                if ($existing === 0) {
+                    $userId = $model->insert([
+                        "name" => $name,
+                        "surname" => $surname,
+                        "email" => $email,
+                        "password" => password_hash($password, PASSWORD_DEFAULT),
+                        "op" => intval(!empty($op))
+                    ]);
+                    if (!empty($departments)) {
+                        foreach ($departments as $department) {
+                            $userDepartmentsModel->insert([
+                                'userId' => $userId,
+                                'departmentId' => $department
+                            ]);
+                        }
+                    }
+                    $this->request->redirect(Utils::getURL("panel", "users"));
+                } else {
+                    $errors[] = 'Email is already in use';
+                }
+            }
+            $this->request->setViewParam('errors', $errors);
+        }
+        $departmentsModel = $this->getModel('departments');
+        $departments = $departmentsModel->find();
+        $this->request->setViewParam('departments', $departments);
+        $this->renderView("create");
+    }
+
     public function actionEdit($params = [])
     {
         $userModel = $this->getModel('users');
@@ -79,16 +150,10 @@ class UserController extends Controller
                     $data['op'] = intval(!empty($op));
                 }
                 $userModel->update($data, ['id' => $user['id']]);
-                if ($loggedUser['id'] == $user['id']) {
-                    $user = array_merge($loggedUser, $data);
-                    $this->request->setViewParam('loggedUser', $user);
-                } else {
-                    $user = array_merge($user, $data);
-                }
                 $userDepartmentsModel->delete([
                     "userId" => $user['id']
                 ]);
-                if (!empty($departments) && $user['op'] != 1) {
+                if (!empty($departments)) {
                     foreach ($departments as $department) {
                         $userDepartmentsModel->insert([
                             'userId' => $user['id'],
@@ -96,11 +161,7 @@ class UserController extends Controller
                         ]);
                     }
                 }
-                if (empty($departments)) {
-                    $user['departments'] = [];
-                } else {
-                    $user['departments'] = $departments;
-                }
+                $this->request->redirect(Utils::getURL('panel', 'users'));
             } else {
                 $this->request->setViewParam('errors', $errors);
             }

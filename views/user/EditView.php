@@ -26,7 +26,7 @@ use Core\Utils;
         </fieldset>
         <?php
         if ($loggedUser['op'] == 1 && $user['id'] != $loggedUser['id']) {
-            if (!empty($departments) && $user['op'] != 1) {
+            if (!empty($departments)) {
                 echo "<label for='departments'>Departments</label><br>";
                 echo "<select name='departments[]' id='departments' multiple>";
                 foreach ($departments as $department) {
@@ -40,7 +40,7 @@ use Core\Utils;
             }
 
             echo "<label for='op'>";
-            echo "<input type='checkbox' name='op' id='op' value='op' " . ($user['op'] == 1 ? 'checked' : '') . ">Op</label>";
+            echo "<input type='checkbox' name='op' id='op' value='op' " . ($user['op'] == 1 ? 'checked' : '') . ">Op";
             echo "</label>";
         }
         ?>
