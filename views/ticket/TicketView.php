@@ -36,14 +36,16 @@ use Core\Utils;
     }
     ?>
 </section>
-<div class="centered-form">
-    <h3>Post New Message</h3>
-    <?= empty($error) ? '' : "<p class='error-message'>$error</p>"; ?>
-    <form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
-        <label for="message">Message:</label><br>
-        <textarea id="message" name="message"></textarea><br>
-        <label for="attachment">Attachment:</label><br>
-        <input type="file" name="attachment" id="attachment"><br>
-        <input type="submit" value="Post Message">
-    </form>
-</div>
+<?php if ($ticket['open'] == 1 || $loggedUser['op'] == 1):?>
+    <div class="centered-form">
+        <h3>Post New Message</h3>
+        <?= empty($error) ? '' : "<p class='error-message'>$error</p>"; ?>
+        <form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
+            <label for="message">Message:</label><br>
+            <textarea id="message" name="message"></textarea><br>
+            <label for="attachment">Attachment:</label><br>
+            <input type="file" name="attachment" id="attachment"><br>
+            <input type="submit" value="Post Message">
+        </form>
+    </div>
+<?php endif ?>
