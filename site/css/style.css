@@ -36,6 +36,7 @@ body {
 }
 
 a {
+    color: #4da167;
     text-decoration: none;
 }
 
@@ -120,6 +121,10 @@ label {
     display: inline-block;
 }
 
+h3, h4, h5 {
+    margin: 0.3em 0;
+}
+
 textarea {
     resize: none;
 }
@@ -193,6 +198,10 @@ a.button {
 
 .button:active {
     background-color: #4d5057;
+}
+
+.button.small {
+    font-size: 0.8rem;
 }
 
 .centered-form {
@@ -334,8 +343,23 @@ CONTENT STYLES
 #main-content {
     flex-grow: 1;
     max-width: 800px;
-    padding: 10px;
+    padding: 0 10px 20px 10px;
     width: 100%;
+}
+
+#ticket-posts article{
+    border: 2px solid black;
+    margin: 1.5em 0;
+}
+
+#ticket-posts .ticket-header,
+#ticket-posts .ticket-footer {
+    background-color: #cfcfcf;
+}
+#ticket-posts .ticket-header,
+#ticket-posts .ticket-footer,
+#ticket-posts .ticket-content {
+    padding: 0.5em;
 }
 
 /*

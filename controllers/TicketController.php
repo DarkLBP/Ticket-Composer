@@ -75,7 +75,7 @@ class TicketController extends Controller
                 [
                     "$usersModel.name" => "createdName",
                     "$usersModel.surname" => "createdSurname",
-                    "$departmentsModel.name", "departmentName"
+                    "$departmentsModel.name" => "departmentName"
                 ]
             ]);
             if (!empty($ticket)) {
@@ -94,9 +94,9 @@ class TicketController extends Controller
                 ]);
 
                 //Retrieve attachments
-                $attachmensModel = $this->getModel('attachments');
+                $attachmentsModel = $this->getModel('attachments');
                 foreach ($ticketPosts as &$post) {
-                    $post['attachments'] = $attachmensModel->find(['postId' => $post['id']]);
+                    $post['attachments'] = $attachmentsModel->find(['postId' => $post['id']]);
                 }
                 $this->request->setViewParam('ticket', $ticket);
                 $this->request->setViewParam('ticketPosts', $ticketPosts);

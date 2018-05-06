@@ -7,39 +7,43 @@ use Core\Utils;
  * @var array $loggedUser
  */
 ?>
-<h2>Ticket #<?= $ticket['id'] ?></h2>
-<h3><?= $ticket['title'] ?></h3>
-<h5>Created by <?= $ticket['createdName'] . ' ' . $ticket['createdSurname'] ?></h5>
-<hr>
-<?php
-foreach ($ticketPosts as $post) {
-    echo "<article>";
-    echo "<header>";
-    echo "<p>Created by <a href='" . Utils::getURL('users', 'view', [$post['createdId']]) . "'>$post[createdName] $post[createdSurname]</a></p>";
-    echo "<small>Created on $post[created]</small>";
-    echo "</header>";
-    echo "<p>" . str_replace(["\n", "\r\n"], '<br>', htmlspecialchars($post['content'])) . "</p>";
-    if (!empty($post['attachments'])) {
-        echo '<p><strong>Attachments:</strong><br>';
-        foreach ($post['attachments'] as $attachment) {
-            echo "<a href='" . Utils::getURL('attachment', 'download', [$attachment['id']]) . "'>$attachment[fileName]</a><br>";
+<h2><?= $ticket['title'] ?></h2>
+<h5>Department: <?= $ticket['departmentName'] ?></h5>
+<h5>Status: <?= $ticket['open'] == 1 ? "<span class='open'>Open</span>" : "<span class='open'>Closed</span>" ?></h5>
+<section id="ticket-posts">
+    <?php
+    foreach ($ticketPosts as $post) {
+        echo "<article><header class='ticket-header'>";
+        echo "<h4>$post[createdName] $post[createdSurname]</h4>";
+        echo "<h5>On $post[created]</h5>";
+        echo "</header>";
+        echo "<p class='ticket-content'>" . str_replace(["\n", "\r\n"], '<br>', htmlspecialchars($post['content'])) . "</p>";
+        echo "<footer class='ticket-footer'>";
+        if (!empty($post['attachments'])) {
+            echo '<h5>Attachments:</h5>';
+            foreach ($post['attachments'] as $attachment) {
+                echo "<a href='" . Utils::getURL('attachment', 'download', [$attachment['id']]) . "'>$attachment[fileName]</a><br>";
+            }
         }
-        echo '</p>';
+        if ($post['userId'] == $loggedUser['id']) {
+            echo "<a href='" . Utils::getURL('post', 'edit', [$post["id"]]) . "' class='button small'>Edit</a>";
+        }
+        if ($loggedUser['op'] == 1) {
+            echo " <a href='" . Utils::getURL('post', 'delete', [$post["id"]]) . "' class='button small'>Delete</a>";
+        }
+        echo "</footer>";
+        echo "</article>";
     }
-    if ($post['userId'] == $loggedUser['id']) {
-        echo "<a href='" . Utils::getURL('post', 'edit', [$post["id"]]) . "'>Edit</a>";
-    }
-    if ($loggedUser['op'] == 1) {
-        echo " <a href='" . Utils::getURL('post', 'delete', [$post["id"]]) . "'>Delete</a>";
-    }
-    echo "</article><hr>";
-}
-echo empty($error) ? '' : "<p>$error</p>";
-?>
-<form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
-    <label for="message">Message:</label><br>
-    <textarea id="message" name="message"></textarea><br>
-    <label for="attachment">Attachment:</label><br>
-    <input type="file" name="attachment" id="attachment"><br>
-    <input type="submit" value="Post">
-</form>
+    ?>
+</section>
+<div class="centered-form">
+    <h3>Post New Message</h3>
+    <?= empty($error) ? '' : "<p class='error-message'>$error</p>"; ?>
+    <form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message"></textarea><br>
+        <label for="attachment">Attachment:</label><br>
+        <input type="file" name="attachment" id="attachment"><br>
+        <input type="submit" value="Post Message">
+    </form>
+</div>
