@@ -32,7 +32,6 @@ body {
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
-    padding: 1%;
     align-items: center;
 }
 
@@ -202,12 +201,23 @@ CLASSES
 HEADER STYLES
  */
 
+#main-header {
+    background-color: #4e6e5d;
+    width: 100%;
+}
+
 #main-header .title {
     text-align: center;
 }
 
 #main-header .title a{
     text-decoration: none;
+    color: #cfcfcf;
+    text-shadow: 2px 2px 0 #4d5057;
+}
+
+#main-header .title a:hover {
+    color: white;
 }
 
 /*
@@ -215,7 +225,8 @@ NAVIGATION STYLES
  */
 
 #main-nav {
-    max-width: 800px;
+    padding: 0 10px;
+    background-color: #4da167;
     width: 100%;
 }
 
@@ -224,12 +235,18 @@ NAVIGATION STYLES
 }
 
 #main-nav li {
+    cursor: pointer;
     padding: 0.5em;
 }
 
+#main-nav li a {
+    display: block;
+}
+
 #main-nav .navigation {
-    background-color: #4e6e5d;
+    max-width: 800px;
     position: relative;
+    margin: 0 auto;
 }
 
 #main-nav .navigation,
@@ -251,6 +268,12 @@ NAVIGATION STYLES
     display: block;
     position: absolute;
     top: 100%;
+    right: 0;
+    width: 150px;
+}
+
+#main-nav .navigation li:hover {
+    background-color: #4d5057;
 }
 
 #main-nav * {
@@ -264,6 +287,7 @@ CONTENT STYLES
 #main-content {
     flex-grow: 1;
     max-width: 800px;
+    padding: 10px;
     width: 100%;
 }
 
@@ -274,7 +298,14 @@ FOOTER STYLES
 
 #main-footer {
     text-align: center;
-    padding-top: 10px;
+    padding: 10px 0;
+    background-color: #4e6e5d;
+    text-shadow: 2px 2px 0 #4d5057;
+    width: 100%;
+}
+
+#main-footer small {
+    color: #cfcfcf;
 }
 
 /*
