@@ -35,4 +35,4 @@ use Core\Utils;
     ?>
     </tbody>
 </table>
-<a href="<?= Utils::getURL('user', 'create') ?>">Add New</a>
+<a href="<?= Utils::getURL('user', 'create') ?>" class="button">Add New User</a>

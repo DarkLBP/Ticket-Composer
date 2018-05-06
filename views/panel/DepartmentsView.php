@@ -28,4 +28,4 @@ use Core\Utils;
     ?>
     </tbody>
 </table>
-<a href="<?= Utils::getURL('department', 'create') ?>">Add New</a>
+<a href="<?= Utils::getURL('department', 'create') ?>" class="button">Add New Department</a>

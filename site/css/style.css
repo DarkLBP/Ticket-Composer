@@ -35,6 +35,14 @@ body {
     align-items: center;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #3bc14a;
+}
+
 label,
 input,
 textarea,
@@ -44,7 +52,7 @@ button {
 
 button,
 input[type=button],
-input[type=submit]{
+input[type=submit] {
     background-color: #4e6e5d;
     color: white;
     border: none;
@@ -57,7 +65,6 @@ button:hover,
 input[type=button]:hover,
 input[type=submit]:hover {
     background-color: #4da167;
-
 }
 
 button:focus,
@@ -158,6 +165,28 @@ tbody > tr:nth-child(even) {
 CLASSES
  */
 
+a.button {
+    background-color: #4e6e5d;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    padding: 0.5em 0.7em;
+    margin-top: 1em;
+    display: inline-block;
+}
+
+.button:hover {
+    background-color: #4da167;
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button:active {
+    background-color: #4d5057;
+}
 
 .centered-form {
     width: 70%;
@@ -193,7 +222,7 @@ CLASSES
     background-color: #bb0a13;
 }
 
-.tickets > tbody > tr:hover *{
+.tickets > tbody > tr:hover * {
     color: white;
 }
 
@@ -210,7 +239,7 @@ HEADER STYLES
     text-align: center;
 }
 
-#main-header .title a{
+#main-header .title a {
     text-decoration: none;
     color: #cfcfcf;
     text-shadow: 2px 2px 0 #4d5057;
@@ -236,11 +265,12 @@ NAVIGATION STYLES
 
 #main-nav li {
     cursor: pointer;
-    padding: 0.5em;
 }
 
-#main-nav li a {
+#main-nav li a,
+#main-nav span {
     display: block;
+    padding: 0.5em;
 }
 
 #main-nav .navigation {
@@ -290,7 +320,6 @@ CONTENT STYLES
     padding: 10px;
     width: 100%;
 }
-
 
 /*
 FOOTER STYLES

@@ -32,7 +32,7 @@ use Core\Utils;
                 echo "<li><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
                 echo "<li><a href='" . Utils::getURL('panel', 'users') . "'>Users</a></li>";
             }
-            echo "<li>$loggedUser[name] $loggedUser[surname]";
+            echo "<li><span>$loggedUser[name] $loggedUser[surname]</span>";
             echo '<ul>';
             echo "<li><a href='" . Utils::getURL('user', 'edit') . "'>Edit Details</a></li>";
             echo "<li><a href='" . Utils::getURL('user', 'logout') . "'>Logout</a></li>";

@@ -39,4 +39,4 @@ use Core\Utils;
     ?>
     </tbody>
 </table>
-<a href="<?= Utils::getURL('ticket', 'create') ?>">Create New Ticket</a>
+<a href="<?= Utils::getURL('ticket', 'create') ?>" class="button">Create New Ticket</a>
