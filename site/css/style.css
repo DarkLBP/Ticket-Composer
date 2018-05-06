@@ -273,6 +273,10 @@ NAVIGATION STYLES
     padding: 0.5em;
 }
 
+#main-nav .active {
+    background-color: #3bc14a;
+}
+
 #main-nav .navigation {
     max-width: 800px;
     position: relative;

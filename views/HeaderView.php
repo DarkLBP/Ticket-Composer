@@ -1,5 +1,7 @@
 <?php
+
 use Core\Utils;
+
 /**
  * @var string $controller
  * @var string $action
@@ -27,20 +29,20 @@ use Core\Utils;
     <ul class="navigation">
         <?php
         if ($loggedUser) {
-            echo "<li><a href='" . Utils::getURL('panel', 'tickets') . "'>Tickets</a></li>";
+            echo "<li" . ($action == 'tickets' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'tickets') . "'>Tickets</a></li>";
             if ($loggedUser['op'] == 1) {
-                echo "<li><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
-                echo "<li><a href='" . Utils::getURL('panel', 'users') . "'>Users</a></li>";
+                echo "<li" . ($action == 'departments' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
+                echo "<li" . ($action == 'users' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'users') . "'>Users</a></li>";
             }
             echo "<li><span>$loggedUser[name] $loggedUser[surname]</span>";
             echo '<ul>';
-            echo "<li><a href='" . Utils::getURL('user', 'edit') . "'>Edit Details</a></li>";
+            echo "<li" . ($action == 'edit' && $controller == 'user' ? ' class="active"' : '') . "><a href='" . Utils::getURL('user', 'edit') . "'>Edit Details</a></li>";
             echo "<li><a href='" . Utils::getURL('user', 'logout') . "'>Logout</a></li>";
             echo '</ul>';
             echo '</li>';
         } else {
-            echo "<li><a href='" . Utils::getURL('user', 'login') . "'>Login</a></li>";
-            echo "<li><a href='" . Utils::getURL('user', 'register') . "'>Register</a></li>";
+            echo "<li" . ($action == 'login' && $controller == 'user' ? ' class="active"' : '') . "><a href='" . Utils::getURL('user', 'login') . "'>Login</a></li>";
+            echo "<li" . ($action == 'register' && $controller == 'user' ? ' class="active"' : '') . "><a href='" . Utils::getURL('user', 'register') . "'>Register</a></li>";
         }
         ?>
     </ul>
