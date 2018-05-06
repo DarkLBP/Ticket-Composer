@@ -51,12 +51,12 @@ CREATE TABLE tickets (
   title VARCHAR(100) NOT NULL,
   createdBy INT NOT NULL,
   department INT,
-  asignedTo INT,
+  assignedTo INT,
   open TINYINT NOT NULL DEFAULT 1,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (createdBy) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (department) REFERENCES departments(id) ON DELETE SET NULL,
-  FOREIGN KEY (asignedTo) REFERENCES users(id) ON DELETE SET NULL
+  FOREIGN KEY (assignedTo) REFERENCES users(id) ON DELETE SET NULL
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE posts (

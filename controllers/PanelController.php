@@ -23,17 +23,27 @@ class PanelController extends Controller
     {
         $ticketsModel = $this->getModel('tickets');
         $departmentsModel = $this->getModel('departments');
+        $postModel = $this->getModel('posts');
         $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
+        $ticketsModel->join($postModel, 'id', 'ticketId', 'inner');
         $userId = $this->request->getSessionParam('loggedUser')['id'];
         $tickets = $ticketsModel->find([
             'createdBy' => $userId
         ], [
-            "$ticketsModel.*",
-            ["$departmentsModel.name" => "departmentName"]
-        ],[], [
-            'created' => 'desc'
+            "$ticketsModel.id",
+            "$ticketsModel.title",
+            "$ticketsModel.open",
+            [
+                "count(*)" => "totalPosts",
+                "max($postModel.created)" => "lastReply",
+                "$departmentsModel.name" => "departmentName"
+            ]
+        ],[
+            "$ticketsModel.id"
+        ], [
+            'lastReply' => 'desc'
         ]);
-        $this->request->setViewParam('tickets', $tickets);
+        $this->request->setViewParam('myTickets', $tickets);
         $this->renderView('tickets');
     }
 
