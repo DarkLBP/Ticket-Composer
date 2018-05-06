@@ -9,7 +9,7 @@ use Core\Utils;
 ?>
 <h2><?= $ticket['title'] ?></h2>
 <h5>Department: <?= $ticket['departmentName'] ?></h5>
-<h5>Status: <?= $ticket['open'] == 1 ? "<span class='open'>Open</span>" : "<span class='open'>Closed</span>" ?></h5>
+<h5>Status: <?= $ticket['open'] == 1 ? "<span class='open'>Open</span>" : "<span class='closed'>Closed</span>" ?></h5>
 <section id="ticket-posts">
     <?php
     foreach ($ticketPosts as $post) {
