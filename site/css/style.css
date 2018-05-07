@@ -423,6 +423,10 @@ RESPONSIVE STYLES
         order: 0;
     }
 
+    #main-nav > .navigation > .user-box {
+        margin-left: auto;
+    }
+
     #main-nav > #hamburger:checked ~ .navigation {
         flex-direction: row;
     }
