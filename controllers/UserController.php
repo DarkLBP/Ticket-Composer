@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+require_once __DIR__ . '/../vendor/SimpleMailer.php';
+
 use Core\Controller;
 use Core\Utils;
 
@@ -186,7 +188,7 @@ class UserController extends Controller
                 $errors[] = 'Email is empty';
             } else {
                 $userModel = $this->getModel('users');
-                $exists = $userModel->findOne($email, 'email', ['id']);
+                $exists = $userModel->findOne($email, 'email', ['id', 'name', 'surname']);
                 if (!empty($exists)) {
                     try {
                         $recoverToken = bin2hex(random_bytes(32));
@@ -196,7 +198,13 @@ class UserController extends Controller
                             'userId' => $exists['id']
                         ]);
                         $link = Utils::getURL('user', 'recover', [$exists['id'], $recoverToken]);
-                        mail($email, 'Account Recovery', 'Please click this link to recover your account ' . $link);
+                        $mailer = new \SimpleMailer();
+                        $mailer->addTo($email, $exists['name'] . ' ' . $exists['surname']);
+                        $mailer->addReplyTo(SITE_EMAIL);
+                        $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
+                        $mailer->setSubject('Account Recovery');
+                        $mailer->setMessage('Please click this link to recover your account ' . $link);
+                        $mailer->send();
                         $this->request->setSessionParam('forgot', true);
                         $this->request->redirect(Utils::getURL("user", "forgot", ["completed"]));
                     } catch (\Exception $e) {
@@ -375,7 +383,13 @@ class UserController extends Controller
                             'userId' => $insertId
                         ]);
                         $link = Utils::getURL('user', 'validate', [$insertId, $validationCode]);
-                        mail($email, 'Account Validation', 'Please click this link to validate your account ' . $link);
+                        $mailer = new \SimpleMailer();
+                        $mailer->addTo($email, $name . ' ' . $surname);
+                        $mailer->addReplyTo(SITE_EMAIL);
+                        $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
+                        $mailer->setSubject('Account Validation');
+                        $mailer->setMessage('Please click this link to validate your account ' . $link);
+                        $mailer->send();
                         $this->request->setSessionParam('registered', true);
                         $this->request->redirect(Utils::getURL("user", "register", ["completed"]));
                     } catch (\Exception $e) {

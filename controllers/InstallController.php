@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+require_once __DIR__ . '/../vendor/SimpleMailer.php';
+
 use Core\Controller;
 use Core\Utils;
 
@@ -17,6 +19,7 @@ class InstallController extends Controller {
             $mUser = $this->request->getPostParam('muser', true);
             $mPass = $this->request->getPostParam('mpass', false);
             $mDB = $this->request->getPostParam('mdb', true);
+            $siteEmail = $this->request->getPostParam('siteemail', true);
             $errors = [];
             if (empty($title)) {
                 $errors[] = "Title is empty";
@@ -29,6 +32,9 @@ class InstallController extends Controller {
             }
             if (empty($mDB)) {
                 $errors[] = "MySQL db is empty";
+            }
+            if (!filter_var($siteEmail, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Invalid site email';
             }
 
             $name = $this->request->getPostParam("name", true);
@@ -65,14 +71,30 @@ class InstallController extends Controller {
                     $errors[] = "Failed to connect to MySQL";
                 } else {
                     $con->multi_query(file_get_contents(__DIR__ . '/../core/sql/Install.sql'));
-                    copy(__DIR__ . '/../core/ConfigDefault.php', __DIR__ . '/../core/Config.php');
                     $configString = "
+<?php
+define(\"SITE_TITLE\", \"$title\");
+define(\"SITE_EMAIL\", \"$siteEmail\");
 define(\"DATABASE_HOST\", \"$mHost\");
 define(\"DATABASE_USER\", \"$mUser\");
 define(\"DATABASE_PASSWORD\", \"$mPass\");
 define(\"DATABASE_DB\", \"$mDB\");
+define(\"DEFAULT_CONTROLLER\", \"main\");
+define(\"DEFAULT_ACTION\", \"index\");
+
+spl_autoload_register(function (\$class) {
+    \$segments = explode(\"\\\\\", \$class);
+    \$path = '';
+    for (\$i = 0; \$i < count(\$segments) - 1; \$i++) {
+        \$path .= strtolower(\$segments[\$i]) . '/';
+    }
+    \$finalPath = __DIR__ . '/../' . \$path . '/' . \$segments[\$i] . '.php';
+    if (file_exists(\$finalPath)) {
+        include_once \$finalPath;
+    }
+});
                     ";
-                    file_put_contents(__DIR__ . '/../core/Config.php', $configString, FILE_APPEND);
+                    file_put_contents(__DIR__ . '/../core/Config.php', $configString);
                     include_once __DIR__ . '/../core/Config.php';
                     $userModel = $this->getModel('users');
                     $userModel->insert([
@@ -82,6 +104,13 @@ define(\"DATABASE_DB\", \"$mDB\");
                         'password' => password_hash($password, PASSWORD_DEFAULT),
                         'op' => 1
                     ]);
+                    $mailer = new \SimpleMailer();
+                    $mailer->addTo($email, $name . ' ' . $surname);
+                    $mailer->addReplyTo(SITE_EMAIL);
+                    $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
+                    $mailer->setSubject('Your new site is installed');
+                    $mailer->setMessage('Your new site on ' . $_SERVER['HTTP_HOST'] . ' is now installed!');
+                    $mailer->send();
                     $this->request->setSessionParam("completed", true);
                     $this->request->redirect(Utils::getURL('install', 'completed'));
                 }

@@ -10,6 +10,8 @@ use Core\Utils;
             <legend>Site Settings</legend>
             <label for="title">Site Title</label><br>
             <input type="text" id="title" name="title"><br>
+            <label for="siteemail">Site Email</label><br>
+            <input type="text" id="siteemail" name="siteemail"><br>
             <label for="mhost">MySQL Host</label><br>
             <input type="text" id="mhost" name="mhost"><br>
             <label for="muser">MySQL User</label><br>
