@@ -5,6 +5,11 @@ use Core\Utils;
  */
 ?>
 <h2>Departments</h2>
+<?php
+if (empty($departments)) {
+    echo "<p>There are no departments</p>";
+} else {
+?>
 <table>
     <thead>
     <tr>
@@ -28,4 +33,5 @@ use Core\Utils;
     ?>
     </tbody>
 </table>
+<?php } ?>
 <a href="<?= Utils::getURL('department', 'create') ?>" class="button">Add New Department</a>
