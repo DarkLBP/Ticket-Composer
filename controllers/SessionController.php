@@ -57,7 +57,7 @@ class SessionController extends Controller
     {
         if (!$this->request->getSessionParam('loggedUser')) {
             //Redirect to login if user tries to enter to pages where login is required
-            if ($this->controller !== "main" && $this->controller !== "user") {
+            if ($this->controller !== "main" && $this->controller !== "user" && $this->controller !== "install") {
                 $this->request->redirect(Utils::getURL("user", "login"));
             }
         } else {

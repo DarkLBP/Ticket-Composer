@@ -30,7 +30,7 @@ use Core\Utils;
     <label for="hamburger">&#9776; Menu</label>
     <ul class="navigation">
         <?php
-        if ($loggedUser) {
+        if (!empty($loggedUser)) {
             echo "<li" . ($action == 'tickets' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'tickets') . "'>Tickets</a></li>";
             if ($loggedUser['op'] == 1) {
                 echo "<li" . ($action == 'departments' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
@@ -42,7 +42,7 @@ use Core\Utils;
             echo "<li><a href='" . Utils::getURL('user', 'logout') . "'>Logout</a></li>";
             echo '</ul>';
             echo '</li>';
-        } else {
+        } else if ($controller !== 'install') {
             echo "<li" . ($action == 'login' && $controller == 'user' ? ' class="active"' : '') . "><a href='" . Utils::getURL('user', 'login') . "'>Login</a></li>";
             echo "<li" . ($action == 'register' && $controller == 'user' ? ' class="active"' : '') . "><a href='" . Utils::getURL('user', 'register') . "'>Register</a></li>";
         }
