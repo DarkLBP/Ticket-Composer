@@ -56,6 +56,44 @@ class TicketController extends Controller
         $this->renderView('create');
     }
 
+    public function actionClose($params = []) {
+        if (isset($params[0])) {
+            $ticketId = $params[0];
+            $ticketsModel = $this->getModel('tickets');
+            $ticket = $ticketsModel->count([
+                'id' => $ticketId
+            ]);
+            if ($ticket === 1) {
+                $ticketsModel->update([
+                    "open" => 0
+                ], [
+                    'id' => $ticketId
+                ]);
+                $this->request->redirect(Utils::getURL('ticket', 'view', $params));
+            }
+        }
+        $this->renderView('invalid');
+    }
+
+    public function actionOpen($params = []) {
+        if (isset($params[0])) {
+            $ticketId = $params[0];
+            $ticketsModel = $this->getModel('tickets');
+            $ticket = $ticketsModel->count([
+                'id' => $ticketId
+            ]);
+            if ($ticket === 1) {
+                $ticketsModel->update([
+                    "open" => 1
+                ], [
+                    'id' => $ticketId
+                ]);
+                $this->request->redirect(Utils::getURL('ticket', 'view', $params));
+            }
+        }
+        $this->renderView('invalid');
+    }
+
     public function actionView($params = [])
     {
         $error = $this->request->getSessionParam('postError');
