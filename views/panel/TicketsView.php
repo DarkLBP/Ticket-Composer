@@ -5,6 +5,11 @@ use Core\Utils;
  */
 ?>
 <h2>My Tickets</h2>
+<?php
+if (empty($myTickets)) {
+    echo "<p>You have no tickets</p>";
+} else {
+?>
 <table class="tickets">
     <thead>
     <tr>
@@ -18,25 +23,26 @@ use Core\Utils;
     </thead>
     <tbody>
     <?php
-    foreach ($myTickets as $ticket) {
-        if ($ticket["open"] == 1) {
-            echo "<tr class='open' id='t-$ticket[id]'>";
-        } else {
-            echo "<tr class='closed' id='t-$ticket[id]'>";
+        foreach ($myTickets as $ticket) {
+            if ($ticket["open"] == 1) {
+                echo "<tr class='open' id='t-$ticket[id]'>";
+            } else {
+                echo "<tr class='closed' id='t-$ticket[id]'>";
+            }
+            echo "<td><a href='" . Utils::getURL('ticket', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
+            echo "<td>$ticket[title]</td>";
+            echo "<td>$ticket[departmentName]</td>";
+            echo "<td>$ticket[lastReply]</td>";
+            echo "<td>$ticket[totalPosts]</td>";
+            if ($ticket["open"] == 1) {
+                echo "<td class='open'>Open</td>";
+            } else {
+                echo "<td class='closed'>Closed</td>";
+            }
+            echo "</tr>";
         }
-        echo "<td><a href='" . Utils::getURL('ticket', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
-        echo "<td>$ticket[title]</td>";
-        echo "<td>$ticket[departmentName]</td>";
-        echo "<td>$ticket[lastReply]</td>";
-        echo "<td>$ticket[totalPosts]</td>";
-        if ($ticket["open"] == 1) {
-            echo "<td class='open'>Open</td>";
-        } else {
-            echo "<td class='closed'>Closed</td>";
-        }
-        echo "</tr>";
-    }
     ?>
     </tbody>
 </table>
+<?php } ?>
 <a href="<?= Utils::getURL('ticket', 'create') ?>" class="button">Create New Ticket</a>
