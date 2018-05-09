@@ -9,7 +9,18 @@ use Core\Utils;
 ?>
 <h2><?= $ticket['title'] ?></h2>
 <h5>Department: <?= $ticket['departmentName'] ?></h5>
-<h5>Status: <?= $ticket['open'] == 1 ? "<span class='open'>Open</span>" : "<span class='closed'>Closed</span>" ?></h5>
+<h5>Status:
+    <?php
+        if ($ticket['open'] == 1) {
+            echo "<span class='open'>Open</span> ";
+            echo '<a class="button" href="' . Utils::getURL('ticket', 'close', [$ticket['id']]) . '">Close</a>';
+        } else {
+            echo "<span class='closed'>Closed</span> ";
+            echo '<a class="button" href="' . Utils::getURL('ticket', 'open', [$ticket['id']]) . '">Reopen</a>';
+        }
+    ?>
+
+</h5>
 <section id="ticket-posts">
     <?php
     foreach ($ticketPosts as $post) {
@@ -36,8 +47,8 @@ use Core\Utils;
     }
     ?>
 </section>
-<?php if ($ticket['open'] == 1 || $loggedUser['op'] == 1):?>
-    <div class="centered-form">
+<div class="centered-form">
+<?php if ($ticket['open'] == 1):?>
         <h3>Post New Message</h3>
         <?= empty($error) ? '' : "<p class='error-message'>$error</p>"; ?>
         <form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
@@ -46,8 +57,12 @@ use Core\Utils;
             <label for="attachment">Attachment:</label><br>
             <input type="file" name="attachment" id="attachment"><br>
             <label for="close">
-                <input type="checkbox" name="close" id="close" value="close"> Close Ticket</label>
+                <input type="checkbox" name="close" id="close" value="close"> Close Ticket
+            </label>
             <input type="submit" value="Post Message">
         </form>
-    </div>
+
+<?php else: ?>
+    <p class="error-message center">This ticket is already closed. No further posts are allowed.</p>
 <?php endif ?>
+</div>

@@ -204,6 +204,10 @@ a.button {
     font-size: 0.8rem;
 }
 
+.center {
+    text-align: center;
+}
+
 .centered-form {
     width: 90%;
     margin: 0 auto;
