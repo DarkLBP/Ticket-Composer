@@ -19,7 +19,6 @@ use Core\Utils;
             echo '<a class="button" href="' . Utils::getURL('ticket', 'open', [$ticket['id']]) . '">Reopen</a>';
         }
     ?>
-
 </h5>
 <section id="ticket-posts">
     <?php
