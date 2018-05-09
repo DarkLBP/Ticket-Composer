@@ -45,6 +45,8 @@ use Core\Utils;
             <textarea id="message" name="message"></textarea><br>
             <label for="attachment">Attachment:</label><br>
             <input type="file" name="attachment" id="attachment"><br>
+            <label for="close">
+                <input type="checkbox" name="close" id="close" value="close"> Close Ticket</label>
             <input type="submit" value="Post Message">
         </form>
     </div>

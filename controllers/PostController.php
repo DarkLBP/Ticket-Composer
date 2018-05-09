@@ -74,6 +74,7 @@ class PostController extends Controller
             if ($exists === 1) {
                 $content = $this->request->getPostParam('message', true);
                 $attachment = $this->request->getSentFile('attachment');
+                $close = $this->request->getPostParam('close');
                 if (!empty($content)) {
                     $ticketPostsModel = $this->getModel('posts');
                     $postId = $ticketPostsModel->insert([
@@ -88,6 +89,13 @@ class PostController extends Controller
                             'postId' => $postId,
                             'fileName' => $attachment['name'],
                             'filePath' => $file
+                        ]);
+                    }
+                    if (!empty($close)) {
+                        $ticketsModel->update([
+                            "open" => 0,
+                        ], [
+                            "id" => $ticketId
                         ]);
                     }
                 } else {
