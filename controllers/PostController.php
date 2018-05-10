@@ -24,7 +24,8 @@ class PostController extends Controller
                         'postId' => $postId
                     ]);
                     foreach ($postAttachments as $attachment) {
-                        unset(__DIR__ . '/../uploads/' . $attachment['filePath']);
+                        $path = __DIR__ . '/../uploads/' . $attachment['filePath'];
+                        unset($path);
                     }
                     $attachmentsModel->delete([
                         'postId' => $postId
