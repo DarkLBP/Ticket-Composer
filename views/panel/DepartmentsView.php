@@ -10,7 +10,7 @@ if (empty($departments)) {
     echo "<p>There are no departments</p>";
 } else {
 ?>
-<table>
+<table class="departments">
     <thead>
     <tr>
         <th>Id</th>
@@ -21,7 +21,7 @@ if (empty($departments)) {
     <tbody>
     <?php
     foreach ($departments as $department) {
-        echo "<tr>";
+        echo "<tr id='d-$department[id]'>";
         echo "<td>$department[id]</td>";
         echo "<td>$department[name]</td>";
         echo "<td>";

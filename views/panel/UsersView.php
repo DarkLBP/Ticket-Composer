@@ -5,7 +5,7 @@ use Core\Utils;
  */
 ?>
 <h2>Users</h2>
-<table>
+<table class="users">
     <thead>
     <tr>
         <th>Id</th>
@@ -19,7 +19,7 @@ use Core\Utils;
     <tbody>
     <?php
     foreach ($users as $user) {
-        echo "<tr>";
+        echo "<tr id='u-$user[id]'>";
         echo "<td><a href='" . Utils::getURL('user', 'edit', [$user['id']]) . "'>$user[id]</a></td>";
         echo "<td>$user[name]</td>";
         echo "<td>$user[surname]</td>";

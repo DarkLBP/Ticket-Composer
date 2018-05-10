@@ -11,7 +11,7 @@ class ExportController extends Controller
     {
         parent::__construct($request);
         $loggedUser = $this->request->getSessionParam('loggedUser');
-        if (empty($loggedUser) || $loggedUser['op'] == 0) {
+        if ($loggedUser['op'] == 0) {
             $this->renderView("forbidden");
         }
         $this->request->setResponseHeader('Content-Type', 'application/json');
