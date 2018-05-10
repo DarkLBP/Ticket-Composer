@@ -19,6 +19,11 @@ class PanelController extends Controller
         $this->renderView('departments');
     }
 
+    public function actionSite()
+    {
+        $this->renderview('site');
+    }
+
     public function actionTickets()
     {
         $ticketsModel = $this->getModel('tickets');

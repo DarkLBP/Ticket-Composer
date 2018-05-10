@@ -36,6 +36,7 @@ use Core\Utils;
             if ($loggedUser['op'] == 1) {
                 echo "<li" . ($action == 'departments' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
                 echo "<li" . ($action == 'users' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'users') . "'>Users</a></li>";
+                echo "<li" . ($action == 'site' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'site') . "'>Site</a></li>";
             }
             echo "<li class='user-box'><span>$loggedUser[name] $loggedUser[surname]</span>";
             echo '<ul>';

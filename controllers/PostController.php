@@ -19,6 +19,16 @@ class PostController extends Controller
                     $this->request->setViewParam('post', $post);
                     $this->renderView('delete');
                 } else if ($this->request->isPost()) {
+                    $attachmentsModel = $this->getModel('attachments');
+                    $postAttachments = $attachmentsModel->find([
+                        'postId' => $postId
+                    ]);
+                    foreach ($postAttachments as $attachment) {
+                        unset(__DIR__ . '/../uploads/' . $attachment['filePath']);
+                    }
+                    $attachmentsModel->delete([
+                        'postId' => $postId
+                    ]);
                     $postsModel->delete([
                         'id' => $postId
                     ]);
