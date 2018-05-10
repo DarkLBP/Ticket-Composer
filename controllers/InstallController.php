@@ -71,8 +71,7 @@ class InstallController extends Controller {
                     $errors[] = "Failed to connect to MySQL";
                 } else {
                     $con->multi_query(file_get_contents(__DIR__ . '/../core/sql/Install.sql'));
-                    $configString = "
-<?php
+                    $configString = "<?php
 define(\"SITE_TITLE\", \"$title\");
 define(\"SITE_EMAIL\", \"$siteEmail\");
 define(\"DATABASE_HOST\", \"$mHost\");
