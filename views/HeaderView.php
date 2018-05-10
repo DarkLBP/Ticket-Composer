@@ -17,6 +17,7 @@ use Core\Utils;
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= SITE_TITLE ?></title>
     <link rel="stylesheet" href="<?= Utils::getURL() ?>/css/style.css">
+    <script src="<?= Utils::getURL() ?>/js/EasyMVC.js"></script>
     <script src="<?= Utils::getURL() ?>/js/script.js"></script>
 </head>
 <body>
