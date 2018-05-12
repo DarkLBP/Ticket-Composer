@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Core\Controller;
+use Core\Utils;
 
 class PanelController extends Controller
 {
@@ -21,7 +22,49 @@ class PanelController extends Controller
 
     public function actionSite()
     {
-        $this->renderview('site');
+        if ($this->request->isPost()) {
+            $title = $this->request->getPostParam('title', true);
+            $siteEmail = $this->request->getPostParam('siteemail', true);
+            $errors = [];
+            if (empty($title)) {
+                $errors[] = 'Site title is empty';
+            }
+            if (empty($siteEmail)) {
+                $errors[] = 'Site email is empty';
+            } else if (!filter_var($siteEmail, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Site email is invalid';
+            }
+            if (empty($errors)) {
+                $configString = "<?php
+define(\"SITE_TITLE\", \"$title\");
+define(\"SITE_EMAIL\", \"$siteEmail\");
+define(\"DATABASE_HOST\", \"" . DATABASE_HOST . "\");
+define(\"DATABASE_USER\", \"" . DATABASE_USER . "\");
+define(\"DATABASE_PASSWORD\", \"" . DATABASE_PASSWORD . "\");
+define(\"DATABASE_DB\", \"" . DATABASE_DB. "\");
+define(\"DEFAULT_CONTROLLER\", \"main\");
+define(\"DEFAULT_ACTION\", \"index\");
+
+spl_autoload_register(function (\$class) {
+    \$segments = explode(\"\\\\\", \$class);
+    \$path = '';
+    for (\$i = 0; \$i < count(\$segments) - 1; \$i++) {
+        \$path .= strtolower(\$segments[\$i]) . '/';
+    }
+    \$finalPath = __DIR__ . '/../' . \$path . '/' . \$segments[\$i] . '.php';
+    if (file_exists(\$finalPath)) {
+        include_once \$finalPath;
+    }
+});
+                    ";
+                file_put_contents(__DIR__ . '/../core/Config.php', $configString);
+                $this->request->setViewParam('message', "Site settings updated successfully");
+                $this->request->setResponseHeader('Location', Utils::getURL('panel', 'site'));
+            } else {
+                $this->request->setViewParam('errors', $errors);
+            }
+        }
+        $this->renderView('site');
     }
 
     public function actionTickets()
