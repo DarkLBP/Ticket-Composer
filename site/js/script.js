@@ -16,8 +16,10 @@ window.onload = function() {
             if (table != null) {
                 table.onclick = function(e) {
                     let ticketId = e.target.parentElement.id;
-                    ticketId = ticketId.replace('t-', '');
-                    EasyMVC.redirect('ticket', 'view', [ticketId]);
+                    if (ticketId) {
+                        ticketId = ticketId.replace('t-', '');
+                        EasyMVC.redirect('ticket', 'view', [ticketId]);
+                    }
                 };
             }
         } else if (action === 'departments') {
@@ -25,8 +27,10 @@ window.onload = function() {
             if (table != null) {
                 table.onclick = function(e) {
                     let departmentId = e.target.parentElement.id;
-                    departmentId = departmentId.replace('d-', '');
-                    EasyMVC.redirect('department', 'edit', [departmentId]);
+                    if (departmentId) {
+                        departmentId = departmentId.replace('d-', '');
+                        EasyMVC.redirect('department', 'edit', [departmentId]);
+                    }
                 }
             }
         } else if (action === "users") {
@@ -34,8 +38,10 @@ window.onload = function() {
             if (table != null) {
                 table.onclick = function(e) {
                     let userId = e.target.parentElement.id;
-                    userId = userId.replace('u-', '');
-                    EasyMVC.redirect('user', 'edit', [userId]);
+                    if (userId) {
+                        userId = userId.replace('u-', '');
+                        EasyMVC.redirect('user', 'edit', [userId]);
+                    }
                 }
             }
 
