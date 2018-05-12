@@ -148,8 +148,13 @@ class SimpleMailer
             $headers[] = 'Content-Transfer-Encoding: base64';
             $message[] = base64_encode($this->message);
         } else {
-            $headers[] = "Content-Type: multipart/mixed; boundary=\"chunk\"";
-            $message[] = '--chunk';
+            try {
+                $chunkSeparator = bin2hex(random_bytes(16));
+            } catch (Exception $e) {
+                $chunkSeparator = "chunk";
+            }
+            $headers[] = "Content-Type: multipart/mixed; boundary=\"$chunkSeparator\"";
+            $message[] = "--$chunkSeparator";
             $message[] = "Content-Type: $messageMime;charset=\"utf-8\"";
             $message[] = 'Content-Transfer-Encoding: base64';
             $message[] = '';
@@ -158,7 +163,7 @@ class SimpleMailer
                 $mime = mime_content_type($image['path']);
                 $base64 = base64_encode(file_get_contents($image['path']));
                 $message[] = '';
-                $message[] = '--chunk';
+                $message[] = "--$chunkSeparator";
                 $message[] = "Content-Type: $mime";
                 $message[] = 'Content-Transfer-Encoding: base64';
                 $message[] = "Content-ID: $image[contentId]";
@@ -170,7 +175,7 @@ class SimpleMailer
                 $mime = mime_content_type($attachment['path']);
                 $base64 = base64_encode(file_get_contents($attachment['path']));
                 $message[] = '';
-                $message[] = '--chunk';
+                $message[] = "--$chunkSeparator";
                 if (!empty($attachment['fileName'])) {
                     $message[] = "Content-Type: $mime; name=\"$attachment[fileName]\"";
                 } else {
@@ -187,7 +192,7 @@ class SimpleMailer
                 $message[] = $base64;
             }
             $message[] = '';
-            $message[] = '--chunk--';
+            $message[] = "--$chunkSeparator--";
         }
         $toString = '';
         foreach ($this->to as $item) {
