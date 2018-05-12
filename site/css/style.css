@@ -48,7 +48,8 @@ a:hover {
 label,
 input,
 textarea,
-button {
+button,
+select {
     font-size: 1rem;
 }
 
@@ -195,6 +196,7 @@ a.button {
     padding: 0.5em 0.7em;
     margin-top: 1em;
     display: inline-block;
+    text-align: center;
 }
 
 .button:hover {
@@ -276,6 +278,11 @@ input[type=button].danger:active {
 
 .row > *:not(:last-child) {
     margin-right: 1%;
+}
+
+.row > * {
+    width: auto !important;
+    flex: 1;
 }
 
 
