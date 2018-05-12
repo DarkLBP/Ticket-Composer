@@ -25,9 +25,9 @@ if (empty($myTickets)) {
     <?php
         foreach ($myTickets as $ticket) {
             if ($ticket["open"] == 1) {
-                echo "<tr class='open' id='t-$ticket[id]'>";
+                echo "<tr class='green-row' id='t-$ticket[id]'>";
             } else {
-                echo "<tr class='closed' id='t-$ticket[id]'>";
+                echo "<tr class='red-row' id='t-$ticket[id]'>";
             }
             echo "<td><a href='" . Utils::getURL('ticket', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
             echo "<td>$ticket[title]</td>";
@@ -35,9 +35,9 @@ if (empty($myTickets)) {
             echo "<td><time>$ticket[lastReply]</time></td>";
             echo "<td>$ticket[totalPosts]</td>";
             if ($ticket["open"] == 1) {
-                echo "<td class='open'>Open</td>";
+                echo "<td class='green'>Open</td>";
             } else {
-                echo "<td class='closed'>Closed</td>";
+                echo "<td class='red'>Closed</td>";
             }
             echo "</tr>";
         }

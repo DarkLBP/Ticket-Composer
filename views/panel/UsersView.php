@@ -19,16 +19,20 @@ use Core\Utils;
     <tbody>
     <?php
     foreach ($users as $user) {
-        echo "<tr id='u-$user[id]'>";
+        if ($user['op'] == 1) {
+            echo "<tr class='red-row' id='u-$user[id]'>";
+        } else {
+            echo "<tr class='green-row' id='u-$user[id]'>";
+        }
         echo "<td><a href='" . Utils::getURL('user', 'edit', [$user['id']]) . "'>$user[id]</a></td>";
         echo "<td>$user[name]</td>";
         echo "<td>$user[surname]</td>";
         echo "<td>$user[email]</td>";
         echo "<td><time>$user[created]</time></td>";
         if ($user['op'] == 1) {
-            echo '<td>Yes</td>';
+            echo '<td class="red">Yes</td>';
         } else {
-            echo '<td>No</td>';
+            echo '<td class="green">No</td>';
         }
         echo "</tr>";
     }
