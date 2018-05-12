@@ -155,6 +155,27 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
+    public function actionStatistics()
+    {
+        $ticketsModel = $this->getModel('tickets');
+        $departmentsModel = $this->getModel('departments');
+        $departmentsModel->join($ticketsModel, 'id', 'department', 'left');
+        $countPerDepartment = $departmentsModel->find([], [
+            'name',
+            [
+                "COUNT($ticketsModel.id)" => "count"
+            ],
+        ], ["department"]);
+
+        $countPerStatus = $ticketsModel->find([], [
+            'open',
+            ['COUNT(*)' => 'count']
+        ], ["open"]);
+        $this->response['results'][] = $countPerDepartment;
+        $this->response['results'][] = $countPerStatus;
+        $this->sendResponse();
+    }
+
     private function sendResponse()
     {
         $this->request->setResponseHeader('Content-Type', 'application/json');

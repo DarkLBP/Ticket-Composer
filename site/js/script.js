@@ -12,6 +12,18 @@ function getCookie(name) {
     }
 }
 
+function performAJAXRequest(url, method = "POST", callback = null, headers = {}) {
+    const request = new XMLHttpRequest();
+    request.open(method, url, true);
+    for (let property in headers) {
+        if (headers.hasOwnProperty(property)) {
+            request.setRequestHeader(property, headers[property]);
+        }
+    }
+    request.onreadystatechange = callback;
+    request.send();
+}
+
 //Wait for page load
 window.onload = function() {
     let mvc = new EasyMVC();
