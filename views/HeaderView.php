@@ -21,7 +21,7 @@ use Core\Utils;
     <script src="<?= Utils::getURL() ?>/js/jquery-3.3.1.js"></script>
     <script>
         //PHP injected script
-        <?= "const serverTimezoneOffset = " . (abs(date('Z')) / 60) . ";" ?>
+        <?= "const serverTimezoneOffset = " . (date('Z') / 60) . ";" ?>
     </script>
     <script src="<?= Utils::getURL() ?>/js/script.js"></script>
 </head>

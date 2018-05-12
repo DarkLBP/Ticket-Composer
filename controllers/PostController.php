@@ -81,7 +81,7 @@ class PostController extends Controller
         if (isset($params[0])) {
             $ticketId = $params[0];
             $ticketsModel = $this->getModel('tickets');
-            $exists = $ticketsModel->find(['id' => $ticketId], ["open"]);
+            $exists = $ticketsModel->findOne($ticketId, ["open"]);
             if (!empty($exists) && $exists['open'] == 1) {
                 $content = $this->request->getPostParam('message', true);
                 $attachment = $this->request->getSentFile('attachment');

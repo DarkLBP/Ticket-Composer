@@ -24,7 +24,7 @@ use Core\Utils;
         echo "<td>$user[name]</td>";
         echo "<td>$user[surname]</td>";
         echo "<td>$user[email]</td>";
-        echo "<td>$user[created]</td>";
+        echo "<td><time>$user[created]</time></td>";
         if ($user['op'] == 1) {
             echo '<td>Yes</td>';
         } else {
