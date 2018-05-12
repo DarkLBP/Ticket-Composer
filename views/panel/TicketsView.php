@@ -32,7 +32,7 @@ if (empty($myTickets)) {
             echo "<td><a href='" . Utils::getURL('ticket', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
             echo "<td>$ticket[title]</td>";
             echo "<td>$ticket[departmentName]</td>";
-            echo "<td>$ticket[lastReply]</td>";
+            echo "<td><time>$ticket[lastReply]</time></td>";
             echo "<td>$ticket[totalPosts]</td>";
             if ($ticket["open"] == 1) {
                 echo "<td class='open'>Open</td>";

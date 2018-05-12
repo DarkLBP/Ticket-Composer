@@ -25,7 +25,7 @@ use Core\Utils;
     foreach ($ticketPosts as $post) {
         echo "<article><header class='ticket-header'>";
         echo "<h4>$post[createdName] $post[createdSurname]</h4>";
-        echo "<h5>On $post[created]</h5>";
+        echo "<h5>On <time>$post[created]</time></h5>";
         echo "</header>";
         echo "<p class='ticket-content'>" . str_replace(["\n", "\r\n"], '<br>', htmlspecialchars($post['content'])) . "</p>";
         echo "<footer class='ticket-footer'>";

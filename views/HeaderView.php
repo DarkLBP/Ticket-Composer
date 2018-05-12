@@ -18,6 +18,7 @@ use Core\Utils;
     <title><?= SITE_TITLE ?></title>
     <link rel="stylesheet" href="<?= Utils::getURL() ?>/css/style.css">
     <script src="<?= Utils::getURL() ?>/js/EasyMVC.js"></script>
+    <script src="<?= Utils::getURL() ?>/js/jquery-3.3.1.js"></script>
     <script src="<?= Utils::getURL() ?>/js/script.js"></script>
 </head>
 <body>
@@ -32,6 +33,7 @@ use Core\Utils;
     <ul class="navigation">
         <?php
         if (!empty($loggedUser)) {
+            echo "<li" . ($action == 'index' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel') . "'>Home</a></li>";
             echo "<li" . ($action == 'tickets' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'tickets') . "'>Tickets</a></li>";
             if ($loggedUser['op'] == 1) {
                 echo "<li" . ($action == 'departments' && $controller == 'panel' ? ' class="active"' : '') . "><a href='" . Utils::getURL('panel', 'departments') . "'>Departments</a></li>";
