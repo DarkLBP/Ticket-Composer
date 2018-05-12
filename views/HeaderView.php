@@ -19,6 +19,10 @@ use Core\Utils;
     <link rel="stylesheet" href="<?= Utils::getURL() ?>/css/style.css">
     <script src="<?= Utils::getURL() ?>/js/EasyMVC.js"></script>
     <script src="<?= Utils::getURL() ?>/js/jquery-3.3.1.js"></script>
+    <script>
+        //PHP injected script
+        <?= "const serverTimezoneOffset = " . (abs(date('Z')) / 60) . ";" ?>
+    </script>
     <script src="<?= Utils::getURL() ?>/js/script.js"></script>
 </head>
 <body>

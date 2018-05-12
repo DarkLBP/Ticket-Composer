@@ -2,7 +2,6 @@ window.onload = function() {
     let mvc = new EasyMVC();
     const action = mvc.getAction();
     const controller = mvc.getController();
-    const serverTimezoneOffset = 240; //GMT -04:00
 
     //Redirect to ticket when clicking table row
     if (controller === 'panel') {
