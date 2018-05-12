@@ -9,15 +9,27 @@ use Core\Utils;
 ?>
 <h2><?= $ticket['title'] ?></h2>
 <h5>Department: <?= $ticket['departmentName'] ?></h5>
-<h5>Asigned To: <?= !empty($ticket['assignedName']) ? $ticket['assignedName'] . ' ' . $ticket['assignedSurname'] : 'Unassigned' ?></h5>
+<h5>Asigned To:
+<?php
+     if(!empty($ticket['assignedName'])) {
+         echo $ticket['assignedName'] . ' ' . $ticket['assignedSurname'];
+     } else {
+         echo 'Unassigned';
+         if (in_array($ticket['department'], $loggedUser['departments'])) {
+             echo ' <a class="button small" href="' . Utils::getURL('ticket', 'assign', [$ticket['id']]) . '">Assign To Me</a>';
+         }
+     }
+?></h5>
 <h5>Status:
     <?php
         if ($ticket['open'] == 1) {
-            echo "<span class='open'>Open</span> ";
+            echo "<span class='green'>Open</span> ";
             echo '<a class="button" href="' . Utils::getURL('ticket', 'close', [$ticket['id']]) . '">Close</a>';
         } else {
-            echo "<span class='closed'>Closed</span> ";
-            echo '<a class="button" href="' . Utils::getURL('ticket', 'open', [$ticket['id']]) . '">Reopen</a>';
+            echo "<span class='red'>Closed</span> ";
+            if (in_array($ticket['department'], $loggedUser['departments']) || $loggedUser['op'] == 1) {
+                echo '<a class="button" href="' . Utils::getURL('ticket', 'open', [$ticket['id']]) . '">Reopen</a>';
+            }
         }
     ?>
 </h5>

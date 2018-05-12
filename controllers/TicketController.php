@@ -6,6 +6,29 @@ use Core\Utils;
 
 class TicketController extends Controller
 {
+    public function actionAssign($params = [])
+    {
+        $loggedUser = $this->request->getSessionParam('loggedUser');
+        $ticketsModel = $this->getModel('tickets');
+        if (!empty($params)) {
+            $ticketId = $params[0];
+            $ticket = $ticketsModel->findOne($ticketId, 'id', ['department']);
+            if (!empty($ticket)) {
+                if (in_array($ticket['department'], $loggedUser['departments'])) {
+                    $ticketsModel->update([
+                        'assignedTo' => $loggedUser['id']
+                    ], [
+                        'id' => $ticketId
+                    ]);
+                    $this->request->redirect(Utils::getURL('ticket', 'view', $params));
+                } else {
+                    $this->renderView('forbidden');
+                }
+            }
+        }
+        $this->renderView('invalid');
+    }
+
     public function actionCreate()
     {
         if ($this->request->isPost()) {
