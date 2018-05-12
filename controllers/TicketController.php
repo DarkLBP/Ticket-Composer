@@ -12,7 +12,7 @@ class TicketController extends Controller
             $title = $this->request->getPostParam('title', true);
             $department = $this->request->getPostParam('department', true);
             $content = $this->request->getPostParam('content', true);
-            $attachment = $this->request->getSentFile('attachment');
+            $attachments = $this->request->getSentFile('attachment');
             $errors = [];
             if (empty($title)) {
                 $errors[] = "The title is empty";
@@ -37,14 +37,19 @@ class TicketController extends Controller
                     'userId' => $user['id'],
                     'content' => $content
                 ]);
-                if (!empty($attachment) && $attachment['error'] === 0) {
-                    $file = $this->uploadFile($attachment);
+                if (!empty($attachments)) {
                     $ticketAttachment = $this->getModel('attachments');
-                    $ticketAttachment->insert([
-                        'postId' => $ticketPostId,
-                        'fileName' => $attachment['name'],
-                        'filePath' => $file
-                    ]);
+                    $count = count($attachments['error']);
+                    for ($i = 0; $i < $count; $i++) {
+                        if ($attachments["error"][$i] === 0) {
+                            $file = $this->uploadFile($attachments['tmp_name'][$i], $attachments["name"][$i]);
+                            $ticketAttachment->insert([
+                                'postId' => $ticketPostId,
+                                'fileName' => $attachments["name"][$i],
+                                'filePath' => $file
+                            ]);
+                        }
+                    }
                 }
                 $this->request->redirect(Utils::getURL('ticket', 'view', [$ticketId]));
             }
@@ -144,11 +149,11 @@ class TicketController extends Controller
         $this->renderView('invalid');
     }
 
-    private function uploadFile($file)
+    private function uploadFile($tmp_name, $name)
     {
-        $fileHash = hash_file('sha256', $file['tmp_name']);
+        $fileHash = hash_file('sha256', $tmp_name);
         $folderName = date('Y-m');
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $extension = pathinfo($name, PATHINFO_EXTENSION);
         $fileName = $fileHash . (!empty($extension) ? '.' . $extension : '');
         $relativePath = $folderName . '/' . $fileName;
         $fullDir = __DIR__ . '/../uploads/' . $folderName . '/';
@@ -156,7 +161,7 @@ class TicketController extends Controller
             mkdir($fullDir, 0755, true);
         }
         $fullPath = $fullDir . $fileName;
-        move_uploaded_file($file['tmp_name'], $fullPath);
+        move_uploaded_file($tmp_name, $fullPath);
         return $relativePath;
     }
 }

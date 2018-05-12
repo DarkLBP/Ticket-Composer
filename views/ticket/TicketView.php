@@ -51,10 +51,14 @@ use Core\Utils;
         <h3>Post New Message</h3>
         <?= empty($error) ? '' : "<p class='error-message'>$error</p>"; ?>
         <form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
-            <label for="message">Message:</label><br>
+            <label for="message">Message</label><br>
             <textarea id="message" name="message"></textarea><br>
-            <label for="attachment">Attachment:</label><br>
-            <input type="file" name="attachment" id="attachment"><br>
+            <label for="attachment">Attachments</label><br>
+            <div id="attachments">
+                <input type="file" name="attachment[]" id="attachment">
+            </div>
+            <a id="addAttachment" class="jsHidden button small">Add Attachment</a>
+            <a id="removeAttachment" class="jsHidden button small">Remove Attachment</a>
             <label for="close">
                 <input type="checkbox" name="close" id="close" value="close"> Close Ticket
             </label>

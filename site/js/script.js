@@ -3,6 +3,12 @@ window.onload = function() {
     const action = mvc.getAction();
     const controller = mvc.getController();
 
+    //Show js only elements
+    const hiddenElements = document.querySelectorAll('.jsHidden');
+    for (let i = 0; i < hiddenElements.length; i++) {
+        hiddenElements[i].classList.remove('jsHidden');
+    }
+
     //Redirect to ticket when clicking table row
     if (controller === 'panel') {
         if (action === 'tickets') {
@@ -33,6 +39,29 @@ window.onload = function() {
                 }
             }
 
+        }
+    } else if (controller === 'ticket') {
+        if (action === 'view' || action === 'create') {
+            const attachments = document.querySelector('#attachments');
+            const addAttachment = document.querySelector('#addAttachment');
+            const removeAttachment = document.querySelector('#removeAttachment');
+            if (attachments != null) {
+                if (addAttachment != null) {
+                    addAttachment.onclick = function() {
+                        let element = document.createElement('input');
+                        element.type = 'file';
+                        element.name = 'attachment[]';
+                        attachments.appendChild(element);
+                    }
+                }
+                if (removeAttachment != null) {
+                    removeAttachment.onclick = function() {
+                        if (attachments.childElementCount !== 0) {
+                            attachments.removeChild(attachments.children[attachments.childElementCount - 1]);
+                        }
+                    }
+                }
+            }
         }
     }
 

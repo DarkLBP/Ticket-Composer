@@ -38,6 +38,7 @@ body {
 a {
     color: #4da167;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:hover {
@@ -256,6 +257,10 @@ input[type=button].danger:active {
 .open,
 .green {
     color: #4da167;
+}
+
+.jsHidden {
+    display: none !important;
 }
 
 .row {

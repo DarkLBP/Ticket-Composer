@@ -9,9 +9,9 @@ use Core\Utils;
     <h2>Create Ticket</h2>
     <?= !empty($errors) ? '<p>' . implode('<br>', $errors) . '</p>' : '' ?>
     <form action="<?= Utils::getURL('ticket', 'create')?>" method="post" enctype="multipart/form-data">
-        <label for="title">Title:</label><br>
+        <label for="title">Title</label><br>
         <input type="text" name="title" id="title"><br>
-        <label for="department">Department:</label><br>
+        <label for="department">Department</label><br>
         <select id="department" name="department">
             <option value="">Select a department</option>
             <?php
@@ -20,10 +20,14 @@ use Core\Utils;
             }
             ?>
         </select><br>
-        <label for="content">Content:</label><br>
+        <label for="content">Content</label><br>
         <textarea name="content" id="content"></textarea><br>
-        <label for="attachment">Attachment:</label><br>
-        <input type="file" name="attachment" id="attachment"><br>
-        <input type="submit" value="Create">
+        <label for="attachment">Attachments</label><br>
+        <div id="attachments">
+            <input type="file" name="attachment[]" id="attachment">
+        </div>
+        <a id="addAttachment" class="jsHidden button small">Add Attachment</a>
+        <a id="removeAttachment" class="jsHidden button small">Remove Attachment</a>
+        <input type="submit" value="Create Ticket">
     </form>
 </div>
