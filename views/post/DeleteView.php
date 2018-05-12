@@ -7,7 +7,9 @@ use Core\Utils;
 <div class="centered-form">
     <form action="<?= Utils::getURL('post', 'delete', [$post['id']]) ?>" method="post">
         <p>Are you sure you want to delete this post?</p>
-        <input type="submit" value="Delete"><br>
-        <a href="<?= Utils::getURL('ticket', 'view', [$post['ticketId']]) ?>">Go Back</a>
+        <div class="row">
+            <input type="submit" class="danger" value="Delete Post">
+            <a href="<?= Utils::getURL('ticket', 'view', [$post['ticketId']]) ?>" class="button">Go Back</a>
+        </div>
     </form>
 </div>

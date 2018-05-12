@@ -39,7 +39,7 @@ use Core\Utils;
             echo "<a href='" . Utils::getURL('post', 'edit', [$post["id"]]) . "' class='button small'>Edit</a>";
         }
         if ($loggedUser['op'] == 1) {
-            echo " <a href='" . Utils::getURL('post', 'delete', [$post["id"]]) . "' class='button small'>Delete</a>";
+            echo " <a href='" . Utils::getURL('post', 'delete', [$post["id"]]) . "' class='button small danger'>Delete</a>";
         }
         echo "</footer>";
         echo "</article>";
