@@ -37,8 +37,7 @@ class DepartmentController extends Controller
                     $this->request->redirect(Utils::getURL('panel', 'departments'));
                 }
                 $name = $exists["name"];
-                $this->request->setViewParam('name', $name);
-                $this->request->setViewParam('department', $department);
+                $this->request->setViewParam('department', $exists);
                 $this->renderView('delete');
             }
         }
