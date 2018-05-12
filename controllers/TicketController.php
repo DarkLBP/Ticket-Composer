@@ -113,12 +113,15 @@ class TicketController extends Controller
             $departmentsModel = $this->getModel('departments');
             $ticketsModel->join($usersModel, 'createdBy', 'id', 'left');
             $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
+            $ticketsModel->join($usersModel, 'assignedTo', 'id', 'left', 'u2');
             $ticket = $ticketsModel->findOne($ticketId, "$ticketsModel.id", [
                 "$ticketsModel.*",
                 [
                     "$usersModel.name" => "createdName",
                     "$usersModel.surname" => "createdSurname",
-                    "$departmentsModel.name" => "departmentName"
+                    "$departmentsModel.name" => "departmentName",
+                    "u2.name" => "assignedName",
+                    "u2.surname" => "assignedSurname",
                 ]
             ]);
             if (!empty($ticket)) {

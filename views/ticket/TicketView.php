@@ -9,6 +9,7 @@ use Core\Utils;
 ?>
 <h2><?= $ticket['title'] ?></h2>
 <h5>Department: <?= $ticket['departmentName'] ?></h5>
+<h5>Asigned To: <?= !empty($ticket['assignedName']) ? $ticket['assignedName'] . ' ' . $ticket['assignedSurname'] : 'Unassigned' ?></h5>
 <h5>Status:
     <?php
         if ($ticket['open'] == 1) {
