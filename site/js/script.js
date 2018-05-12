@@ -1,3 +1,18 @@
+/**
+ * Get a cookie
+ * @param name Name of the cookie
+ */
+function getCookie(name) {
+    name += '=';
+    const cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; i++) {
+        if (cookies[i].startsWith(name)) {
+            return cookies[i].split("=")[1];
+        }
+    }
+}
+
+//Wait for page load
 window.onload = function() {
     let mvc = new EasyMVC();
     const action = mvc.getAction();
