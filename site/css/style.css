@@ -204,6 +204,24 @@ a.button {
     font-size: 0.8rem;
 }
 
+.button.danger,
+input[type=submit].danger,
+input[type=button].danger {
+    background-color: #bb0a13;
+}
+
+.button.danger:hover,
+input[type=submit].danger:hover,
+input[type=button].danger:hover {
+    background-color: #4d5057;
+}
+
+.button.danger:active,
+input[type=submit].danger:active,
+input[type=button].danger:active {
+    background-color: #bb0a13;
+}
+
 .center {
     text-align: center;
 }
@@ -230,12 +248,23 @@ a.button {
     background-color: #bb0a13;
 }
 
-.closed {
+.closed,
+.red {
     color: #bb0a13;
 }
 
-.open {
+.open,
+.green {
     color: #4da167;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.row > *:not(:last-child) {
+    margin-right: 1%;
 }
 
 .tickets > tbody > tr.open:hover {

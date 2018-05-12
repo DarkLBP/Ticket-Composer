@@ -80,6 +80,32 @@ class UserController extends Controller
         $this->renderView("create");
     }
 
+    public function actionDelete($params = [])
+    {
+        $loggedUser = $this->request->getSessionParam('loggedUser');
+        if ($loggedUser['op'] != 1) {
+            $this->renderView('forbidden');
+        }
+        if (!empty($params)) {
+
+            $userId = $params[0];
+            $userModel = $this->getModel('users');
+            $user = $userModel->findOne($userId);
+            if (!empty($user)) {
+                $this->request->setViewParam('user', $user);
+                if ($this->request->isPost()) {
+                    $userModel->delete([
+                        'id' => $userId
+                    ]);
+                    $this->request->redirect(Utils::getURL('panel', 'users'));
+                } else if ($this->request->isGet()) {
+                    $this->renderView('delete');
+                }
+            }
+        }
+        $this->renderView('invalid');
+    }
+
     public function actionEdit($params = [])
     {
         $userModel = $this->getModel('users');
@@ -163,7 +189,7 @@ class UserController extends Controller
                         ]);
                     }
                 }
-                $this->request->redirect(Utils::getURL('panel', 'users'));
+                $this->request->redirect(Utils::getURL('user', 'edit', $params));
             } else {
                 $this->request->setViewParam('errors', $errors);
             }
@@ -172,6 +198,7 @@ class UserController extends Controller
         $this->request->setViewParam('departments', $departmentList);
         $this->renderView('edit');
     }
+
     public function actionForgot($params = [])
     {
         if (isset($params[0])) {

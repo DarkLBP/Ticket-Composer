@@ -44,6 +44,13 @@ use Core\Utils;
             echo "</label>";
         }
         ?>
-        <input type="submit" value="Edit">
+        <div class="row">
+            <input type="submit" value="Edit User">
+            <?php
+            if ($user['id'] != $loggedUser['id']) {
+                echo '<a href="' . Utils::getURL('user', 'delete', [$user['id']]) . '" class="button danger">Remove User</a>';
+            }
+            ?>
+        </div>
     </form>
 </div>
