@@ -154,7 +154,7 @@ class TicketController extends Controller
         $fileHash = hash_file('sha256', $tmp_name);
         $folderName = date('Y-m');
         $extension = pathinfo($name, PATHINFO_EXTENSION);
-        $fileName = $fileHash . (!empty($extension) ? '.' . $extension : '');
+        $fileName = time() . "-" . $fileHash . (!empty($extension) ? '.' . $extension : '');
         $relativePath = $folderName . '/' . $fileName;
         $fullDir = __DIR__ . '/../uploads/' . $folderName . '/';
         if (!is_dir($fullDir)) {
