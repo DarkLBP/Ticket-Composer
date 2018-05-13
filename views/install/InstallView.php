@@ -1,7 +1,6 @@
 <?php
 use Core\Utils;
 ?>
-
 <div class="centered-form">
     <h2>Install Ticket Composer</h2>
     <?= !empty($errors) ? '<p class="error-message">' .implode('<br>', $errors) . '</p>' : '' ?>

@@ -19,7 +19,7 @@ class AttachmentController extends Controller
             if (!empty($attachment)) {
                 $userId = $attachment['userId'];
                 if ($userId != $this->request->getSessionParam('loggedUser')['id']) {
-                    $this->renderView('notAuthorised');
+                    $this->renderView('forbidden');
                 }
                 $filePath = '../uploads/'.$attachment['filePath'];
                 $mimeType = mime_content_type($filePath);

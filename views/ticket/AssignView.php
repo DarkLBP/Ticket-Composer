@@ -11,7 +11,6 @@ use Core\Utils;
     <h2>Assign Ticket To</h2>
     <?= !empty($error) ? '<p class="error-message">' . $error . '</p>' : '' ?>
     <form action="<?= Utils::getURL('ticket', 'assign', [$ticketId]) ?>" method="post">
-
         <label for="user">User</label>
         <select id="user" name="user">
             <option value="">Select a user</option>

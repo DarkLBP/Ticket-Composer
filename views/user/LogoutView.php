@@ -5,8 +5,8 @@ use Core\Utils;
  */
 ?>
 <div class="centered-form">
+    <h2>Logout User</h2>
     <form action="<?= Utils::getURL('user', 'logout', [$user['id']]) ?>" method="post">
-        <h2>Logout User</h2>
         <p>Are you sure you want to logout '<?= $user["name"] . ' ' . $user['surname'] ?>'?</p>
         <p>This will close all opened sessions.</p>
         <div class="row stretch">
