@@ -419,6 +419,7 @@ CONTENT STYLES
     display: flex;
     justify-content: flex-end;
     margin-bottom: 0.5em;
+    align-items: center;
 }
 
 /*

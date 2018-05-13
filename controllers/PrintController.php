@@ -1,11 +1,11 @@
 <?php
-include_once __DIR__ . "/../vendor/TablePDF.php";
+include_once __DIR__ . "/../vendor/fpdf/fpdf.php";
 
 use Core\Controller;
 
 class PrintController extends Controller
 {
-    public function actionTickets()
+    public function actionOverview()
     {
         $loggedUser = $this->request->getSessionParam('loggedUser');
         $ticketsModel = $this->getModel('tickets');
