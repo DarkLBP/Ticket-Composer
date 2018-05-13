@@ -163,8 +163,13 @@ tbody > tr {
     cursor: pointer;
 }
 
-thead th {
+thead th,
+thead th a {
     color: white;
+}
+
+thead th a {
+    display: block;
 }
 
 table > tbody > tr:hover {

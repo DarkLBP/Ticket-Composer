@@ -2,10 +2,17 @@
 use Core\Utils;
 /**
  * @var array $departments
+ * @var string $sortBy
+ * @var string $sortOrder
+ * @var string $searchTerm
  */
 ?>
 <h2>Departments</h2>
 <?php
+$queryString = '?';
+if (!empty($searchTerm)) {
+    $queryString .= "search=$searchTerm";
+}
 if (empty($departments)) {
     echo "<p>There are no departments</p>";
 } else {
@@ -19,9 +26,45 @@ if (empty($departments)) {
 <table class="departments">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Created</th>
+        <th>
+            <?php
+            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            if ($sortBy === "id") {
+                if ($sortOrder === 'asc') {
+                    $query .= "sort=id&order=desc";
+                }
+            } else {
+                $query .= "sort=id&order=asc";
+            }
+            echo "<a href='" . Utils::getURL('panel', 'departments') . $query ."'>Id</a>";
+            ?>
+        </th>
+        <th>
+            <?php
+            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            if ($sortBy === "name") {
+                if ($sortOrder === 'asc') {
+                    $query .= "sort=name&order=desc";
+                }
+            } else {
+                $query .= "sort=name&order=asc";
+            }
+            echo "<a href='" . Utils::getURL('panel', 'departments') . $query ."'>Name</a>";
+            ?>
+        </th>
+        <th>
+            <?php
+            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            if ($sortBy === "created") {
+                if ($sortOrder === 'asc') {
+                    $query .= "sort=created&order=desc";
+                }
+            } else {
+                $query .= "sort=created&order=asc";
+            }
+            echo "<a href='" . Utils::getURL('panel', 'departments') . $query ."'>Created</a>";
+            ?>
+        </th>
     </tr>
     </thead>
     <tbody>
