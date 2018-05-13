@@ -1,6 +1,7 @@
 /**
  * Get a cookie
  * @param name Name of the cookie
+ * @returns (string) The cookie value
  */
 function getCookie(name) {
     name += '=';
@@ -10,8 +11,16 @@ function getCookie(name) {
             return cookies[i].split("=")[1];
         }
     }
+    return '';
 }
 
+/**
+ * Performs an AJAX request
+ * @param url Target url
+ * @param method Desired request method
+ * @param callback Function that will be called when changing request state
+ * @param headers Headers to be set before the request is sent
+ */
 function performAJAXRequest(url, method = "POST", callback = null, headers = {}) {
     const request = new XMLHttpRequest();
     request.open(method, url, true);
@@ -24,8 +33,29 @@ function performAJAXRequest(url, method = "POST", callback = null, headers = {})
     request.send();
 }
 
+/**
+ * Gets a random int
+ * @param min Min value
+ * @param max Max value
+ * @returns(int) Generated random int
+ */
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Generates a random RGB string
+ * @returns {string} Random RGB string
+ */
+function randomRGB() {
+    const r = getRandomInt(0, 255);
+    const g = getRandomInt(0, 255);
+    const b = getRandomInt(0, 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+}
+
 //Wait for page load
-window.onload = function() {
+window.onload = function () {
     let mvc = new EasyMVC();
     const action = mvc.getAction();
     const controller = mvc.getController();
@@ -36,12 +66,13 @@ window.onload = function() {
         hiddenElements[i].classList.remove('jsHidden');
     }
 
-    //Redirect to ticket when clicking table row
+    //Do actions depending which controller or action was triggered
     if (controller === 'panel') {
         if (action === 'tickets') {
+            //Redirect to ticket when clicking table row
             const table = document.querySelector(".tickets");
             if (table != null) {
-                table.onclick = function(e) {
+                table.onclick = function (e) {
                     let ticketId = e.target.parentElement.id;
                     if (ticketId) {
                         ticketId = ticketId.replace('t-', '');
@@ -50,9 +81,10 @@ window.onload = function() {
                 };
             }
         } else if (action === 'departments') {
+            //Redirect to department when clicking table row
             const table = document.querySelector(".departments");
             if (table != null) {
-                table.onclick = function(e) {
+                table.onclick = function (e) {
                     let departmentId = e.target.parentElement.id;
                     if (departmentId) {
                         departmentId = departmentId.replace('d-', '');
@@ -61,9 +93,10 @@ window.onload = function() {
                 }
             }
         } else if (action === "users") {
+            //Redirect to user when clicking table row
             const table = document.querySelector(".users");
             if (table != null) {
-                table.onclick = function(e) {
+                table.onclick = function (e) {
                     let userId = e.target.parentElement.id;
                     if (userId) {
                         userId = userId.replace('u-', '');
@@ -71,6 +104,112 @@ window.onload = function() {
                     }
                 }
             }
+        } else if (action === "index") {
+            const charts = [];
+            let currentChart = 0;
+
+            //Create canvas for each chart
+            charts.push(document.createElement('canvas'));
+            charts.push(document.createElement('canvas'));
+            const slideshow = document.querySelector("#chart-slideshow");
+            slideshow.appendChild(charts[currentChart]);
+
+            //Get statistics through AJAX
+            const sessionToken = getCookie('userToken');
+            const requestURL = EasyMVC.getURL('api', 'statistics');
+            const headers = {
+                "Session-Token": sessionToken
+            };
+            performAJAXRequest(requestURL, 'POST', function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    const response = JSON.parse(this.responseText);
+
+                    //Tickets per department stats
+                    let stats = response.results[0];
+                    let config = {
+                        type: 'pie',
+                        data: {
+                            datasets: [{
+                                data: [],
+                                backgroundColor: [],
+                            }],
+                            labels: []
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    };
+                    for (let i = 0; i < stats.length; i++) {
+                        config.data.datasets[0].data.push(stats[i].count);
+                        config.data.datasets[0].backgroundColor.push(randomRGB());
+                        config.data.labels.push(stats[i].name);
+                    }
+                    new Chart(charts[0].getContext("2d"), config);
+
+                    //Open and closed tickets
+                    stats = response.results[1];
+                    config = {
+                        type: 'pie',
+                        data: {
+                            datasets: [{
+                                data: [
+                                    0,
+                                    0
+                                ],
+                                backgroundColor: [
+                                    randomRGB(),
+                                    randomRGB()
+                                ],
+                            }],
+                            labels: [
+                                'Open',
+                                'Closed'
+                            ]
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    };
+                    for (let i = 0; i < stats.length; i++) {
+                        if (stats[i].open === "1") {
+                            config.data.datasets[0].data[1] += parseInt(stats[i].count);
+                        } else if (stats[i].open === "0") {
+                            config.data.datasets[0].data[0] += parseInt(stats[i].count);
+                        }
+                    }
+                    new Chart(charts[1].getContext("2d"), config);
+
+                    //Set automatic slideshow change
+                    let applyInterval = true;
+                    setInterval(function() {
+                        if (!applyInterval) {
+                            return;
+                        }
+                        $("#chart-slideshow canvas").animate({
+                            opacity: 0.25,
+                            left: "-=100%"
+                        }, 1000, function() {
+                            slideshow.removeChild(charts[currentChart]);
+                            currentChart++;
+                            if (currentChart > charts.length - 1) {
+                                currentChart = 0;
+                            }
+                            slideshow.appendChild(charts[currentChart]);
+                            $("#chart-slideshow canvas")
+                                .css('left', '100%')
+                                .animate({
+                                    opacity: 1,
+                                    left: ""
+                                }, 1000);
+                        });
+                    }, 5000);
+                    $('#chart-slideshow').hover(function() {
+                        applyInterval = false;
+                    }, function() {
+                        applyInterval = true;
+                    })
+                }
+            }, headers);
 
         }
     } else if (controller === 'ticket') {
@@ -80,7 +219,7 @@ window.onload = function() {
             const removeAttachment = document.querySelector('#removeAttachment');
             if (attachments != null) {
                 if (addAttachment != null) {
-                    addAttachment.onclick = function() {
+                    addAttachment.onclick = function () {
                         let element = document.createElement('input');
                         element.type = 'file';
                         element.name = 'attachment[]';
@@ -88,7 +227,7 @@ window.onload = function() {
                     }
                 }
                 if (removeAttachment != null) {
-                    removeAttachment.onclick = function() {
+                    removeAttachment.onclick = function () {
                         if (attachments.childElementCount !== 0) {
                             attachments.removeChild(attachments.children[attachments.childElementCount - 1]);
                         }
@@ -103,7 +242,7 @@ window.onload = function() {
     const currentTimezoneOffset = currentDate.getTimezoneOffset();
     const serverClientDiff = Math.abs(serverTimezoneOffset) + Math.abs(currentTimezoneOffset);
     const timeElements = document.querySelectorAll('time');
-    for (let i = 0; i < timeElements.length; i++){
+    for (let i = 0; i < timeElements.length; i++) {
         let element = timeElements[i];
         let date = new Date(element.innerHTML);
         let newDate = new Date(date.getTime() + serverClientDiff * 60000);

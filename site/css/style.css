@@ -45,6 +45,10 @@ a:hover {
     color: #3bc14a;
 }
 
+canvas {
+    position: relative;
+}
+
 label,
 input,
 textarea,
@@ -404,6 +408,11 @@ CONTENT STYLES
 #ticket-posts .ticket-footer,
 #ticket-posts .ticket-content {
     padding: 0.5em;
+}
+
+#chart-slideshow {
+    overflow: hidden;
+    position: relative;
 }
 
 /*

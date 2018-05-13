@@ -9,7 +9,7 @@
 
 <h2>Welcome Back</h2>
 <p>Use the navigation menu links above to get started</p>
-<?php if ($loggedUser['op'] == 1) : ?>
+<div class="jsHidden">
     <h2>Statistics</h2>
-
-<?php endif; ?>
+    <div class="jsHidden" id="chart-slideshow"></div>
+</div>
