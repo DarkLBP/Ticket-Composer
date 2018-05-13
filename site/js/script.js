@@ -106,13 +106,14 @@ window.onload = function () {
             }
         } else if (action === "index") {
             const charts = [];
+            const titles = [];
             let currentChart = 0;
 
             //Create canvas for each chart
             charts.push(document.createElement('canvas'));
             charts.push(document.createElement('canvas'));
             const slideshow = document.querySelector("#chart-slideshow");
-            slideshow.appendChild(charts[currentChart]);
+            const slideshowTitle = document.querySelector("#slideshow-title");
 
             //Get statistics through AJAX
             const sessionToken = getCookie('userToken');
@@ -123,6 +124,7 @@ window.onload = function () {
             performAJAXRequest(requestURL, 'POST', function () {
                 if (this.readyState === 4 && this.status === 200) {
                     const response = JSON.parse(this.responseText);
+                    titles.push.apply(titles, response.resultTitles);
 
                     //Tickets per department stats
                     let stats = response.results[0];
@@ -145,7 +147,6 @@ window.onload = function () {
                         config.data.labels.push(stats[i].name);
                     }
                     new Chart(charts[0].getContext("2d"), config);
-
                     //Open and closed tickets
                     stats = response.results[1];
                     config = {
@@ -179,6 +180,10 @@ window.onload = function () {
                     }
                     new Chart(charts[1].getContext("2d"), config);
 
+                    //Set first chart
+                    slideshow.appendChild(charts[currentChart]);
+                    slideshowTitle.innerHTML = titles[currentChart];
+
                     //Set automatic slideshow change
                     let applyInterval = true;
                     setInterval(function() {
@@ -186,7 +191,7 @@ window.onload = function () {
                             return;
                         }
                         $("#chart-slideshow canvas").animate({
-                            opacity: 0.25,
+                            opacity: 0,
                             left: "-=100%"
                         }, 1000, function() {
                             slideshow.removeChild(charts[currentChart]);
@@ -195,6 +200,7 @@ window.onload = function () {
                                 currentChart = 0;
                             }
                             slideshow.appendChild(charts[currentChart]);
+                            slideshowTitle.innerHTML = titles[currentChart];
                             $("#chart-slideshow canvas")
                                 .css('left', '100%')
                                 .animate({

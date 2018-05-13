@@ -11,5 +11,6 @@
 <p>Use the navigation menu links above to get started</p>
 <div class="jsHidden">
     <h2>Statistics</h2>
+    <h4 class="center" id="slideshow-title"></h4>
     <div class="jsHidden" id="chart-slideshow"></div>
 </div>

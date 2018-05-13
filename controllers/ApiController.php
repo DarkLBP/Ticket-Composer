@@ -166,13 +166,14 @@ class ApiController extends Controller
                 "COUNT($ticketsModel.id)" => "count"
             ],
         ], ["department"]);
-
         $countPerStatus = $ticketsModel->find([], [
             'open',
             ['COUNT(*)' => 'count']
         ], ["open"]);
         $this->response['results'][] = $countPerDepartment;
         $this->response['results'][] = $countPerStatus;
+        $this->response['resultTitles'][] = "Tickets Per Department";
+        $this->response['resultTitles'][] = "Tickets Per Status";
         $this->sendResponse();
     }
 
