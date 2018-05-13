@@ -170,10 +170,18 @@ class ApiController extends Controller
             'open',
             ['COUNT(*)' => 'count']
         ], ["open"]);
+        $countPerStatusDepartment = $departmentsModel->find([], [
+            'name',
+            'open',
+            ['COUNT(*)' => 'count']
+        ], ["department", "open"]);
+
         $this->response['results'][] = $countPerDepartment;
         $this->response['results'][] = $countPerStatus;
+        $this->response['results'][] = $countPerStatusDepartment;
         $this->response['resultTitles'][] = "Tickets Per Department";
         $this->response['resultTitles'][] = "Tickets Per Status";
+        $this->response['resultTitles'][] = "Open And Closed Tickets Per Department";
         $this->sendResponse();
     }
 

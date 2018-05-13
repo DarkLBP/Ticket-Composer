@@ -112,6 +112,7 @@ window.onload = function () {
             //Create canvas for each chart
             charts.push(document.createElement('canvas'));
             charts.push(document.createElement('canvas'));
+            charts.push(document.createElement('canvas'));
             const slideshow = document.querySelector("#chart-slideshow");
             const slideshowTitle = document.querySelector("#slideshow-title");
 
@@ -147,6 +148,7 @@ window.onload = function () {
                         config.data.labels.push(stats[i].name);
                     }
                     new Chart(charts[0].getContext("2d"), config);
+
                     //Open and closed tickets
                     stats = response.results[1];
                     config = {
@@ -180,6 +182,56 @@ window.onload = function () {
                     }
                     new Chart(charts[1].getContext("2d"), config);
 
+                    //Open and closed tickets per department
+                    stats = response.results[2];
+                    config = {
+                        type: 'bar',
+                        data:  {
+                            labels: [],
+                            datasets: [{
+                                label: 'Closed',
+                                backgroundColor: randomRGB(),
+                                data: []
+                            }, {
+                                label: 'Open',
+                                backgroundColor: randomRGB(),
+                                data: []
+                            }]
+
+                        },
+                        options: {
+                            tooltips: {
+                                mode: 'index',
+                                intersect: false
+                            },
+                            responsive: true,
+                            scales: {
+                                xAxes: [{
+                                    stacked: true,
+                                }],
+                                yAxes: [{
+                                    stacked: true
+                                }]
+                            }
+                        }
+                    };
+                    for (let i = 0; i < stats.length; i++) {
+                        let index = config.data.labels.indexOf(stats[i].name);
+                        if (index === -1) {
+                            //Prepare empty data for that department
+                            config.data.labels.push(stats[i].name);
+                            index = config.data.labels.length - 1;
+                            config.data.datasets[1].data[index] = 0;
+                            config.data.datasets[0].data[index] = 0;
+                        }
+                        if (stats[i].open === "1") {
+                            config.data.datasets[1].data[index] += parseInt(stats[i].count);
+                        } else if (stats[i].open === "0") {
+                            config.data.datasets[0].data[index] += parseInt(stats[i].count);
+                        }
+                    }
+                    new Chart(charts[2].getContext("2d"), config);
+
                     //Set first chart
                     slideshow.appendChild(charts[currentChart]);
                     slideshowTitle.innerHTML = titles[currentChart];
@@ -209,6 +261,8 @@ window.onload = function () {
                                 }, 1000);
                         });
                     }, 5000);
+
+                    //Avoid slide change when hovering the slideshow
                     $('#chart-slideshow').hover(function() {
                         applyInterval = false;
                     }, function() {
