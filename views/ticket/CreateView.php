@@ -10,7 +10,7 @@ use Core\Utils;
     <?= !empty($errors) ? '<p>' . implode('<br>', $errors) . '</p>' : '' ?>
     <form action="<?= Utils::getURL('ticket', 'create')?>" method="post" enctype="multipart/form-data">
         <label for="title">Title</label><br>
-        <input type="text" name="title" id="title"><br>
+        <input type="text" name="title" id="title" required><br>
         <label for="department">Department</label><br>
         <select id="department" name="department">
             <option value="">Select a department</option>
@@ -21,7 +21,7 @@ use Core\Utils;
             ?>
         </select><br>
         <label for="content">Content</label><br>
-        <textarea name="content" id="content"></textarea><br>
+        <textarea name="content" id="content" required></textarea><br>
         <label for="attachment">Attachments</label><br>
         <div id="attachments">
             <input type="file" name="attachment[]" id="attachment">

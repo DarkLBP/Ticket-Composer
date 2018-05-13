@@ -11,11 +11,11 @@ use Core\Utils;
     <?= !empty($errors) ? '<p class="error-message">' . implode('<br>', $errors) . '</p>' : '' ?>
     <form action="<?= Utils::getURL('user', 'edit', [$user['id']]) ?>" method="post">
         <label for="name">Name</label><br>
-        <input type="text" name="name" id="name" value="<?= Utils::escapeData($user['name']) ?>"><br>
+        <input type="text" name="name" id="name" value="<?= Utils::escapeData($user['name']) ?>" required><br>
         <label for="surname">Surname</label><br>
-        <input type="text" name="surname" id="surname" value="<?= Utils::escapeData($user['surname']) ?>"><br>
+        <input type="text" name="surname" id="surname" value="<?= Utils::escapeData($user['surname']) ?>" required><br>
         <label for="email">Email</label><br>
-        <input type="email" name="email" id="email" value="<?= Utils::escapeData($user['email']) ?>"><br>
+        <input type="email" name="email" id="email" value="<?= Utils::escapeData($user['email']) ?>" required><br>
         <fieldset>
             <label for="current-password">Current Password</label><br>
             <input type="password" name="current-password" id="current-password"><br>

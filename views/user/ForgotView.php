@@ -6,7 +6,7 @@ use Core\Utils;
     <?= !empty($errors) ? '<p class="error-message">' . implode('<br>', $errors) . '</p>' : '' ?>
     <form action="<?= Utils::getURL("user", "forgot") ?>" method="post">
         <label for="email">Email</label><br>
-        <input type="email" id="email" name="email"><br>
+        <input type="email" id="email" name="email" required><br>
         <input type="submit" value="Recover Password">
     </form>
 </div>

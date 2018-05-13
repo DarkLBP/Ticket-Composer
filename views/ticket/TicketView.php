@@ -65,7 +65,7 @@ use Core\Utils;
         <?= empty($error) ? '' : "<p class='error-message'>$error</p>"; ?>
         <form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
             <label for="message">Message</label><br>
-            <textarea id="message" name="message"></textarea><br>
+            <textarea id="message" name="message" required></textarea><br>
             <label for="attachment">Attachments</label><br>
             <div id="attachments">
                 <input type="file" name="attachment[]" id="attachment">

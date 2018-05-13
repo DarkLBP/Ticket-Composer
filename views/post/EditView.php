@@ -9,7 +9,7 @@ use Core\Utils;
     <?= !empty($error) ? "<p>$error</p>" : '' ?>
     <form action="<?= Utils::getURL('post', 'edit', [$post['id']]) ?>" method="post">
         <label for="message">Message:</label><br>
-        <textarea id="message" name="message"><?= Utils::escapeData($post['content']) ?></textarea><br>
-        <input type="submit" value="Edit">
+        <textarea id="message" name="message" required><?= Utils::escapeData($post['content']) ?></textarea><br>
+        <input type="submit" value="Edit Post">
     </form>
 </div>
