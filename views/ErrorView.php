@@ -1,1 +1,2 @@
-<h3>Invalid Request</h3>
+<h2>Invalid Request</h2>
+<p>We could not handle your request</p>

@@ -15,6 +15,9 @@ use Core\Utils;
         <input type="password" id="password" name="password" required><br>
         <label for="confirm">Confirm Password</label><br>
         <input type="password" id="confirm" name="confirm" required><br>
-        <input type="submit" value="Register">
+        <label>
+            <input type="checkbox" value="accept" name="accept" required> By using this site you accept the use of cookies for handling sessions
+        </label>
+        <input type="submit" value="Register Account">
     </form>
 </div>

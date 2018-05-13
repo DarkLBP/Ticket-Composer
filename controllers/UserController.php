@@ -308,7 +308,6 @@ class UserController extends Controller
     {
         $loggedUser = $this->request->getSessionParam('loggedUser');
         if (!empty($params)) {
-
             $userModel = $this->getModel('users');
             $user = $userModel->findOne($params[0]);
             if (empty($user)) {
@@ -405,6 +404,7 @@ class UserController extends Controller
             $email = $this->request->getPostParam("email", true);
             $password = $this->request->getPostParam("password");
             $confirm = $this->request->getPostParam("confirm");
+            $accept = $this->request->getPostParam('accept');
 
             if (empty($name)) {
                 $errors[] = 'Name is empty';
@@ -426,6 +426,9 @@ class UserController extends Controller
             }
             if ($password !== $confirm) {
                 $errors[] = 'Passwords do not match';
+            }
+            if (!empty($accept)) {
+                $errors[] = 'You need to accept the cookie policy';
             }
             if (empty($errors)) {
                 $model = $this->getModel('users');
