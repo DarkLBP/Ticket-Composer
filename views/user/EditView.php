@@ -48,10 +48,14 @@ use Core\Utils;
                 echo "</label>";
             }
         }
+
         ?>
         <div class="row stretch">
             <input type="submit" value="Edit User">
             <?php
+            if ($loggedUser["id"] == 1 || $user['id'] == $loggedUser["id"]) {
+                echo '<a href="' . Utils::getURL('user', 'logout', [$user['id']]) . '" class="button danger">Logout User</a>';
+            }
             if ($user['id'] != $loggedUser['id']) {
                 echo '<a href="' . Utils::getURL('user', 'delete', [$user['id']]) . '" class="button danger">Remove User</a>';
             }

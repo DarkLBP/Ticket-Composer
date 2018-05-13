@@ -308,18 +308,26 @@ class UserController extends Controller
     {
         $loggedUser = $this->request->getSessionParam('loggedUser');
         if (!empty($params)) {
-            $userModel = $this->getModel('user');
+
+            $userModel = $this->getModel('users');
             $user = $userModel->findOne($params[0]);
             if (empty($user)) {
                 $this->renderView('invalid');
             } else if ($loggedUser["op"] == 0 && $loggedUser['id'] != $user['id']) {
                 $this->renderView('forbidden');
             }
-            $sessionModel = $this->getModel('sessions');
-            $sessionModel->delete([
-                ['userId', '=', $user['id']]
-            ]);
-            $this->request->redirect(Utils::getURL('user', 'edit', $params));
+            if ($this->request->isGet()) {
+                $this->request->setViewParam("user", $user);
+                $this->renderView('logout');
+            } else if ($this->request->isPost()) {
+                $sessionModel = $this->getModel('sessions');
+                $sessionModel->delete([
+                    ['userId', '=', $user['id']]
+                ]);
+                if ($loggedUser['id'] != $user['id']) {
+                    $this->request->redirect(Utils::getURL('user', 'edit', $params));
+                }
+            }
         }
         $this->request->redirect(Utils::getURL());
     }

@@ -6,6 +6,7 @@ use Core\Utils;
 ?>
 <div class="centered-form">
     <form action="<?= Utils::getURL('user', 'delete', [$user['id']]) ?>" method="post">
+        <h2>Delete User</h2>
         <p>Are you sure you want to delete '<?= $user["name"] . ' ' . $user['surname'] ?>'?</p>
         <div class="row stretch">
             <input type="submit" class="danger" value="Delete User">
