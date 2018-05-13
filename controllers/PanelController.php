@@ -62,11 +62,11 @@ class PanelController extends Controller
             $departmentCount = 0;
         }
         $this->request->setViewParam('departments', $departments);
-        $this->request->setViewParam('departmentCount', $departmentCount);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);
-        $this->request->setViewParam('page', $page, true);
+        $this->request->setViewParam('page', ++$page, true);
+        $this->request->setViewParam('morePages', $page * 25 < $departmentCount);
         $this->renderView('departments');
     }
 
@@ -184,11 +184,11 @@ spl_autoload_register(function (\$class) {
             $ticketCount = 0;
         }
         $this->request->setViewParam('tickets', $tickets);
-        $this->request->setViewParam('ticketCount', $ticketCount);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);
-        $this->request->setViewParam('page', $page, true);
+        $this->request->setViewParam('page', ++$page, true);
+        $this->request->setViewParam('morePages', $page * 25 < $ticketCount);
         $this->renderView('tickets');
     }
 
@@ -235,11 +235,11 @@ spl_autoload_register(function (\$class) {
             $userCount = 0;
         }
         $this->request->setViewParam('users', $users);
-        $this->request->setViewParam('userCount', $userCount);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);
-        $this->request->setViewParam('page', $page, true);
+        $this->request->setViewParam('page', ++$page, true);
+        $this->request->setViewParam('morePages', $page * 25 < $userCount);
         $this->renderView('users');
     }
 }

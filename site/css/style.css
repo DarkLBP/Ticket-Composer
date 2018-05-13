@@ -281,7 +281,6 @@ input[type=button].danger:active {
 
 .row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin: 0.5em 0;
 }
@@ -293,6 +292,10 @@ input[type=button].danger:active {
 .row.stretch > * {
     width: auto !important;
     flex: 1;
+}
+
+.row.between {
+    justify-content: space-between;
 }
 
 
