@@ -18,7 +18,7 @@ if (empty($departments)) {
 } else {
 ?>
 <div id="search-box">
-    <form action="<?= Utils::getURL('panel', 'tickets') ?>" method="get">
+    <form action="<?= Utils::getURL('panel', 'departments') ?>" method="get">
         <input type="search" name="search" id="search" placeholder="Search...">
         <input type="submit" class="button small" value="&#128269;">
     </form>
