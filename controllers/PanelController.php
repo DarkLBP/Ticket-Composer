@@ -15,7 +15,22 @@ class PanelController extends Controller
     public function actionDepartments()
     {
         $departmentsModel = $this->getModel('departments');
-        $departments = $departmentsModel->find();
+        $sortBy = $this->request->getGetParam('sort', true);
+        $sortOrder = $this->request->getGetParam('order', true);
+        if (empty($sortBy) || empty($sortOrder)) {
+            $sort = [
+                'id' => 'desc'
+            ];
+        } else {
+            $sort = [
+                $sortBy => $sortOrder
+            ];
+        }
+        try {
+            $departments = $departmentsModel->find([], [], [], $sort);
+        } catch (\PDOException $e) {
+            $departments = [];
+        }
         $this->request->setViewParam('departments', $departments);
         $this->renderView('departments');
     }
@@ -69,28 +84,43 @@ spl_autoload_register(function (\$class) {
 
     public function actionTickets()
     {
+        $searchTerm = $this->request->getPostParam('search', true);
+        $sortBy = $this->request->getGetParam('sort', true);
+        $sortOrder = $this->request->getGetParam('order', true);
         $ticketsModel = $this->getModel('tickets');
         $departmentsModel = $this->getModel('departments');
         $postModel = $this->getModel('posts');
         $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
         $ticketsModel->join($postModel, 'id', 'ticketId', 'inner');
         $userId = $this->request->getSessionParam('loggedUser')['id'];
-        $tickets = $ticketsModel->find([
-            'createdBy' => $userId
-        ], [
-            "$ticketsModel.id",
-            "$ticketsModel.title",
-            "$ticketsModel.open",
-            [
-                "count(*)" => "totalPosts",
-                "max($postModel.created)" => "lastReply",
-                "$departmentsModel.name" => "departmentName"
-            ]
-        ],[
-            "$ticketsModel.id"
-        ], [
-            'lastReply' => 'desc'
-        ]);
+        if (empty($sortBy) || empty($sortOrder)) {
+            $sort = [
+                'lastReply' => 'desc'
+            ];
+        } else {
+            $sort = [
+                $sortBy => $sortOrder
+            ];
+        }
+        try {
+            $tickets = $ticketsModel->find([
+                'createdBy' => $userId
+            ], [
+                "$ticketsModel.id",
+                "$ticketsModel.title",
+                "$ticketsModel.open",
+                [
+                    "count(*)" => "totalPosts",
+                    "max($postModel.created)" => "lastReply",
+                    "$departmentsModel.name" => "departmentName"
+                ]
+            ],[
+                "$ticketsModel.id"
+            ], $sort);
+        } catch (\PDOException $e) {
+            $tickets = [];
+        }
+
         $this->request->setViewParam('myTickets', $tickets);
         $this->renderView('tickets');
     }
@@ -98,7 +128,22 @@ spl_autoload_register(function (\$class) {
     public function actionUsers()
     {
         $usersModel = $this->getModel('users');
-        $users = $usersModel->find();
+        $sortBy = $this->request->getGetParam('sort', true);
+        $sortOrder = $this->request->getGetParam('order', true);
+        if (empty($sortBy) || empty($sortOrder)) {
+            $sort = [
+                'created' => 'desc'
+            ];
+        } else {
+            $sort = [
+                $sortBy => $sortOrder
+            ];
+        }
+        try {
+            $users = $usersModel->find([], [], [], $sort);
+        } catch (\PDOException $e) {
+            $users = [];
+        }
         $this->request->setViewParam('users', $users);
         $this->renderView('users');
     }

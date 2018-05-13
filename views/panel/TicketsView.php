@@ -7,9 +7,15 @@ use Core\Utils;
 <h2>My Tickets</h2>
 <?php
 if (empty($myTickets)) {
-    echo "<p>You have no tickets</p>";
+    echo "<p>There are no tickets</p>";
 } else {
 ?>
+<div id="search-box">
+    <form action="<?= Utils::getURL('panel', 'tickets') ?>" method="post">
+        <input type="search" name="search" id="search" placeholder="Search...">
+        <input type="submit" class="button small" value="&#128269;">
+    </form>
+</div>
 <table class="tickets">
     <thead>
     <tr>

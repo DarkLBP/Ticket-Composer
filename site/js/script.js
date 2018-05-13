@@ -61,10 +61,7 @@ window.onload = function () {
     const controller = mvc.getController();
 
     //Show js only elements
-    const hiddenElements = document.querySelectorAll('.jsHidden');
-    for (let i = 0; i < hiddenElements.length; i++) {
-        hiddenElements[i].classList.remove('jsHidden');
-    }
+    $('.jsHidden').removeClass('jsHidden');
 
     //Do actions depending which controller or action was triggered
     if (controller === 'panel') {
@@ -165,8 +162,8 @@ window.onload = function () {
                                 ],
                             }],
                             labels: [
-                                'Open',
-                                'Closed'
+                                'Closed',
+                                'Open'
                             ]
                         },
                         options: {

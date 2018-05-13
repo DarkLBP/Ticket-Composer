@@ -415,6 +415,12 @@ CONTENT STYLES
     position: relative;
 }
 
+#search-box {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5em;
+}
+
 /*
 FOOTER STYLES
  */

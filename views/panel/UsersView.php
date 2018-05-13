@@ -5,6 +5,11 @@ use Core\Utils;
  */
 ?>
 <h2>Users</h2>
+<?php
+if (empty($users)) {
+    echo "<p>There are no users</p>";
+} else {
+?>
 <table class="users">
     <thead>
     <tr>
@@ -39,4 +44,5 @@ use Core\Utils;
     ?>
     </tbody>
 </table>
+<?php } ?>
 <a href="<?= Utils::getURL('user', 'create') ?>" class="button">Add New User</a>
