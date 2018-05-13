@@ -1,6 +1,8 @@
 <?php
 namespace Controllers;
 
+require_once __DIR__ . '/../vendor/SimpleMailer.php';
+
 use Core\Controller;
 use Core\Utils;
 
@@ -82,16 +84,17 @@ class PostController extends Controller
         if (isset($params[0])) {
             $ticketId = $params[0];
             $ticketsModel = $this->getModel('tickets');
-            $exists = $ticketsModel->findOne($ticketId, ["open"]);
+            $exists = $ticketsModel->findOne($ticketId);
             if (!empty($exists) && $exists['open'] == 1) {
                 $content = $this->request->getPostParam('message', true);
                 $attachments = $this->request->getSentFile('attachment');
                 $close = $this->request->getPostParam('close');
                 if (!empty($content)) {
-                    $ticketPostsModel = $this->getModel('posts');
-                    $postId = $ticketPostsModel->insert([
+                    $postsModel = $this->getModel('posts');
+                    $loggedUser = $this->request->getSessionParam('loggedUser');
+                    $postId = $postsModel->insert([
                         'ticketId' => $ticketId,
-                        'userId' => $this->request->getSessionParam('loggedUser')['id'],
+                        'userId' => $loggedUser['id'],
                         'content' => $content
                     ]);
                     if (!empty($attachments)) {
@@ -114,6 +117,23 @@ class PostController extends Controller
                         ], [
                             ["id", '=', $ticketId]
                         ]);
+                    }
+                    //Send email to the assigned person
+                    if (!empty($exists['assignedTo'])) {
+                        if ($loggedUser['id'] != $exists['assignedTo']) {
+                            $usersModel = $this->getModel('users');
+                            $user = $usersModel->findOne($exists['assignedTo']);
+                            if (!empty($user)) {
+                                $mailer = new \SimpleMailer();
+                                $mailer->addTo($user['email'], $user['name'] . ' ' . $user['surname']);
+                                $mailer->addReplyTo(SITE_EMAIL);
+                                $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
+                                $mailer->setSubject('[Ticket #' . $ticketId . '] ' . $exists['title']);
+                                $mailer->setMessage('New answer by ' . $loggedUser["name"] . " " . $loggedUser["surname"] .
+                                ' on ticket ' . Utils::getURL('ticket', 'view', [$ticketId]));
+                                $mailer->send();
+                            }
+                        }
                     }
                 } else {
                     $this->request->setSessionParam('postError', 'Message is empty');

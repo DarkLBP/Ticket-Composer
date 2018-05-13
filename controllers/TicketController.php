@@ -1,6 +1,8 @@
 <?php
 namespace Controllers;
 
+require_once __DIR__ . '/../vendor/SimpleMailer.php';
+
 use Core\Controller;
 use Core\Utils;
 
@@ -74,6 +76,13 @@ class TicketController extends Controller
                         }
                     }
                 }
+                $mailer = new \SimpleMailer();
+                $mailer->addTo($user['email'], $user['name'] . ' ' . $user['surname']);
+                $mailer->addReplyTo(SITE_EMAIL);
+                $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
+                $mailer->setSubject('[Ticket #' . $ticketId . '] ' . $title);
+                $mailer->setMessage('You have created the ticket ' . Utils::getURL('ticket', 'view', [$ticketId]) . '. Wait for an agent to reply.');
+                $mailer->send();
                 $this->request->redirect(Utils::getURL('ticket', 'view', [$ticketId]));
             }
             $this->request->setViewParam('errors', $errors);
