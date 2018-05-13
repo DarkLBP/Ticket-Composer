@@ -28,6 +28,7 @@ class PanelController extends Controller
     public function actionDepartments()
     {
         $searchTerm = $this->request->getGetParam('search', true);
+        $page = $this->request->getGetParam('page', true);
         $departmentsModel = $this->getModel('departments');
         $sortBy = $this->request->getGetParam('sort', true);
         $sortOrder = $this->request->getGetParam('order', true);
@@ -39,6 +40,11 @@ class PanelController extends Controller
             $matches[] = ["name", "LIKE", "%$searchTerm%"];
             $matches[] = ')';
         }
+        if (empty($page) || !is_numeric($page)) {
+            $page = 0;
+        } else {
+            $page--;
+        }
         if (empty($sortBy) || empty($sortOrder)) {
             $sort = [
                 'id' => 'desc'
@@ -49,14 +55,18 @@ class PanelController extends Controller
             ];
         }
         try {
-            $departments = $departmentsModel->find($matches, [], [], $sort);
+            $departments = $departmentsModel->find($matches, [], [], $sort, 25, $page * 25);
+            $departmentCount = $departmentsModel->count($matches);
         } catch (\PDOException $e) {
             $departments = [];
+            $departmentCount = 0;
         }
         $this->request->setViewParam('departments', $departments);
+        $this->request->setViewParam('departmentCount', $departmentCount);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);
+        $this->request->setViewParam('page', $page, true);
         $this->renderView('departments');
     }
 
@@ -110,6 +120,7 @@ spl_autoload_register(function (\$class) {
     public function actionTickets()
     {
         $searchTerm = $this->request->getGetParam('search', true);
+        $page = $this->request->getGetParam('page', true);
         $sortBy = $this->request->getGetParam('sort', true);
         $sortOrder = $this->request->getGetParam('order', true);
         $ticketsModel = $this->getModel('tickets');
@@ -129,6 +140,11 @@ spl_autoload_register(function (\$class) {
             $matches[] = 'OR';
             $matches[] = ["$departmentsModel.name", "LIKE", "%$searchTerm%"];
             $matches[] = ')';
+        }
+        if (empty($page) || !is_numeric($page)) {
+            $page = 0;
+        } else {
+            $page--;
         }
         if ($loggedUser['op'] == 0) {
             if (!empty($matches)) {
@@ -161,21 +177,25 @@ spl_autoload_register(function (\$class) {
                 ]
             ],[
                 "$ticketsModel.id"
-            ], $sort);
+            ], $sort, 25, 25 * $page);
+            $ticketCount = $ticketsModel->count($matches);
         } catch (\PDOException $e) {
             $tickets = [];
+            $ticketCount = 0;
         }
-
         $this->request->setViewParam('tickets', $tickets);
+        $this->request->setViewParam('ticketCount', $ticketCount);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);
+        $this->request->setViewParam('page', $page, true);
         $this->renderView('tickets');
     }
 
     public function actionUsers()
     {
         $searchTerm = $this->request->getGetParam('search', true);
+        $page = $this->request->getGetParam('page', true);
         $usersModel = $this->getModel('users');
         $sortBy = $this->request->getGetParam('sort', true);
         $sortOrder = $this->request->getGetParam('order', true);
@@ -193,6 +213,11 @@ spl_autoload_register(function (\$class) {
             $matches[] = ["created", "LIKE", "%$searchTerm%"];
             $matches[] = ')';
         }
+        if (empty($page) || !is_numeric($page)) {
+            $page = 0;
+        } else {
+            $page--;
+        }
         if (empty($sortBy) || empty($sortOrder)) {
             $sort = [
                 'created' => 'desc'
@@ -203,14 +228,18 @@ spl_autoload_register(function (\$class) {
             ];
         }
         try {
-            $users = $usersModel->find($matches, [], [], $sort);
+            $users = $usersModel->find($matches, [], [], $sort, 25, $page * 25);
+            $userCount = $usersModel->count($matches);
         } catch (\PDOException $e) {
             $users = [];
+            $userCount = 0;
         }
         $this->request->setViewParam('users', $users);
+        $this->request->setViewParam('userCount', $userCount);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);
+        $this->request->setViewParam('page', $page, true);
         $this->renderView('users');
     }
 }
