@@ -9,6 +9,19 @@ class PanelController extends Controller
 {
     public function actionIndex()
     {
+        $loggedUser = $this->request->getSessionParam('loggedUser');
+        $ticketsModel = $this->getModel('tickets');
+        $totalTickets = $ticketsModel->count([
+            ['createdBy', '=', $loggedUser['id']]
+        ]);
+        $postModel = $this->getModel('posts');
+        $totalPosts = $postModel->count([
+            ['userId', '=', $loggedUser['id']]
+        ]);
+        $recentPost = $postModel->findOne($loggedUser["id"], 'userId', [], ["created" => "desc"]);
+        $this->request->setViewParam('totalTickets', $totalTickets);
+        $this->request->setViewParam('totalPosts', $totalPosts);
+        $this->request->setViewParam('recentPost', $recentPost);
         $this->renderView('index');
     }
 
