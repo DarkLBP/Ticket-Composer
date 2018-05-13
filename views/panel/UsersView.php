@@ -28,7 +28,7 @@ if (empty($users)) {
     <tr>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "id") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=id&order=desc";
@@ -41,7 +41,7 @@ if (empty($users)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "name") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=name&order=desc";
@@ -54,7 +54,7 @@ if (empty($users)) {
         </th>
         <th id="f-departmentName">
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "surname") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=surname&order=desc";
@@ -67,7 +67,7 @@ if (empty($users)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "email") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=email&order=desc";
@@ -80,7 +80,7 @@ if (empty($users)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "created") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=created&order=desc";
@@ -93,7 +93,7 @@ if (empty($users)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "op") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=op&order=desc";

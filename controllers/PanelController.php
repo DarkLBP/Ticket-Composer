@@ -14,9 +14,18 @@ class PanelController extends Controller
 
     public function actionDepartments()
     {
+        $searchTerm = $this->request->getGetParam('search', true);
         $departmentsModel = $this->getModel('departments');
         $sortBy = $this->request->getGetParam('sort', true);
         $sortOrder = $this->request->getGetParam('order', true);
+        $matches = [];
+        if (!empty($searchTerm)) {
+            $matches[] = '(';
+            $matches[] = ["id", "LIKE", "%$searchTerm%"];
+            $matches[] = 'OR';
+            $matches[] = ["name", "LIKE", "%$searchTerm%"];
+            $matches[] = ')';
+        }
         if (empty($sortBy) || empty($sortOrder)) {
             $sort = [
                 'id' => 'desc'
@@ -27,7 +36,7 @@ class PanelController extends Controller
             ];
         }
         try {
-            $departments = $departmentsModel->find([], [], [], $sort);
+            $departments = $departmentsModel->find($matches, [], [], $sort);
         } catch (\PDOException $e) {
             $departments = [];
         }
@@ -86,7 +95,7 @@ spl_autoload_register(function (\$class) {
 
     public function actionTickets()
     {
-        $searchTerm = $this->request->getPostParam('search', true);
+        $searchTerm = $this->request->getGetParam('search', true);
         $sortBy = $this->request->getGetParam('sort', true);
         $sortOrder = $this->request->getGetParam('order', true);
         $ticketsModel = $this->getModel('tickets');
@@ -94,7 +103,29 @@ spl_autoload_register(function (\$class) {
         $postModel = $this->getModel('posts');
         $ticketsModel->join($departmentsModel, 'department', 'id', 'left');
         $ticketsModel->join($postModel, 'id', 'ticketId', 'inner');
-        $userId = $this->request->getSessionParam('loggedUser')['id'];
+        $loggedUser = $this->request->getSessionParam('loggedUser');
+        $matches = [];
+        if (!empty($searchTerm)) {
+            $matches[] = '(';
+            $matches[] = ["$ticketsModel.id", "LIKE", "%$searchTerm%"];
+            $matches[] = 'OR';
+            $matches[] = ["$ticketsModel.title", "LIKE", "%$searchTerm%"];
+            $matches[] = 'OR';
+            $matches[] = ["$ticketsModel.open", "LIKE", "%$searchTerm%"];
+            $matches[] = 'OR';
+            $matches[] = ["$departmentsModel.name", "LIKE", "%$searchTerm%"];
+            $matches[] = ')';
+        }
+        if ($loggedUser['op'] == 0) {
+            if (!empty($matches)) {
+                $matches[] = 'AND';
+            }
+            $matches[] = ['createdBy', '=', $loggedUser["id"]];
+            if (!empty($loggedUser["departments"])) {
+                $matches[] = 'OR';
+                $matches[] = ["$ticketsModel.department", 'IN', $loggedUser["departments"]];
+            }
+        }
         if (empty($sortBy) || empty($sortOrder)) {
             $sort = [
                 'lastReply' => 'desc'
@@ -105,9 +136,7 @@ spl_autoload_register(function (\$class) {
             ];
         }
         try {
-            $tickets = $ticketsModel->find([
-                ['createdBy', '=', $userId]
-            ], [
+            $tickets = $ticketsModel->find($matches, [
                 "$ticketsModel.id",
                 "$ticketsModel.title",
                 "$ticketsModel.open",
@@ -132,9 +161,24 @@ spl_autoload_register(function (\$class) {
 
     public function actionUsers()
     {
+        $searchTerm = $this->request->getGetParam('search', true);
         $usersModel = $this->getModel('users');
         $sortBy = $this->request->getGetParam('sort', true);
         $sortOrder = $this->request->getGetParam('order', true);
+        $matches = [];
+        if (!empty($searchTerm)) {
+            $matches[] = '(';
+            $matches[] = ["id", "LIKE", "%$searchTerm%"];
+            $matches[] = 'OR';
+            $matches[] = ["name", "LIKE", "%$searchTerm%"];
+            $matches[] = 'OR';
+            $matches[] = ["surname", "LIKE", "%$searchTerm%"];
+            $matches[] = 'OR';
+            $matches[] = ["email", "LIKE", "%$searchTerm%"];
+            $matches[] = 'OR';
+            $matches[] = ["created", "LIKE", "%$searchTerm%"];
+            $matches[] = ')';
+        }
         if (empty($sortBy) || empty($sortOrder)) {
             $sort = [
                 'created' => 'desc'
@@ -145,7 +189,7 @@ spl_autoload_register(function (\$class) {
             ];
         }
         try {
-            $users = $usersModel->find([], [], [], $sort);
+            $users = $usersModel->find($matches, [], [], $sort);
         } catch (\PDOException $e) {
             $users = [];
         }

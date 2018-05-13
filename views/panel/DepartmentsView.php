@@ -28,7 +28,7 @@ if (empty($departments)) {
     <tr>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "id") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=id&order=desc";
@@ -41,7 +41,7 @@ if (empty($departments)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "name") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=name&order=desc";
@@ -54,7 +54,7 @@ if (empty($departments)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "created") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=created&order=desc";

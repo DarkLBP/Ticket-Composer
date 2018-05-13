@@ -28,7 +28,7 @@ if (empty($tickets)) {
     <tr>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "id") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=id&order=desc";
@@ -41,7 +41,7 @@ if (empty($tickets)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "title") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=title&order=desc";
@@ -54,7 +54,7 @@ if (empty($tickets)) {
         </th>
         <th id="f-departmentName">
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "departmentName") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=departmentName&order=desc";
@@ -67,7 +67,7 @@ if (empty($tickets)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "lastReply") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=lastReply&order=desc";
@@ -80,7 +80,7 @@ if (empty($tickets)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "totalPosts") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=totalPosts&order=desc";
@@ -93,7 +93,7 @@ if (empty($tickets)) {
         </th>
         <th>
             <?php
-            $query = strlen($queryString) > 1 ? "&$queryString" : $queryString;
+            $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "open") {
                 if ($sortOrder === 'asc') {
                     $query .= "sort=open&order=desc";
