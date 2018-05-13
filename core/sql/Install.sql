@@ -8,7 +8,7 @@ CREATE TABLE users (
   name VARCHAR(50) NOT NULL,
   surname VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL,
-  password VARCHAR(64) NOT NULL,
+  password VARCHAR(255) NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   op TINYINT NOT NULL DEFAULT 0,
   UNIQUE KEY email (email)
@@ -17,6 +17,7 @@ CREATE TABLE users (
 CREATE TABLE users_departments (
   userId INT,
   departmentId INT,
+  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (userId, departmentId),
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (departmentId) REFERENCES departments(id) ON DELETE CASCADE
