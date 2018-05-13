@@ -12,20 +12,24 @@ use Core\Utils;
 $queryString = '?';
 if (!empty($searchTerm)) {
     $queryString .= "search=$searchTerm";
-}
-if (!empty($searchTerm)) {
     echo "<h4>Filtering results by: $searchTerm</h4>";
 }
+?>
+<div class="row">
+    <a href="<?= Utils::getURL('ticket', 'create') ?>" class="button small">Create New Ticket</a>
+    <div id="search-box">
+        <form action="<?= Utils::getURL('panel', 'tickets') ?>" method="get">
+            <input type="search" name="search" id="search" placeholder="Search...">
+            <input type="submit" class="button small" value="&#128269;">
+        </form>
+    </div>
+</div>
+<?php
 if (empty($tickets)) {
     echo "<p>There are no tickets</p>";
 } else {
 ?>
-<div id="search-box">
-    <form action="<?= Utils::getURL('panel', 'tickets') ?>" method="get">
-        <input type="search" name="search" id="search" placeholder="Search...">
-        <input type="submit" class="button small" value="&#128269;">
-    </form>
-</div>
+
 <table class="tickets">
     <thead>
     <tr>
@@ -133,4 +137,3 @@ if (empty($tickets)) {
     </tbody>
 </table>
 <?php } ?>
-<a href="<?= Utils::getURL('ticket', 'create') ?>" class="button">Create New Ticket</a>

@@ -115,10 +115,6 @@ input::placeholder {
     color: #cfcfcf;
 }
 
-input[type=submit] {
-    margin-top: 1em;
-}
-
 fieldset {
     margin-top: 1em;
 }
@@ -203,7 +199,6 @@ a.button {
     border-radius: 2px;
     cursor: pointer;
     padding: 0.5em 0.7em;
-    margin-top: 1em;
     display: inline-block;
     text-align: center;
 }
@@ -283,13 +278,15 @@ input[type=button].danger:active {
 .row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5em;
 }
 
 .row > *:not(:last-child) {
     margin-right: 1%;
 }
 
-.row > * {
+.row.stretch > * {
     width: auto !important;
     flex: 1;
 }

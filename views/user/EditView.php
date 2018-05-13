@@ -45,7 +45,7 @@ use Core\Utils;
             }
         }
         ?>
-        <div class="row">
+        <div class="row stretch">
             <input type="submit" value="Edit User">
             <?php
             if ($user['id'] != $loggedUser['id']) {
