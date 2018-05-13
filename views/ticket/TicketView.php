@@ -15,9 +15,12 @@ use Core\Utils;
          echo $ticket['assignedName'] . ' ' . $ticket['assignedSurname'];
      } else {
          echo 'Unassigned';
-         if (in_array($ticket['department'], $loggedUser['departments'])) {
+         if (in_array($ticket['department'], $loggedUser['departments']) && $loggedUser['op'] != 1) {
              echo ' <a class="button small" href="' . Utils::getURL('ticket', 'assign', [$ticket['id']]) . '">Assign To Me</a>';
          }
+     }
+     if ($loggedUser['op'] == 1) {
+         echo ' <a class="button small" href="' . Utils::getURL('ticket', 'assign', [$ticket['id']]) . '">Assign</a>';
      }
 ?></h5>
 <h5>Status:

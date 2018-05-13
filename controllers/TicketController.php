@@ -14,7 +14,7 @@ class TicketController extends Controller
         $ticketsModel = $this->getModel('tickets');
         if (!empty($params)) {
             $ticketId = $params[0];
-            $ticket = $ticketsModel->findOne($ticketId, 'id', ['department']);
+            $ticket = $ticketsModel->findOne($ticketId, 'id');
             if (!empty($ticket)) {
                 if (in_array($ticket['department'], $loggedUser['departments'])) {
                     $ticketsModel->update([
@@ -23,6 +23,37 @@ class TicketController extends Controller
                         ['id', '=', $ticketId]
                     ]);
                     $this->request->redirect(Utils::getURL('ticket', 'view', $params));
+                } else if ($loggedUser['op'] == 1) {
+                    $usersModel = $this->getModel('users');
+                    if ($this->request->isPost()) {
+                        $userId = $this->request->getPostParam('user', true);
+                        if (empty($userId)) {
+                            $this->request->setViewParam('error', 'No user has been selected');
+                        } else {
+                            $exist = $usersModel->findOne($userId);
+                            if (!empty($exist)) {
+                                $ticketsModel->update([
+                                    'assignedTo' => $userId
+                                ], [
+                                    ['id', '=', $ticketId]
+                                ]);
+                                $mailer = new \SimpleMailer();
+                                $mailer->addTo($exist['email'], $exist['name'] . ' ' . $exist['surname']);
+                                $mailer->addReplyTo(SITE_EMAIL);
+                                $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
+                                $mailer->setSubject('[Ticket #' . $ticketId . '] ' . $ticket["title"]);
+                                $mailer->setMessage('You were assigned to ticket ' . Utils::getURL('ticket', 'view', [$ticketId]));
+                                $mailer->send();
+                                $this->request->redirect(Utils::getURL('ticket', 'view', $params));
+                            } else {
+                                $this->renderView('invalid');
+                            }
+                        }
+                    }
+                    $users = $usersModel->find();
+                    $this->request->setViewParam('users', $users);
+                    $this->request->setViewParam('ticketId', $ticketId);
+                    $this->renderView('assign');
                 } else {
                     $this->renderView('forbidden');
                 }
