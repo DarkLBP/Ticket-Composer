@@ -49,6 +49,10 @@ canvas {
     position: relative;
 }
 
+form input[type=submit]:last-child {
+    margin-top: 1em;
+}
+
 label,
 input,
 textarea,
@@ -279,7 +283,7 @@ input[type=button].danger:active {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5em;
+    margin: 0.5em 0;
 }
 
 .row > *:not(:last-child) {
