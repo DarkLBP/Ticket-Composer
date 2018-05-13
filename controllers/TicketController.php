@@ -18,7 +18,7 @@ class TicketController extends Controller
                     $ticketsModel->update([
                         'assignedTo' => $loggedUser['id']
                     ], [
-                        'id' => $ticketId
+                        ['id', '=', $ticketId]
                     ]);
                     $this->request->redirect(Utils::getURL('ticket', 'view', $params));
                 } else {
@@ -89,13 +89,13 @@ class TicketController extends Controller
             $ticketId = $params[0];
             $ticketsModel = $this->getModel('tickets');
             $ticket = $ticketsModel->count([
-                'id' => $ticketId
+                ['id', '=', $ticketId]
             ]);
             if ($ticket === 1) {
                 $ticketsModel->update([
                     "open" => 0
                 ], [
-                    'id' => $ticketId
+                    ['id', '=', $ticketId]
                 ]);
                 $this->request->redirect(Utils::getURL('ticket', 'view', $params));
             }
@@ -108,13 +108,13 @@ class TicketController extends Controller
             $ticketId = $params[0];
             $ticketsModel = $this->getModel('tickets');
             $ticket = $ticketsModel->count([
-                'id' => $ticketId
+                ['id', '=', $ticketId]
             ]);
             if ($ticket === 1) {
                 $ticketsModel->update([
                     "open" => 1
                 ], [
-                    'id' => $ticketId
+                    ['id', '=', $ticketId]
                 ]);
                 $this->request->redirect(Utils::getURL('ticket', 'view', $params));
             }
@@ -151,7 +151,9 @@ class TicketController extends Controller
                 //Retrieve ticket's posts
                 $ticketPostsModel = $this->getModel('posts');
                 $ticketPostsModel->join($usersModel, 'userId', 'id', 'left');
-                $ticketPosts = $ticketPostsModel->find(['ticketId' => $ticketId], [
+                $ticketPosts = $ticketPostsModel->find([
+                    ['ticketId', '=', $ticketId]
+                ], [
                     "$ticketPostsModel.*",
                     [
                         "$usersModel.name" => "createdName",
@@ -165,7 +167,9 @@ class TicketController extends Controller
                 //Retrieve attachments
                 $attachmentsModel = $this->getModel('attachments');
                 foreach ($ticketPosts as &$post) {
-                    $post['attachments'] = $attachmentsModel->find(['postId' => $post['id']]);
+                    $post['attachments'] = $attachmentsModel->find([
+                        ['postId', '=', $post['id']]
+                    ]);
                 }
                 $this->request->setViewParam('ticket', $ticket);
                 $this->request->setViewParam('ticketPosts', $ticketPosts);

@@ -10,7 +10,7 @@ class PrintController extends Controller
         $loggedUser = $this->request->getSessionParam('loggedUser');
         $ticketsModel = $this->getModel('tickets');
         $ticketsModel->find([
-            'createdBy' => $loggedUser['id']
+            ['createdBy', '=', $loggedUser['id']]
         ]);
 
     }

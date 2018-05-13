@@ -37,9 +37,11 @@ class ApiController extends Controller
             $userId = $chunks[0];
             $session = $chunks[1];
             $count = $sessionModel->count([
-                "$sessionModel.id" => $session,
-                "$usersModel.id" => $userId,
-                "$usersModel.op" => 1
+                ["$sessionModel.id", '=', $session],
+                'AND',
+                ["$usersModel.id", '=', $userId],
+                'AND',
+                ["$usersModel.op", '=', 1]
             ]);
             return $count === 1;
         }
@@ -70,12 +72,12 @@ class ApiController extends Controller
         } else {
             $ticketsModel = $this->getModel('tickets');
             $count = $ticketsModel->count([
-                'id' => $ticket
+                ['id', '=', $ticket]
             ]);
             if ($count === 1) {
                 $postsModel = $this->getModel('posts');
                 $posts = $postsModel->find([
-                    'ticketId' => $ticket
+                    ['ticketId', '=', $ticket]
                 ]);
                 $this->response['posts'] = $posts;
             } else {
@@ -94,12 +96,12 @@ class ApiController extends Controller
         } else {
             $postsModel = $this->getModel('posts');
             $count = $postsModel->count([
-                'id' => $post
+                ['id', '=', $post]
             ]);
             if ($count === 1) {
                 $attachmentsModel = $this->getModel('attachments');
                 $attachments = $attachmentsModel->find([
-                    'postId' => $post
+                    ['postId', '=', $post]
                 ]);
                 $this->response['attachments'] = $attachments;
             } else {

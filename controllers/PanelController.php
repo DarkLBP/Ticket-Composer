@@ -106,7 +106,7 @@ spl_autoload_register(function (\$class) {
         }
         try {
             $tickets = $ticketsModel->find([
-                'createdBy' => $userId
+                ['createdBy', '=', $userId]
             ], [
                 "$ticketsModel.id",
                 "$ticketsModel.title",
@@ -123,7 +123,7 @@ spl_autoload_register(function (\$class) {
             $tickets = [];
         }
 
-        $this->request->setViewParam('myTickets', $tickets);
+        $this->request->setViewParam('tickets', $tickets);
         $this->request->setViewParam('sortOrder', $sortOrder);
         $this->request->setViewParam('sortBy', $sortBy);
         $this->request->setViewParam('searchTerm', $searchTerm);

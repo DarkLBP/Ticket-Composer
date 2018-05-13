@@ -33,7 +33,11 @@ class SessionController extends Controller
             return;
         }
         $sessionModel = $this->getModel('sessions');
-        $sessionModel->delete(['id' => $this->userToken['sessionToken'], 'userId' => $this->userToken['userId']]);
+        $sessionModel->delete([
+            ['id', '=', $this->userToken['sessionToken']],
+            'AND',
+            ['userId', '=', $this->userToken['userId']]
+        ]);
         $this->userToken = [];
         $this->request->setCookieParam('userToken', null);
     }
@@ -82,8 +86,9 @@ class SessionController extends Controller
         $usersModel = $this->getModel('users');
         $sessionModel->join($usersModel, 'userId', 'id', 'inner');
         $data = $sessionModel->find([
-            "$sessionModel.id" => $this->userToken['sessionToken'],
-            "$sessionModel.userId" => $this->userToken['userId']
+            ["$sessionModel.id", '=', $this->userToken['sessionToken']],
+            "AND",
+            ["$sessionModel.userId", '=', $this->userToken['userId']]
         ], [
             "$usersModel.*"
         ]);
@@ -91,7 +96,7 @@ class SessionController extends Controller
             $user = $data[0];
             $departmentsModel = $this->getModel('usersDepartments');
             $departments = $departmentsModel->find([
-                'userId' => $user['id']
+                ['userId', '=', $user['id']]
             ]);
             foreach ($departments as $department) {
                 $user['departments'][] = $department['departmentId'];

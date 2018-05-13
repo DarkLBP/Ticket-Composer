@@ -50,7 +50,9 @@ class UserController extends Controller
                 $userDepartmentsModel = $this->getModel('usersDepartments');
 
                 //Find if email is in use
-                $existing = $model->count(["email" => $email]);
+                $existing = $model->count([
+                    ["email", '=', $email]
+                ]);
                 if ($existing === 0) {
                     $userId = $model->insert([
                         "name" => $name,
@@ -95,7 +97,7 @@ class UserController extends Controller
                 $this->request->setViewParam('user', $user);
                 if ($this->request->isPost()) {
                     $userModel->delete([
-                        'id' => $userId
+                        ['id', '=', $userId]
                     ]);
                     $this->request->redirect(Utils::getURL('panel', 'users'));
                 } else if ($this->request->isGet()) {
@@ -122,7 +124,7 @@ class UserController extends Controller
                 $this->renderView('invalid');
             }
             $userDepartments = $userDepartmentsModel->find([
-                "userId" => $user['id']
+                ["userId", '=', $user['id']]
             ], [
                 "departmentId"
             ]);
@@ -177,9 +179,11 @@ class UserController extends Controller
                 if ($loggedUser['op'] == 1 && $loggedUser['id'] != $user['id']) {
                     $data['op'] = intval(!empty($op));
                 }
-                $userModel->update($data, ['id' => $user['id']]);
+                $userModel->update($data, [
+                    ['id', '=', $user['id']]
+                ]);
                 $userDepartmentsModel->delete([
-                    "userId" => $user['id']
+                    ["userId", '=', $user['id']]
                 ]);
                 if (!empty($departments)) {
                     foreach ($departments as $department) {
@@ -321,7 +325,11 @@ class UserController extends Controller
             $user = $params[0];
             $key = $params[1];
             $recover = $this->getModel('recovers');
-            $data = $recover->count(['id' => $key, 'userId' => $user]);
+            $data = $recover->count([
+                ['id', '=', $key],
+                'AND',
+                ['userId', '=', $user]
+            ]);
             if ($data === 1) {
                 $this->request->setViewParam('params', $params);
                 if ($this->request->isGet()) {
@@ -341,8 +349,14 @@ class UserController extends Controller
                 }
                 if (empty($errors)) {
                     $userModel = $this->getModel('users');
-                    $userModel->update(['password' => password_hash($password, PASSWORD_DEFAULT)], ['id' => $user]);
-                    $recover->delete(['id' => $key, 'userId' => $user]);
+                    $userModel->update(['password' => password_hash($password, PASSWORD_DEFAULT)], [
+                        ['id', '=', $user]
+                    ]);
+                    $recover->delete([
+                        ['id', '=', $key],
+                        'AND',
+                        ['userId', '=', $user]
+                    ]);
                     $this->request->setSessionParam('recovered', true);
                     $this->request->redirect(Utils::getURL("user", "recover", ["completed"]));
                 }
@@ -394,7 +408,9 @@ class UserController extends Controller
             if (empty($errors)) {
                 $model = $this->getModel('users');
                 //Find if email is in use
-                $existing = $model->count(["email" => $email]);
+                $existing = $model->count([
+                    ["email", '=', $email]
+                ]);
                 if ($existing === 0) {
                     try {
                         $validationCode = bin2hex(random_bytes(32));
@@ -437,9 +453,17 @@ class UserController extends Controller
             $user = $params[0];
             $key = $params[1];
             $validation = $this->getModel('validations');
-            $data = $validation->count(['id' => $key, 'userId' => $user]);
+            $data = $validation->count([
+                ['id', '=', $key],
+                'AND',
+                ['userId', '=', $user]
+            ]);
             if ($data === 1) {
-                $validation->delete(['id' => $key, 'userId' => $user]);
+                $validation->delete([
+                    ['id', '=', $key],
+                    'AND',
+                    ['userId', '=', $user]
+                ]);
                 $this->renderView('validateCompleted');
             }
         }

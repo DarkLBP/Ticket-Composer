@@ -21,17 +21,17 @@ class PostController extends Controller
                 } else if ($this->request->isPost()) {
                     $attachmentsModel = $this->getModel('attachments');
                     $postAttachments = $attachmentsModel->find([
-                        'postId' => $postId
+                        ['postId', '=', $postId]
                     ]);
                     foreach ($postAttachments as $attachment) {
                         $path = __DIR__ . '/../uploads/' . $attachment['filePath'];
                         unset($path);
                     }
                     $attachmentsModel->delete([
-                        'postId' => $postId
+                        ['postId', '=', $postId]
                     ]);
                     $postsModel->delete([
-                        'id' => $postId
+                        ['id', '=', $postId]
                     ]);
                     $this->request->redirect(Utils::getURL('ticket', 'view', [$post['ticketId']]));
                 } else {
@@ -61,7 +61,7 @@ class PostController extends Controller
                         $postsModel->update([
                             'content' => $message
                         ], [
-                            'id' => $postId
+                            ['id', '=', $postId]
                         ]);
                         $this->request->redirect(Utils::getURL('ticket', 'view', [$post['ticketId']]));
                     }
@@ -111,7 +111,7 @@ class PostController extends Controller
                         $ticketsModel->update([
                             "open" => 0,
                         ], [
-                            "id" => $ticketId
+                            ["id", '=', $ticketId]
                         ]);
                     }
                 } else {

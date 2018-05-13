@@ -1,19 +1,19 @@
 <?php
 use Core\Utils;
 /**
- * @var array $myTickets
+ * @var array $tickets
  * @var string $sortBy
  * @var string $sortOrder
  * @var string $searchTerm
  */
 ?>
-<h2>My Tickets</h2>
+<h2>Tickets</h2>
 <?php
 $queryString = '?';
 if (!empty($searchTerm)) {
     $queryString .= "search=$searchTerm";
 }
-if (empty($myTickets)) {
+if (empty($tickets)) {
     echo "<p>There are no tickets</p>";
 } else {
 ?>
@@ -108,7 +108,7 @@ if (empty($myTickets)) {
     </thead>
     <tbody>
     <?php
-        foreach ($myTickets as $ticket) {
+        foreach ($tickets as $ticket) {
             if ($ticket["open"] == 1) {
                 echo "<tr class='green-row' id='t-$ticket[id]'>";
             } else {

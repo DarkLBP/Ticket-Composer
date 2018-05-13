@@ -33,10 +33,11 @@ class DepartmentController extends Controller
             $exists = $model->findOne($department);
             if (!empty($exists)) {
                 if ($this->request->isPost()) {
-                    $model->delete(["id" => $department]);
+                    $model->delete([
+                        ["id", '=', $department]
+                    ]);
                     $this->request->redirect(Utils::getURL('panel', 'departments'));
                 }
-                $name = $exists["name"];
                 $this->request->setViewParam('department', $exists);
                 $this->renderView('delete');
             }
@@ -58,7 +59,9 @@ class DepartmentController extends Controller
                         $this->request->setViewParam('error', 'Department name is empty');
                         $this->renderView('edit');
                     }
-                    $model->update(["name" => $name], ["id" => $department]);
+                    $model->update(["name" => $name], [
+                        ["id", '=', $department]
+                    ]);
                     $this->request->redirect(Utils::getURL('panel', 'departments'));
                 }
                 $this->request->setViewParam('department', $exists);
