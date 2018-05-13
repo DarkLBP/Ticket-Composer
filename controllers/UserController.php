@@ -157,7 +157,7 @@ class UserController extends Controller
                 $errors[] = 'The email is invalid';
             }
             if (!empty($newPassword)) {
-                if (empty($currentPassword)) {
+                if (empty($currentPassword) && $user['id'] == $loggedUser['id']) {
                     $errors[] = 'Current password is empty';
                 }
                 if (empty($newPasswordConfirm)) {
@@ -165,7 +165,7 @@ class UserController extends Controller
                 } else if ($newPassword != $newPasswordConfirm) {
                     $errors[] = 'Password do not match';
                 }
-                if (!password_verify($currentPassword, $user['password'])) {
+                if (!password_verify($currentPassword, $user['password']) && $user['id'] == $loggedUser['id']) {
                     $errors[] = 'Invalid password';
                 }
             }

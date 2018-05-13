@@ -17,8 +17,12 @@ use Core\Utils;
         <label for="email">Email</label><br>
         <input type="email" name="email" id="email" value="<?= Utils::escapeData($user['email']) ?>" required><br>
         <fieldset>
-            <label for="current-password">Current Password</label><br>
-            <input type="password" name="current-password" id="current-password"><br>
+            <?php
+            if ($user['id'] == $loggedUser['id']) {
+                echo "<label for=\"current-password\">Current Password</label><br>";
+                echo "<input type=\"password\" name=\"current-password\" id=\"current-password\"><br>";
+            }
+            ?>
             <label for="new-password">New Password</label><br>
             <input type="password" name="new-password" id="new-password"><br>
             <label for="confirm-password">Confirm New Password</label><br>
