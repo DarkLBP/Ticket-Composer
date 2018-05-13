@@ -48,7 +48,8 @@ class PostController extends Controller
             $postId = $params[0];
             $postsModel = $this->getModel('posts');
             $post = $postsModel->findOne($postId, 'id');
-            if ($post['userId'] !== $this->request->getSessionParam('loggedUser')['id']) {
+            $loggedUser = $this->request->getSessionParam('loggedUser');
+            if ($post['userId'] !== $loggedUser['id'] && $loggedUser['op'] == 0) {
                 $this->renderView('forbidden');
             }
             if (!empty($post)) {

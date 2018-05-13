@@ -41,8 +41,9 @@ class PanelController extends Controller
             $departments = [];
         }
         $this->request->setViewParam('departments', $departments);
-        $this->request->setViewParam('sortOrder', $sortOrder);
-        $this->request->setViewParam('sortBy', $sortBy);
+        $this->request->setViewParam('sortOrder', $sortOrder, true);
+        $this->request->setViewParam('sortBy', $sortBy, true);
+        $this->request->setViewParam('searchTerm', $searchTerm, true);
         $this->renderView('departments');
     }
 
@@ -153,9 +154,9 @@ spl_autoload_register(function (\$class) {
         }
 
         $this->request->setViewParam('tickets', $tickets);
-        $this->request->setViewParam('sortOrder', $sortOrder);
-        $this->request->setViewParam('sortBy', $sortBy);
-        $this->request->setViewParam('searchTerm', $searchTerm);
+        $this->request->setViewParam('sortOrder', $sortOrder, true);
+        $this->request->setViewParam('sortBy', $sortBy, true);
+        $this->request->setViewParam('searchTerm', $searchTerm, true);
         $this->renderView('tickets');
     }
 
@@ -194,8 +195,9 @@ spl_autoload_register(function (\$class) {
             $users = [];
         }
         $this->request->setViewParam('users', $users);
-        $this->request->setViewParam('sortOrder', $sortOrder);
-        $this->request->setViewParam('sortBy', $sortBy);
+        $this->request->setViewParam('sortOrder', $sortOrder, true);
+        $this->request->setViewParam('sortBy', $sortBy, true);
+        $this->request->setViewParam('searchTerm', $searchTerm, true);
         $this->renderView('users');
     }
 }

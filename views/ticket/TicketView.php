@@ -48,11 +48,11 @@ use Core\Utils;
                 echo "<a href='" . Utils::getURL('attachment', 'download', [$attachment['id']]) . "'>$attachment[fileName]</a><br>";
             }
         }
-        if ($post['userId'] == $loggedUser['id']) {
-            echo "<a href='" . Utils::getURL('post', 'edit', [$post["id"]]) . "' class='button small'>Edit</a>";
-        }
         if ($loggedUser['op'] == 1) {
+            echo "<a href='" . Utils::getURL('post', 'edit', [$post["id"]]) . "' class='button small'>Edit</a>";
             echo " <a href='" . Utils::getURL('post', 'delete', [$post["id"]]) . "' class='button small danger'>Delete</a>";
+        } else if ($post['userId'] == $loggedUser['id']) {
+            echo "<a href='" . Utils::getURL('post', 'edit', [$post["id"]]) . "' class='button small'>Edit</a>";
         }
         echo "</footer>";
         echo "</article>";

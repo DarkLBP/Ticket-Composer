@@ -13,6 +13,9 @@ $queryString = '?';
 if (!empty($searchTerm)) {
     $queryString .= "search=$searchTerm";
 }
+if (!empty($searchTerm)) {
+    echo "<h4>Filtering results by: $searchTerm</h4>";
+}
 if (empty($departments)) {
     echo "<p>There are no departments</p>";
 } else {
