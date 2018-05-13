@@ -9,8 +9,6 @@ use Core\Utils;
 class SessionController extends Controller
 {
     private $userToken = [];
-    private $controller = '';
-    private $action = '';
 
     public function __construct(Request $request)
     {
@@ -23,8 +21,6 @@ class SessionController extends Controller
                 $this->userToken['sessionToken'] = $tokenSplit[1];
             }
         }
-        $this->controller = $this->request->getController();
-        $this->action = $this->request->getAction();
     }
 
     private function destroyToken()
@@ -45,7 +41,8 @@ class SessionController extends Controller
     public function initialize()
     {
         //Destroy token if logout
-        if ($this->controller === "user" && $this->action === "logout") {
+        if ($this->request->getController() === "user" && $this->request->getAction() === "logout"
+            && empty($this->request->getActionParameters())) {
             $this->destroyToken();
             return;
         }
@@ -61,16 +58,17 @@ class SessionController extends Controller
     {
         if (!$this->request->getSessionParam('loggedUser')) {
             //Redirect to login if user tries to enter to pages where login is required
-            if ($this->controller !== "main" && $this->controller !== "user" && $this->controller !== "install" && $this->controller !== "api") {
+            if ($this->request->getController() !== "main" && $this->request->getController() !== "user" &&
+                $this->request->getController() !== "install" && $this->request->getController() !== "api") {
                 $this->request->redirect(Utils::getURL("user", "login"));
             }
         } else {
-            if ($this->controller === "user") {
+            if ($this->request->getController() === "user") {
                 //Redirect if the user is logged in and tries to access login or register pages
-                if ($this->action === "login" || $this->action === "register") {
+                if ($this->request->getAction() === "login" || $this->request->getAction() === "register") {
                     $this->request->redirect(Utils::getURL('panel'));
                 }
-            } else if ($this->controller === 'main') {
+            } else if ($this->request->getController() === 'main') {
                 $this->request->redirect(Utils::getURL('panel'));
             }
         }
