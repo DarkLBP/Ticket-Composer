@@ -170,33 +170,43 @@ class UserController extends Controller
                 }
             }
             if (empty($errors)) {
-                $data['name'] = $name;
-                $data['surname'] = $surname;
-                $data['email'] = $email;
-                if (!empty($newPassword)) {
-                    $data['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
-                }
-                if ($loggedUser['op'] == 1 && $loggedUser['id'] != $user['id']) {
-                    $data['op'] = intval(!empty($op));
-                }
-                $userModel->update($data, [
-                    ['id', '=', $user['id']]
-                ]);
-                $userDepartmentsModel->delete([
-                    ["userId", '=', $user['id']]
-                ]);
-                if (!empty($departments)) {
-                    foreach ($departments as $department) {
-                        $userDepartmentsModel->insert([
-                            'userId' => $user['id'],
-                            'departmentId' => $department
-                        ]);
+                if ($user["email"] != $email) {
+                    //Find if email is in use
+                    $existing = $userModel->count([
+                        ["email", '=', $email]
+                    ]);
+                    if ($existing === 1) {
+                        $errors[] = "Email already in use";
                     }
                 }
-                $this->request->redirect(Utils::getURL('user', 'edit', $params));
-            } else {
-                $this->request->setViewParam('errors', $errors);
+                if (empty($errors)) {
+                    $data['name'] = $name;
+                    $data['surname'] = $surname;
+                    $data['email'] = $email;
+                    if (!empty($newPassword)) {
+                        $data['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
+                    }
+                    if ($loggedUser['op'] == 1 && $loggedUser['id'] != $user['id']) {
+                        $data['op'] = intval(!empty($op));
+                    }
+                    $userModel->update($data, [
+                        ['id', '=', $user['id']]
+                    ]);
+                    $userDepartmentsModel->delete([
+                        ["userId", '=', $user['id']]
+                    ]);
+                    if (!empty($departments)) {
+                        foreach ($departments as $department) {
+                            $userDepartmentsModel->insert([
+                                'userId' => $user['id'],
+                                'departmentId' => $department
+                            ]);
+                        }
+                    }
+                    $this->request->redirect(Utils::getURL('user', 'edit', $params));
+                }
             }
+            $this->request->setViewParam('errors', $errors);
         }
         $this->request->setViewParam('user', $user);
         $this->request->setViewParam('departments', $departmentList);
