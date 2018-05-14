@@ -17,4 +17,6 @@ use Core\Utils;
     <a href="<?= Utils::getURL('export', 'users') ?>" class="button">Users</a>
     <a href="<?= Utils::getURL('export', 'attachments') ?>" class="button">Attachments</a>
     <a href="<?= Utils::getURL('export', 'departments') ?>" class="button">Departments</a>
+    <h3>Other Operations</h3>
+    <a href="<?= Utils::getURL('print', 'overview') ?>" class="button" target="_blank">Generate Site Overview PDF</a>
 </div>
