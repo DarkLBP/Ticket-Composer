@@ -20,8 +20,9 @@ function getCookie(name) {
  * @param method Desired request method
  * @param callback Function that will be called when changing request state
  * @param headers Headers to be set before the request is sent
+ * @param body Data to be sent
  */
-function performAJAXRequest(url, method = "POST", callback = null, headers = {}) {
+function performAJAXRequest(url, method = "POST", callback = null, headers = {}, body = '') {
     const request = new XMLHttpRequest();
     request.open(method, url, true);
     for (let property in headers) {
@@ -30,7 +31,7 @@ function performAJAXRequest(url, method = "POST", callback = null, headers = {})
         }
     }
     request.onreadystatechange = callback;
-    request.send();
+    request.send(body);
 }
 
 /**
@@ -289,6 +290,31 @@ window.onload = function () {
                             attachments.removeChild(attachments.children[attachments.childElementCount - 1]);
                         }
                     }
+                }
+            }
+        }
+    } else if (controller === 'user') {
+        if (action === 'register') {
+            const emailField = document.querySelector('#email');
+            if (emailField != null) {
+                emailField.oninput = function() {
+                    //Validate email
+                    const sessionToken = getCookie('userToken');
+                    const requestURL = EasyMVC.getURL('api', 'email');
+                    const headers = {
+                        "Session-Token": sessionToken,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    };
+                    performAJAXRequest(requestURL, 'POST', function () {
+                        if (this.readyState === 4 && this.status === 200) {
+                            const response = JSON.parse(this.responseText);
+                            if (response.hasOwnProperty('error')) {
+                                emailField.setCustomValidity(response.error);
+                            } else {
+                                emailField.setCustomValidity('');
+                            }
+                        }
+                    }, headers, 'email=' + this.value);
                 }
             }
         }

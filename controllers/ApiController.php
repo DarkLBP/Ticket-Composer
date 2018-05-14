@@ -7,6 +7,9 @@ use Core\Request;
 class ApiController extends Controller
 {
     private $response = [];
+    private $authExclusions = [
+        'email'
+    ];
 
     public function __construct(Request $request)
     {
@@ -16,14 +19,16 @@ class ApiController extends Controller
             $this->sendResponse();
         }
 
-        $validToken = false;
-        if (isset($_SERVER["HTTP_SESSION_TOKEN"])) {
-            $validToken = $this->validateSession($_SERVER["HTTP_SESSION_TOKEN"]);
-        }
+        if (!in_array($this->request->getAction(), $this->authExclusions)) {
+            $validToken = false;
+            if (isset($_SERVER["HTTP_SESSION_TOKEN"])) {
+                $validToken = $this->validateSession($_SERVER["HTTP_SESSION_TOKEN"]);
+            }
 
-        if (!$validToken && $this->request->getAction() !== 'login') {
-            $this->response['error'] = 'Not authorised';
-            $this->sendResponse();
+            if (!$validToken && $this->request->getAction() !== 'login') {
+                $this->response['error'] = 'Not authorised';
+                $this->sendResponse();
+            }
         }
     }
 
