@@ -111,6 +111,25 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
+    public function actionEmail()
+    {
+        $email = $this->request->getPostParam('ticket', true);
+        if (empty($email)) {
+            $this->response['error'] = 'Missing parameters';
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->response['error'] = 'Invalid email';
+        } else {
+            $usersModel = $this->getModel('users');
+            $exists = $usersModel->count([
+                ['email', '=', $email]
+            ]);
+            if ($exists == 1) {
+                $this->response['error'] = 'Email already exists';
+            }
+        }
+        $this->sendResponse();
+    }
+
     public function actionLogin()
     {
         $email = $this->request->getPostParam('email', true);
