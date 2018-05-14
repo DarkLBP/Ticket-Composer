@@ -23,6 +23,13 @@ class OverviewPDF extends FPDF
         $this->SetFont('Arial', '', 14);
     }
 
+    public function Footer()
+    {
+        $this->SetY(-15);
+        $this->SetFont('Helvetica','I',12);
+        $this->Cell(0,10,'Copyright (C) ' . date('Y') . ' ' . SITE_TITLE,0,0,'C');
+    }
+
     public function PrintLine($text)
     {
         $this->MultiCell(0, 8, $text);
