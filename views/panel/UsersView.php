@@ -80,7 +80,7 @@ if (empty($users)) {
             echo "<a href='" . Utils::getURL('panel', 'users') . $query ."'>Surname</a>";
             ?>
         </th>
-        <th>
+        <th class="hide-medium">
             <?php
             $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "email") {
@@ -93,7 +93,7 @@ if (empty($users)) {
             echo "<a href='" . Utils::getURL('panel', 'users') . $query ."'>Email</a>";
             ?>
         </th>
-        <th>
+        <th class="hide-small">
             <?php
             $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "created") {
@@ -106,7 +106,7 @@ if (empty($users)) {
             echo "<a href='" . Utils::getURL('panel', 'users') . $query ."'>Created</a>";
             ?>
         </th>
-        <th>
+        <th class="hide-small">
             <?php
             $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "op") {
@@ -132,12 +132,12 @@ if (empty($users)) {
         echo "<td><a href='" . Utils::getURL('user', 'edit', [$user['id']]) . "'>$user[id]</a></td>";
         echo "<td>$user[name]</td>";
         echo "<td>$user[surname]</td>";
-        echo "<td>$user[email]</td>";
-        echo "<td><time>$user[created]</time></td>";
+        echo "<td class=\"hide-medium\">$user[email]</td>";
+        echo "<td class=\"hide-small\"><time>$user[created]</time></td>";
         if ($user['op'] == 1) {
-            echo '<td class="red">Yes</td>';
+            echo '<td class="red hide-small">Yes</td>';
         } else {
-            echo '<td class="green">No</td>';
+            echo '<td class="green hide-small">No</td>';
         }
         echo "</tr>";
     }

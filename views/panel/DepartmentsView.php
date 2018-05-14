@@ -67,7 +67,7 @@ if (empty($departments)) {
             echo "<a href='" . Utils::getURL('panel', 'departments') . $query ."'>Name</a>";
             ?>
         </th>
-        <th>
+        <th class="hide-medium">
             <?php
             $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "created") {
@@ -88,7 +88,7 @@ if (empty($departments)) {
         echo "<tr id='d-$department[id]'>";
         echo "<td><a href='" . Utils::getURL('department', 'edit', [$department['id']]) . "'>$department[id]</a></td>";
         echo "<td>$department[name]</td>";
-        echo "<td><time>$department[created]</time></td>";
+        echo "<td class=\"hide-medium\"><time>$department[created]</time></td>";
         echo "</tr>";
     }
     ?>

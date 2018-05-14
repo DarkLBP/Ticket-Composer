@@ -55,7 +55,7 @@ if (empty($tickets)) {
             echo "<a href='" . Utils::getURL('panel', 'tickets') . $query ."'>Id</a>";
             ?>
         </th>
-        <th>
+        <th class="hide-small">
             <?php
             $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "title") {
@@ -68,7 +68,7 @@ if (empty($tickets)) {
             echo "<a href='" . Utils::getURL('panel', 'tickets') . $query ."'>Title</a>";
             ?>
         </th>
-        <th id="f-departmentName">
+        <th class="hide-medium">
             <?php
             $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "departmentName") {
@@ -94,7 +94,7 @@ if (empty($tickets)) {
             echo "<a href='" . Utils::getURL('panel', 'tickets') . $query ."'>Last Reply</a>";
             ?>
         </th>
-        <th>
+        <th class="hide-small">
             <?php
             $query = strlen($queryString) > 1 ? "$queryString&" : $queryString;
             if ($sortBy === "totalPosts") {
@@ -132,9 +132,9 @@ if (empty($tickets)) {
             }
             echo "<td><a href='" . Utils::getURL('ticket', 'view', [$ticket['id']]) . "'>$ticket[id]</a></td>";
             echo "<td>$ticket[title]</td>";
-            echo "<td>$ticket[departmentName]</td>";
-            echo "<td><time>$ticket[lastReply]</time></td>";
-            echo "<td>$ticket[totalPosts]</td>";
+            echo "<td class=\"hide-medium\">$ticket[departmentName]</td>";
+            echo "<td class=\"hide-small\"><time>$ticket[lastReply]</time></td>";
+            echo "<td class=\"hide-small\">$ticket[totalPosts]</td>";
             if ($ticket["open"] == 1) {
                 echo "<td class='green'>Open</td>";
             } else {
