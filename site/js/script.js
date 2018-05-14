@@ -301,7 +301,6 @@ window.onload = function () {
                 emailField.oninput = function() {
                     //Validate email
                     if (emailRegexp.test(this.value.toLowerCase())) {
-                        console.log("PASA");
                         const sessionToken = getCookie('userToken');
                         const requestURL = EasyMVC.getURL('api', 'email');
                         const headers = {
