@@ -282,8 +282,8 @@ input[type=button].danger:active {
 
 .row {
     display: flex;
-    align-items: center;
     margin: 0.5em 0;
+    flex-wrap: wrap;
 }
 
 .row > *:not(:last-child) {
