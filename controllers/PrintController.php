@@ -1,5 +1,7 @@
 <?php
-include_once __DIR__ . "/../vendor/fpdf/fpdf.php";
+namespace Controllers;
+
+include_once __DIR__ . "/../vendor/OverviewPDF.php";
 
 use Core\Controller;
 
@@ -7,11 +9,7 @@ class PrintController extends Controller
 {
     public function actionOverview()
     {
-        $loggedUser = $this->request->getSessionParam('loggedUser');
-        $ticketsModel = $this->getModel('tickets');
-        $ticketsModel->find([
-            ['createdBy', '=', $loggedUser['id']]
-        ]);
-
+        $pdf = new \OverviewPDF();
+        $pdf->Render();
     }
 }
