@@ -31,6 +31,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    height: 100vh;
     margin: 0;
     align-items: center;
 }
@@ -344,6 +345,7 @@ NAVIGATION STYLES
     width: 100%;
     position: relative;
     justify-content: flex-end;
+    flex-shrink: 0;
 }
 
 #main-nav > .navigation {
@@ -481,8 +483,12 @@ RESPONSIVE STYLES
         display: none;
     }
 
+    #main-nav {
+        justify-content: flex-start;
+    }
+
     #main-nav > .navigation {
-        position: initial;
+        position: static;
         display: flex;
         max-width: 800px;
         background-color: #4da167;
