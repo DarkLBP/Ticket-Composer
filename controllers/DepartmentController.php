@@ -11,16 +11,24 @@ class DepartmentController extends Controller
     {
         if ($this->request->isPost()) {
             $name = $this->request->getPostParam('name', true);
+            $error = '';
             if (empty($name)) {
-                $this->request->setViewParam('error', 'Department name is empty');
-                $this->renderView('create');
+                $error = 'Department name is empty';
+            } else {
+                $model = $this->getModel('departments');
+                $exists = $model->count([
+                    ['name', '=', $name]
+                ]);
+                if ($exists == 1) {
+                    $error = 'That department already exists';
+                } else {
+                    $model->insert([
+                        'name' => $name
+                    ]);
+                    $this->request->redirect(Utils::getURL('panel', 'departments'));
+                }
             }
-            $model = $this->getModel('departments');
-            $model->insert([
-                'name' => $name
-            ]);
-            $this->request->setViewParam('department', $name);
-            $this->request->redirect(Utils::getURL('panel', 'departments'));
+            $this->request->setViewParam('error', $error);
         }
         $this->renderView('create');
     }
@@ -54,15 +62,26 @@ class DepartmentController extends Controller
             if (!empty($exists)) {
                 if ($this->request->isPost()) {
                     $name = $this->request->getPostParam('department', true);
+                    $error = '';
                     if (empty($name)) {
-                        $this->request->setViewParam('department', $exists);
-                        $this->request->setViewParam('error', 'Department name is empty');
-                        $this->renderView('edit');
+                        $error = 'Department name is empty';
+                    } else {
+                        if ($name != $exists['name']) {
+                            $usedName = $model->count([
+                                ['name', '=', $name]
+                            ]);
+                            if ($usedName == 1) {
+                                $error = 'That department already exists';
+                            }
+                        }
+                        if (empty($error)) {
+                            $model->update(["name" => $name], [
+                                ["id", '=', $department]
+                            ]);
+                            $this->request->redirect(Utils::getURL('panel', 'departments'));
+                        }
                     }
-                    $model->update(["name" => $name], [
-                        ["id", '=', $department]
-                    ]);
-                    $this->request->redirect(Utils::getURL('panel', 'departments'));
+                    $this->request->setViewParam('error', $error);
                 }
                 $this->request->setViewParam('department', $exists);
                 $this->renderView('edit');
