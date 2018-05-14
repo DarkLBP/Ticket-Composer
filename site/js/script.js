@@ -296,25 +296,29 @@ window.onload = function () {
     } else if (controller === 'user') {
         if (action === 'register') {
             const emailField = document.querySelector('#email');
+            const emailRegexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (emailField != null) {
                 emailField.oninput = function() {
                     //Validate email
-                    const sessionToken = getCookie('userToken');
-                    const requestURL = EasyMVC.getURL('api', 'email');
-                    const headers = {
-                        "Session-Token": sessionToken,
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    };
-                    performAJAXRequest(requestURL, 'POST', function () {
-                        if (this.readyState === 4 && this.status === 200) {
-                            const response = JSON.parse(this.responseText);
-                            if (response.hasOwnProperty('error')) {
-                                emailField.setCustomValidity(response.error);
-                            } else {
-                                emailField.setCustomValidity('');
+                    if (emailRegexp.test(this.value.toLowerCase())) {
+                        console.log("PASA");
+                        const sessionToken = getCookie('userToken');
+                        const requestURL = EasyMVC.getURL('api', 'email');
+                        const headers = {
+                            "Session-Token": sessionToken,
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        };
+                        performAJAXRequest(requestURL, 'POST', function () {
+                            if (this.readyState === 4 && this.status === 200) {
+                                const response = JSON.parse(this.responseText);
+                                if (response.hasOwnProperty('error')) {
+                                    emailField.setCustomValidity(response.error);
+                                } else {
+                                    emailField.setCustomValidity('');
+                                }
                             }
-                        }
-                    }, headers, 'email=' + this.value);
+                        }, headers, 'email=' + this.value);
+                    }
                 }
             }
         }
