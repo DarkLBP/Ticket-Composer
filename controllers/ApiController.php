@@ -6,7 +6,7 @@ use Core\Request;
 
 class ApiController extends Controller
 {
-    private $response;
+    private $response = [];
 
     public function __construct(Request $request)
     {
@@ -113,7 +113,7 @@ class ApiController extends Controller
 
     public function actionEmail()
     {
-        $email = $this->request->getPostParam('ticket', true);
+        $email = $this->request->getPostParam('email', true);
         if (empty($email)) {
             $this->response['error'] = 'Missing parameters';
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
