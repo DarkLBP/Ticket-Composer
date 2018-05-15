@@ -51,7 +51,7 @@ class TicketController extends Controller
                         }
                     }
                     $users = $usersModel->find();
-                    $this->request->setViewParam('users', $users);
+                    $this->request->setViewParam('users', $users, true);
                     $this->request->setViewParam('ticketId', $ticketId);
                     $this->renderView('assign');
                 } else {
