@@ -71,6 +71,7 @@ input[type=submit] {
     border-radius: 2px;
     cursor: pointer;
     padding: 0.5em 0.7em;
+    transition: background 0.2s;
 }
 
 button:hover,
@@ -196,6 +197,10 @@ tbody > tr.red-row:hover {
 /*
 CLASSES
  */
+
+.button {
+    transition: background 0.2s;
+}
 
 a.button {
     background-color: #4e6e5d;
@@ -361,6 +366,7 @@ NAVIGATION STYLES
 #main-nav label,
 #main-nav a {
     cursor: pointer;
+    transition: background 0.2s;
 }
 
 #main-nav li a,
