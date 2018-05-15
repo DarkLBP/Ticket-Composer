@@ -1,5 +1,7 @@
 <?php
+
 use Core\Utils;
+
 ?>
 <div class="centered-form">
     <h2>Log In</h2>

@@ -1,5 +1,7 @@
 <?php
+
 use Core\Utils;
+
 ?>
 <h2>Installation Completed</h2>
 <p>Enjoy your ticket system</p>

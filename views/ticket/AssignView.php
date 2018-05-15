@@ -1,4 +1,5 @@
 <?php
+
 use Core\Utils;
 
 /**
@@ -15,9 +16,9 @@ use Core\Utils;
         <select id="user" name="user">
             <option value="">Select a user</option>
             <?php
-                foreach ($users as $user) {
-                    echo "<option value='$user[id]'>$user[name] $user[surname]</option>";
-                }
+            foreach ($users as $user) {
+                echo "<option value='$user[id]'>$user[name] $user[surname]</option>";
+            }
             ?>
         </select><br>
         <input type="submit" value="Assign User">

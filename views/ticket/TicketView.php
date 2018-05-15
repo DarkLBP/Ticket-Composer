@@ -1,5 +1,7 @@
 <?php
+
 use Core\Utils;
+
 /**
  * @var array $ticket
  * @var array $ticketPosts
@@ -10,30 +12,30 @@ use Core\Utils;
 <h2><?= $ticket['title'] ?></h2>
 <h5>Department: <?= $ticket['departmentName'] ?></h5>
 <h5>Asigned To:
-<?php
-     if(!empty($ticket['assignedName'])) {
-         echo $ticket['assignedName'] . ' ' . $ticket['assignedSurname'];
-     } else {
-         echo 'Unassigned';
-         if (in_array($ticket['department'], $loggedUser['departments']) && $loggedUser['op'] != 1) {
-             echo ' <a class="button small" href="' . Utils::getURL('ticket', 'assign', [$ticket['id']]) . '">Assign To Me</a>';
-         }
-     }
-     if ($loggedUser['op'] == 1) {
-         echo ' <a class="button small" href="' . Utils::getURL('ticket', 'assign', [$ticket['id']]) . '">Assign</a>';
-     }
-?></h5>
+    <?php
+    if (!empty($ticket['assignedName'])) {
+        echo $ticket['assignedName'] . ' ' . $ticket['assignedSurname'];
+    } else {
+        echo 'Unassigned';
+        if (in_array($ticket['department'], $loggedUser['departments']) && $loggedUser['op'] != 1) {
+            echo ' <a class="button small" href="' . Utils::getURL('ticket', 'assign', [$ticket['id']]) . '">Assign To Me</a>';
+        }
+    }
+    if ($loggedUser['op'] == 1) {
+        echo ' <a class="button small" href="' . Utils::getURL('ticket', 'assign', [$ticket['id']]) . '">Assign</a>';
+    }
+    ?></h5>
 <h5>Status:
     <?php
-        if ($ticket['open'] == 1) {
-            echo "<span class='green'>Open</span> ";
-            echo '<a class="button" href="' . Utils::getURL('ticket', 'close', [$ticket['id']]) . '">Close</a>';
-        } else {
-            echo "<span class='red'>Closed</span> ";
-            if (in_array($ticket['department'], $loggedUser['departments']) || $loggedUser['op'] == 1) {
-                echo '<a class="button" href="' . Utils::getURL('ticket', 'open', [$ticket['id']]) . '">Reopen</a>';
-            }
+    if ($ticket['open'] == 1) {
+        echo "<span class='green'>Open</span> ";
+        echo '<a class="button" href="' . Utils::getURL('ticket', 'close', [$ticket['id']]) . '">Close</a>';
+    } else {
+        echo "<span class='red'>Closed</span> ";
+        if (in_array($ticket['department'], $loggedUser['departments']) || $loggedUser['op'] == 1) {
+            echo '<a class="button" href="' . Utils::getURL('ticket', 'open', [$ticket['id']]) . '">Reopen</a>';
         }
+    }
     ?>
 </h5>
 <section id="ticket-posts">
@@ -63,10 +65,11 @@ use Core\Utils;
     ?>
 </section>
 <div class="centered-form">
-<?php if ($ticket['open'] == 1):?>
+    <?php if ($ticket['open'] == 1): ?>
         <h3>Post New Message</h3>
         <?= empty($error) ? '' : "<p class='error-message'>$error</p>"; ?>
-        <form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post" enctype="multipart/form-data">
+        <form action="<?= Utils::getURL('post', 'create', [$ticket["id"]]) ?>" method="post"
+              enctype="multipart/form-data">
             <label for="message">Message</label><br>
             <textarea id="message" name="message" required></textarea><br>
             <label for="attachment">Attachments</label><br>
@@ -81,7 +84,7 @@ use Core\Utils;
             <input type="submit" value="Post Message">
         </form>
 
-<?php else: ?>
-    <p class="error-message center">This ticket is already closed. No further posts are allowed.</p>
-<?php endif ?>
+    <?php else: ?>
+        <p class="error-message center">This ticket is already closed. No further posts are allowed.</p>
+    <?php endif ?>
 </div>

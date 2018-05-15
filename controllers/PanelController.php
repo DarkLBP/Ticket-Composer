@@ -100,7 +100,7 @@ define(\"SITE_EMAIL\", \"$siteEmail\");
 define(\"DATABASE_HOST\", \"" . DATABASE_HOST . "\");
 define(\"DATABASE_USER\", \"" . DATABASE_USER . "\");
 define(\"DATABASE_PASSWORD\", \"" . DATABASE_PASSWORD . "\");
-define(\"DATABASE_DB\", \"" . DATABASE_DB. "\");
+define(\"DATABASE_DB\", \"" . DATABASE_DB . "\");
 define(\"DEFAULT_CONTROLLER\", \"main\");
 define(\"DEFAULT_ACTION\", \"index\");
 
@@ -187,7 +187,7 @@ spl_autoload_register(function (\$class) {
                     "max($postModel.created)" => "lastReply",
                     "$departmentsModel.name" => "departmentName"
                 ]
-            ],[
+            ], [
                 "$ticketsModel.id"
             ], $sort, 25, 25 * $page);
             $ticketCount = $ticketsModel->count($matches);

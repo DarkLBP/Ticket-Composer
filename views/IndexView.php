@@ -7,4 +7,3 @@ use Core\Utils;
 <p>If you are already registered just <a href="<?= Utils::getURL('user', 'login')?>">log in</a> to enter to your panel</p>
 <p>Once in there you can manager your tickets and create new ones</p>
 <p>If you are assigned to a department or you are an OverPowered user you will have some extra tools for you to work</p>
-<p>Don't hesitate to <a href="<?= Utils::getURL('main', 'contact') ?>">send us a message</a> if you have any question</p>

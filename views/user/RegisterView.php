@@ -1,5 +1,7 @@
 <?php
+
 use Core\Utils;
+
 ?>
 <div class="centered-form">
     <h2>Create New Account</h2>
@@ -16,7 +18,8 @@ use Core\Utils;
         <label for="confirm">Confirm Password</label><br>
         <input type="password" id="confirm" name="confirm" required><br>
         <label>
-            <input type="checkbox" value="accept" name="accept" required> By using this site you accept the use of cookies for handling sessions
+            <input type="checkbox" value="accept" name="accept" required> By using this site you accept the use of
+            cookies for handling sessions
         </label>
         <input type="submit" value="Register Account">
     </form>

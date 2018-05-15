@@ -1,5 +1,7 @@
 <?php
+
 use Core\Utils;
+
 /**
  * @var array $department
  */
@@ -12,7 +14,7 @@ use Core\Utils;
         <input type="text" name="department" id="department" value="<?= $department['name'] ?>" required><br>
         <div class="row stretch">
             <input type="submit" value="Edit Department">
-            <?='<a href="' . Utils::getURL('department', 'delete', [$department['id']]) . '" class="button danger">Remove Department</a>' ?>
+            <?= '<a href="' . Utils::getURL('department', 'delete', [$department['id']]) . '" class="button danger">Remove Department</a>' ?>
         </div>
     </form>
 </div>

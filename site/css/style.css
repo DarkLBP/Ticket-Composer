@@ -300,7 +300,6 @@ input[type=button].danger:active {
     justify-content: space-between;
 }
 
-
 /*
 HEADER STYLES
  */
@@ -332,7 +331,7 @@ NAVIGATION STYLES
     display: none;
 }
 
-#hamburger ~ label{
+#hamburger ~ label {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -407,7 +406,7 @@ CONTENT STYLES
     width: 100%;
 }
 
-#ticket-posts article{
+#ticket-posts article {
     border: 2px solid black;
     margin: 1.5em 0;
 }
@@ -416,6 +415,7 @@ CONTENT STYLES
 #ticket-posts .ticket-footer {
     background-color: #cfcfcf;
 }
+
 #ticket-posts .ticket-header,
 #ticket-posts .ticket-footer,
 #ticket-posts .ticket-content {
@@ -462,7 +462,6 @@ RESPONSIVE STYLES
 
 @media screen and (max-width: 768px) {
 
-
     #main-nav > .navigation {
         display: none;
         position: absolute;
@@ -488,8 +487,7 @@ RESPONSIVE STYLES
     }
 }
 
-
-@media screen and (min-width: 768px)  {
+@media screen and (min-width: 768px) {
     .centered-form {
         width: 70%;
     }

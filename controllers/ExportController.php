@@ -24,7 +24,8 @@ class ExportController extends Controller
     /**
      * Returns a JSON array with tickets to the client
      */
-    function actionTickets() {
+    function actionTickets()
+    {
         $this->request->setResponseHeader("Content-Disposition", "attachment; filename=tickets.json");
         $ticketsModel = $this->getModel("tickets");
         echo json_encode($ticketsModel->find(), JSON_PRETTY_PRINT);
@@ -33,7 +34,8 @@ class ExportController extends Controller
     /**
      * Returns a JSON array with posts to the client
      */
-    function actionPosts() {
+    function actionPosts()
+    {
         $this->request->setResponseHeader("Content-Disposition", "attachment; filename=posts.json");
         $postsModel = $this->getModel("posts");
         echo json_encode($postsModel->find(), JSON_PRETTY_PRINT);
@@ -42,7 +44,8 @@ class ExportController extends Controller
     /**
      * Returns a JSON array with users to the client
      */
-    function actionUsers() {
+    function actionUsers()
+    {
         $this->request->setResponseHeader("Content-Disposition", "attachment; filename=users.json");
         $usersModel = $this->getModel("users");
         echo json_encode($usersModel->find(), JSON_PRETTY_PRINT);
@@ -51,7 +54,8 @@ class ExportController extends Controller
     /**
      * Returns a JSON array with attachments to the client
      */
-    function actionAttachments() {
+    function actionAttachments()
+    {
         $this->request->setResponseHeader("Content-Disposition", "attachment; filename=attachments.json");
         $attachmentsModel = $this->getModel("attachments");
         echo json_encode($attachmentsModel->find(), JSON_PRETTY_PRINT);
@@ -60,7 +64,8 @@ class ExportController extends Controller
     /**
      * Returns a JSON array with departments to the client
      */
-    function actionDepartments() {
+    function actionDepartments()
+    {
         $this->request->setResponseHeader("Content-Disposition", "attachment; filename=departments.json");
         $departmentsModel = $this->getModel("departments");
         echo json_encode($departmentsModel->find(), JSON_PRETTY_PRINT);

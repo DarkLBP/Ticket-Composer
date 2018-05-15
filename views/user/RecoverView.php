@@ -12,6 +12,6 @@ use Core\Utils;
         <input type="password" id="password" name="password" required><br>
         <label for="confirm">Confirm New Password</label><br>
         <input type="password" id="confirm" name="confirm" required><br>
-        <input type="submit" value="Recover">
+        <input type="submit" value="Change Password">
     </form>
 </div>

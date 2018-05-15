@@ -1,16 +1,19 @@
 <?php
+
 use Core\Utils;
+
 ?>
 <div class="centered-form">
     <h2>Site Settings</h2>
-    <?= !empty($errors) ? '<p class="error-message">' . implode('<br>', $errors) . '</p>': '' ?>
+    <?= !empty($errors) ? '<p class="error-message">' . implode('<br>', $errors) . '</p>' : '' ?>
     <form action="<?= Utils::getURL('panel', 'site') ?>" method="post">
         <label for="title">Title</label><br>
         <input type="text" name="title" id="title" value="<?= SITE_TITLE ?>"><br>
         <label for="siteemail">Site Email</label><br>
         <input type="email" id="siteemail" name="siteemail" value="<?= SITE_EMAIL ?>"><br>
         <input type="submit" value="Update Settings">
-    </form><br>
+    </form>
+    <br>
     <h3>Export Data</h3>
     <a href="<?= Utils::getURL('export', 'posts') ?>" class="button">Posts</a>
     <a href="<?= Utils::getURL('export', 'tickets') ?>" class="button">Tickets</a>

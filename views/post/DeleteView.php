@@ -1,5 +1,7 @@
 <?php
+
 use Core\Utils;
+
 /**
  * @var array $post
  */

@@ -17,7 +17,8 @@ use Core\Utils;
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="keywords" content="<?= SITE_TITLE ?>, ticket, composer, support">
     <meta name="copyright" content="Ticket Composer is a script made by Leandro Botella https://github.com/DarkLBP">
-    <meta name="description" content="<?= SITE_TITLE ?> ticket management site. Enter and we will manage your concerns.">
+    <meta name="description"
+          content="<?= SITE_TITLE ?> ticket management site. Enter and we will manage your concerns.">
     <title><?= SITE_TITLE ?></title>
     <link rel="stylesheet" href="<?= Utils::getURL() ?>/css/style.css">
     <script src="<?= Utils::getURL() ?>/js/EasyMVC.js"></script>

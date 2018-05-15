@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers;
 
 use Core\Controller;
@@ -176,7 +177,7 @@ class ApiController extends Controller
         $usersModel->join($validationModel, 'id', 'userId', 'left');
         $user = $usersModel->findOne($email, "email", [
             "$usersModel.*",
-            [ "$validationModel.id" => "validationId"]
+            ["$validationModel.id" => "validationId"]
         ]);
         if (!empty($user)) {
             if (password_verify($password, $user["password"])) {

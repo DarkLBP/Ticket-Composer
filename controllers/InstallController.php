@@ -7,7 +7,8 @@ require_once __DIR__ . '/../vendor/SimpleMailer.php';
 use Core\Controller;
 use Core\Utils;
 
-class InstallController extends Controller {
+class InstallController extends Controller
+{
     /**
      * Performs the site installation
      */

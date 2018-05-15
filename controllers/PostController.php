@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers;
 
 require_once __DIR__ . '/../vendor/SimpleMailer.php';
@@ -12,7 +13,8 @@ class PostController extends Controller
      * Deletes a post
      * @param array $params Post id
      */
-    public function actionDelete($params = []) {
+    public function actionDelete($params = [])
+    {
         if (isset($params[0])) {
             $postId = $params[0];
             $postsModel = $this->getModel('posts');
@@ -134,9 +136,9 @@ class PostController extends Controller
                     if (!empty($exists['assignedTo'])) {
                         $sendTo = '';
                         if ($loggedUser['id'] != $exists['assignedTo']) {
-                            $sendTo =  $exists['assignedTo'];
+                            $sendTo = $exists['assignedTo'];
                         } else if ($loggedUser['id'] != $exists['userId']) {
-                            $sendTo =  $exists['userId'];
+                            $sendTo = $exists['userId'];
                         }
                         if (!empty($sendTo)) {
                             $usersModel = $this->getModel('users');

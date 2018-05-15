@@ -2,7 +2,9 @@
 /**
  * @var array $post
  */
+
 use Core\Utils;
+
 ?>
 <div class="centered-form">
     <h2>Edit Post</h2>
