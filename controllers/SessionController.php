@@ -10,6 +10,10 @@ class SessionController extends Controller
 {
     private $userToken = [];
 
+    /**
+     * SessionController constructor.
+     * @param Request $request The incoming request
+     */
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -23,6 +27,9 @@ class SessionController extends Controller
         }
     }
 
+    /**
+     * Destroys a session token
+     */
     private function destroyToken()
     {
         if (empty($this->userToken)) {
@@ -38,6 +45,9 @@ class SessionController extends Controller
         $this->request->setCookieParam('userToken', null);
     }
 
+    /**
+     * Begins session controller checks
+     */
     public function initialize()
     {
         //Destroy token if logout
@@ -54,6 +64,9 @@ class SessionController extends Controller
         $this->makeRedirects();
     }
 
+    /**
+     * Redirects according to established rules
+     */
     private function makeRedirects()
     {
         if (!$this->request->getSessionParam('loggedUser')) {
@@ -77,6 +90,9 @@ class SessionController extends Controller
         }
     }
 
+    /**
+     * Converts a user token to a session
+     */
     private function redeemToken()
     {
         if (empty($this->userToken)) {

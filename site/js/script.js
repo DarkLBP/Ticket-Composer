@@ -272,6 +272,7 @@ window.onload = function () {
         }
     } else if (controller === 'ticket') {
         if (action === 'view' || action === 'create') {
+            //Add and remove attachments
             const attachments = document.querySelector('#attachments');
             const addAttachment = document.querySelector('#addAttachment');
             const removeAttachment = document.querySelector('#removeAttachment');
@@ -328,6 +329,7 @@ window.onload = function () {
                 }
             }
             if (nameField != null) {
+                //Validate name
                 nameField.oninput = function() {
                     const test = invalidName.test(this.value);
                     if (test) {
@@ -340,6 +342,7 @@ window.onload = function () {
                 }
             }
             if (surnameField != null) {
+                //Validate surname
                 surnameField.oninput = function() {
                     const test = invalidName.test(this.value);
                     if (test) {

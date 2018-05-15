@@ -7,6 +7,9 @@ use Core\Utils;
 
 class DepartmentController extends Controller
 {
+    /**
+     * Creates a department
+     */
     public function actionCreate()
     {
         if ($this->request->isPost()) {
@@ -33,6 +36,10 @@ class DepartmentController extends Controller
         $this->renderView('create');
     }
 
+    /**
+     * Removes a department
+     * @param array $params Department id
+     */
     public function actionDelete($params = [])
     {
         if (!empty($params[0])) {
@@ -53,6 +60,10 @@ class DepartmentController extends Controller
         $this->renderView('invalidDepartment');
     }
 
+    /**
+     * Removes a department
+     * @param array $params Department id
+     */
     public function actionEdit($params = [])
     {
         if (!empty($params[0])) {

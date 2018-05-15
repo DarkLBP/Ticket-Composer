@@ -8,6 +8,9 @@ use Core\Controller;
 use Core\Utils;
 
 class InstallController extends Controller {
+    /**
+     * Performs the site installation
+     */
     public function actionIndex()
     {
         if (file_exists(__DIR__ . "/../core/Config.php")) {
@@ -119,6 +122,9 @@ spl_autoload_register(function (\$class) {
         $this->renderView('install');
     }
 
+    /**
+     * Show that the installation has completed once
+     */
     public function actionCompleted()
     {
         if ($this->request->getSessionParam("completed")) {

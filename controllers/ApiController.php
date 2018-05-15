@@ -11,6 +11,10 @@ class ApiController extends Controller
         'email'
     ];
 
+    /**
+     * ApiController constructor.
+     * @param Request $request Incoming request
+     */
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -32,7 +36,12 @@ class ApiController extends Controller
         }
     }
 
-    private function validateSession($token)
+    /**
+     *  Validates a user token
+     * @param string $token The user token
+     * @return bool Returns whether the token is valid or not
+     */
+    private function validateSession(string $token): bool
     {
         $chunks = explode('-', $token);
         if (count($chunks) === 2) {
@@ -53,6 +62,9 @@ class ApiController extends Controller
         return false;
     }
 
+    /**
+     * Replies with a list of tickets
+     */
     public function actionTickets()
     {
         $ticketsModel = $this->getModel('tickets');
@@ -61,6 +73,9 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
+    /**
+     * Replies with a list of departments
+     */
     public function actionDepartments()
     {
         $departmentsModel = $this->getModel('departments');
@@ -69,6 +84,9 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
+    /**
+     * Replies with a list of posts from a ticket
+     */
     public function actionPosts()
     {
         $ticket = $this->request->getPostParam('ticket', true);
@@ -92,7 +110,9 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
-
+    /**
+     * Replies with a list of attachments from a post
+     */
     public function actionAttachments()
     {
         $post = $this->request->getPostParam('post', true);
@@ -116,6 +136,9 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
+    /**
+     * Checks if the given email is valid
+     */
     public function actionEmail()
     {
         $email = $this->request->getPostParam('email', true);
@@ -135,6 +158,9 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
+    /**
+     * Logs in a user and replies with the user token
+     */
     public function actionLogin()
     {
         $email = $this->request->getPostParam('email', true);
@@ -181,6 +207,9 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
+    /**
+     * Replies with a group of calculated statistics
+     */
     public function actionStatistics()
     {
         $ticketsModel = $this->getModel('tickets');
@@ -211,6 +240,9 @@ class ApiController extends Controller
         $this->sendResponse();
     }
 
+    /**
+     * Send the response to the client
+     */
     private function sendResponse()
     {
         $this->request->setResponseHeader('Content-Type', 'application/json');

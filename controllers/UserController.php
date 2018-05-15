@@ -9,6 +9,9 @@ use Core\Utils;
 
 class UserController extends Controller
 {
+    /**
+     * Creates a user
+     */
     public function actionCreate()
     {
         $loggedUser = $this->request->getSessionParam('loggedUser');;
@@ -86,6 +89,10 @@ class UserController extends Controller
         $this->renderView("create");
     }
 
+    /**
+     * Deletes a user
+     * @param array $params User id
+     */
     public function actionDelete($params = [])
     {
         $loggedUser = $this->request->getSessionParam('loggedUser');
@@ -112,6 +119,10 @@ class UserController extends Controller
         $this->renderView('invalid');
     }
 
+    /**
+     * Edits a user
+     * @param array $params User id
+     */
     public function actionEdit($params = [])
     {
         $userModel = $this->getModel('users');
@@ -217,6 +228,10 @@ class UserController extends Controller
         $this->renderView('edit');
     }
 
+    /**
+     * Sends a recovery email
+     * @param array $params User id
+     */
     public function actionForgot($params = [])
     {
         if (isset($params[0])) {
@@ -264,6 +279,9 @@ class UserController extends Controller
         $this->renderView('forgot');
     }
 
+    /**
+     * Logs in a user
+     */
     public function actionLogin()
     {
         if ($this->request->isPost()) {
@@ -323,6 +341,10 @@ class UserController extends Controller
         $this->renderView("login");
     }
 
+    /**
+     * Logs out a user
+     * @param array $params User id
+     */
     public function actionLogout($params = [])
     {
         $loggedUser = $this->request->getSessionParam('loggedUser');
@@ -350,6 +372,10 @@ class UserController extends Controller
         $this->request->redirect(Utils::getURL());
     }
 
+    /**
+     * Changes the user password with a recovery key
+     * @param array $params User id and key
+     */
     public function actionRecover($params = [])
     {
         if (isset($params[0])) {
@@ -407,6 +433,10 @@ class UserController extends Controller
         $this->renderView('recoverInvalid');
     }
 
+    /**
+     * Performs a user registration
+     * @param array $params Completed
+     */
     public function actionRegister($params = [])
     {
         if (isset($params[0])) {
@@ -495,6 +525,10 @@ class UserController extends Controller
         $this->renderView("register");
     }
 
+    /**
+     * Validates a user
+     * @param array $params User id and key
+     */
     public function actionValidate($params = [])
     {
         if (count($params) === 2) {

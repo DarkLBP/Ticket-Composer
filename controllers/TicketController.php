@@ -8,6 +8,10 @@ use Core\Utils;
 
 class TicketController extends Controller
 {
+    /**
+     * Assigns a ticket to somebody
+     * @param array $params Ticket id
+     */
     public function actionAssign($params = [])
     {
         $loggedUser = $this->request->getSessionParam('loggedUser');
@@ -61,6 +65,9 @@ class TicketController extends Controller
         $this->renderView('invalid');
     }
 
+    /**
+     * Creates a tickets
+     */
     public function actionCreate()
     {
         if ($this->request->isPost()) {
@@ -123,6 +130,10 @@ class TicketController extends Controller
         $this->renderView('create');
     }
 
+    /**
+     * Closes a ticket
+     * @param array $params Ticket id
+     */
     public function actionClose($params = []) {
         if (isset($params[0])) {
             $ticketId = $params[0];
@@ -142,6 +153,10 @@ class TicketController extends Controller
         $this->renderView('invalid');
     }
 
+    /**
+     * Opens a closed ticket
+     * @param array $params Ticket id
+     */
     public function actionOpen($params = []) {
         if (isset($params[0])) {
             $ticketId = $params[0];
@@ -161,6 +176,10 @@ class TicketController extends Controller
         $this->renderView('invalid');
     }
 
+    /**
+     * Shows ticket posts
+     * @param array $params Ticket id
+     */
     public function actionView($params = [])
     {
         $error = $this->request->getSessionParam('postError');
@@ -218,7 +237,13 @@ class TicketController extends Controller
         $this->renderView('invalid');
     }
 
-    private function uploadFile($tmp_name, $name)
+    /**
+     * Uploads a file
+     * @param string $tmp_name Uploaded file tmp_name
+     * @param string $name The Uploaded file name
+     * @return string The file relative path
+     */
+    private function uploadFile(string $tmp_name, string $name): string
     {
         $fileHash = hash_file('sha256', $tmp_name);
         $folderName = date('Y-m');

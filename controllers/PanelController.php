@@ -7,6 +7,9 @@ use Core\Utils;
 
 class PanelController extends Controller
 {
+    /**
+     * Show intro message and some statistics
+     */
     public function actionIndex()
     {
         $loggedUser = $this->request->getSessionParam('loggedUser');
@@ -25,6 +28,9 @@ class PanelController extends Controller
         $this->renderView('index');
     }
 
+    /**
+     * Shows departments table
+     */
     public function actionDepartments()
     {
         $searchTerm = $this->request->getGetParam('search', true);
@@ -70,6 +76,9 @@ class PanelController extends Controller
         $this->renderView('departments');
     }
 
+    /**
+     * Shows site options
+     */
     public function actionSite()
     {
         if ($this->request->isPost()) {
@@ -117,6 +126,9 @@ spl_autoload_register(function (\$class) {
         $this->renderView('site');
     }
 
+    /**
+     * Shows tickets table
+     */
     public function actionTickets()
     {
         $searchTerm = $this->request->getGetParam('search', true);
@@ -192,6 +204,9 @@ spl_autoload_register(function (\$class) {
         $this->renderView('tickets');
     }
 
+    /**
+     * Shows users table
+     */
     public function actionUsers()
     {
         $searchTerm = $this->request->getGetParam('search', true);

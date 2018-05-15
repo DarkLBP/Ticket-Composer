@@ -5,6 +5,10 @@ use Core\Controller;
 
 class AttachmentController extends Controller
 {
+    /**
+     * Prepares a file download
+     * @param array $params The id of the download
+     */
     public function actionDownload($params = [])
     {
         if (isset($params[0])) {

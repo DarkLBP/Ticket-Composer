@@ -8,6 +8,10 @@ use Core\Utils;
 
 class PostController extends Controller
 {
+    /**
+     * Deletes a post
+     * @param array $params Post id
+     */
     public function actionDelete($params = []) {
         if (isset($params[0])) {
             $postId = $params[0];
@@ -44,6 +48,10 @@ class PostController extends Controller
         $this->renderView('invalid');
     }
 
+    /**
+     * Edits a post
+     * @param array $params Post id
+     */
     public function actionEdit($params = [])
     {
         if (isset($params[0])) {
@@ -79,6 +87,10 @@ class PostController extends Controller
         $this->renderView('invalid');
     }
 
+    /**
+     * Creates a post
+     * @param array $params Ticket id
+     */
     public function actionCreate($params = [])
     {
         if (isset($params[0])) {
@@ -150,6 +162,12 @@ class PostController extends Controller
         $this->renderView('forbidden');
     }
 
+    /**
+     * Uploads a file
+     * @param string $tmp_name Uploaded file tmp_name
+     * @param string $name The Uploaded file name
+     * @return string The file relative path
+     */
     private function uploadFile($tmp_name, $name)
     {
         $fileHash = hash_file('sha256', $tmp_name);

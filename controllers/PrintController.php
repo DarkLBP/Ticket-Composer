@@ -7,6 +7,9 @@ use Core\Controller;
 
 class PrintController extends Controller
 {
+    /**
+     * Generates an overview PDF with site stats
+     */
     public function actionOverview()
     {
         $pdf = new \OverviewPDF();
