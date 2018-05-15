@@ -24,6 +24,12 @@ class PrintController extends Controller
         $recovers = $recoversModel->count();
         $sessions = $sessionsModels->count();
         $tickets = $ticketsModel->count();
+        $openTickets = $ticketsModel->count([
+            ['open', '=', 1]
+        ]);
+        $closedTickets = $ticketsModel->count([
+            ['open', '=', 0]
+        ]);
         $users = $usersModel->count();
         $validations = $validationsModel->count();
         $pdf->PrintLine('Number of uploaded attachments: ' . $attachments);
@@ -32,6 +38,8 @@ class PrintController extends Controller
         $pdf->PrintLine('Number of pending account recoveries: ' . $recovers);
         $pdf->PrintLine('Number of started sessions: ' . $sessions);
         $pdf->PrintLine('Number of created tickets: ' . $tickets);
+        $pdf->PrintLine('From those are open: ' . $openTickets);
+        $pdf->PrintLine('From those are closed: ' . $closedTickets);
         $pdf->PrintLine('Number of registered users: ' . $users);
         $pdf->PrintLine('Number of pending validations: ' . $validations);
         $pdf->Render();
