@@ -16,14 +16,7 @@ class TicketController extends Controller
             $ticketId = $params[0];
             $ticket = $ticketsModel->findOne($ticketId, 'id');
             if (!empty($ticket)) {
-                if (in_array($ticket['department'], $loggedUser['departments'])) {
-                    $ticketsModel->update([
-                        'assignedTo' => $loggedUser['id']
-                    ], [
-                        ['id', '=', $ticketId]
-                    ]);
-                    $this->request->redirect(Utils::getURL('ticket', 'view', $params));
-                } else if ($loggedUser['op'] == 1) {
+                 if ($loggedUser['op'] == 1) {
                     $usersModel = $this->getModel('users');
                     if ($this->request->isPost()) {
                         $userId = $this->request->getPostParam('user', true);
@@ -54,7 +47,14 @@ class TicketController extends Controller
                     $this->request->setViewParam('users', $users, true);
                     $this->request->setViewParam('ticketId', $ticketId);
                     $this->renderView('assign');
-                } else {
+                } else if (in_array($ticket['department'], $loggedUser['departments'])) {
+                     $ticketsModel->update([
+                         'assignedTo' => $loggedUser['id']
+                     ], [
+                         ['id', '=', $ticketId]
+                     ]);
+                     $this->request->redirect(Utils::getURL('ticket', 'view', $params));
+                 } else {
                     $this->renderView('forbidden');
                 }
             }
