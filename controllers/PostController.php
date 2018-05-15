@@ -118,11 +118,17 @@ class PostController extends Controller
                             ["id", '=', $ticketId]
                         ]);
                     }
-                    //Send email to the assigned person
+                    //Send email to the assigned person or to the one that created the ticket
                     if (!empty($exists['assignedTo'])) {
+                        $sendTo = '';
                         if ($loggedUser['id'] != $exists['assignedTo']) {
+                            $sendTo =  $exists['assignedTo'];
+                        } else if ($loggedUser['id'] != $exists['userId']) {
+                            $sendTo =  $exists['userId'];
+                        }
+                        if (!empty($sendTo)) {
                             $usersModel = $this->getModel('users');
-                            $user = $usersModel->findOne($exists['assignedTo']);
+                            $user = $usersModel->findOne($sendTo);
                             if (!empty($user)) {
                                 $mailer = new \SimpleMailer();
                                 $mailer->addTo($user['email'], $user['name'] . ' ' . $user['surname']);
@@ -130,7 +136,7 @@ class PostController extends Controller
                                 $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
                                 $mailer->setSubject('[Ticket #' . $ticketId . '] ' . $exists['title']);
                                 $mailer->setMessage('New answer by ' . $loggedUser["name"] . " " . $loggedUser["surname"] .
-                                ' on ticket ' . Utils::getURL('ticket', 'view', [$ticketId]));
+                                    ' on ticket ' . Utils::getURL('ticket', 'view', [$ticketId]));
                                 $mailer->send();
                             }
                         }
