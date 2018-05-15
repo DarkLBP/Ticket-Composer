@@ -20,28 +20,27 @@ class TicketController extends Controller
                     $usersModel = $this->getModel('users');
                     if ($this->request->isPost()) {
                         $userId = $this->request->getPostParam('user', true);
-                        if (empty($userId)) {
-                            $this->request->setViewParam('error', 'No user has been selected');
-                        } else {
+                        if (!empty($userId)) {
                             $exist = $usersModel->findOne($userId);
-                            if (!empty($exist)) {
-                                $ticketsModel->update([
-                                    'assignedTo' => $userId
-                                ], [
-                                    ['id', '=', $ticketId]
-                                ]);
-                                $mailer = new \SimpleMailer();
-                                $mailer->addTo($exist['email'], $exist['name'] . ' ' . $exist['surname']);
-                                $mailer->addReplyTo(SITE_EMAIL);
-                                $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
-                                $mailer->setSubject('[Ticket #' . $ticketId . '] ' . $ticket["title"]);
-                                $mailer->setMessage('You were assigned to ticket ' . Utils::getURL('ticket', 'view', [$ticketId]));
-                                $mailer->send();
-                                $this->request->redirect(Utils::getURL('ticket', 'view', $params));
-                            } else {
-                                $this->renderView('invalid');
+                            if (empty($exist)) {
+                                $this->renderView('forbidden');
                             }
+                            $mailer = new \SimpleMailer();
+                            $mailer->addTo($exist['email'], $exist['name'] . ' ' . $exist['surname']);
+                            $mailer->addReplyTo(SITE_EMAIL);
+                            $mailer->setFrom(SITE_EMAIL, SITE_TITLE);
+                            $mailer->setSubject('[Ticket #' . $ticketId . '] ' . $ticket["title"]);
+                            $mailer->setMessage('You were assigned to ticket ' . Utils::getURL('ticket', 'view', [$ticketId]));
+                            $mailer->send();
+                        } else {
+                            $userId = null;
                         }
+                        $ticketsModel->update([
+                            'assignedTo' => $userId
+                        ], [
+                            ['id', '=', $ticketId]
+                        ]);
+                        $this->request->redirect(Utils::getURL('ticket', 'view', $params));
                     }
                     $users = $usersModel->find();
                     $this->request->setViewParam('users', $users, true);
