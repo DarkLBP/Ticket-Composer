@@ -69,22 +69,24 @@ class SessionController extends Controller
      */
     private function makeRedirects()
     {
+        $controller = $this->request->getController();
+        $action = $this->request->getAction();
+        $excludedFromLogin = ["main", "user", "install", "api"];
         if (!$this->request->getSessionParam('loggedUser')) {
             //Redirect to login if user tries to enter to pages where login is required
-            if ($this->request->getController() !== "main" && $this->request->getController() !== "user" &&
-                $this->request->getController() !== "install" && $this->request->getController() !== "api") {
-                $this->request->setSessionParam('targetURL', Utils::getURL($this->request->getController(), $this->request->getAction(), $this->request->getActionParameters()));
+            if (!in_array($controller, $excludedFromLogin)) {
+                $this->request->setSessionParam('targetURL', Utils::getURL($controller, $action, $this->request->getActionParameters()));
                 $this->request->redirect(Utils::getURL("user", "login"));
-            } else if (!empty($this->request->getSessionParam('targetURL')) && $this->request->getController() !== "user" && $this->request->getAction() !== "login") {
+            } else if (!empty($this->request->getSessionParam('targetURL')) && $controller !== "user" && $action !== "login") {
                 $this->request->setSessionParam('targetURL');
             }
         } else {
-            if ($this->request->getController() === "user") {
+            if ($controller === "user") {
                 //Redirect if the user is logged in and tries to access login or register pages
-                if ($this->request->getAction() === "login" || $this->request->getAction() === "register") {
+                if ($action === "login" || $action === "register") {
                     $this->request->redirect(Utils::getURL('panel'));
                 }
-            } else if ($this->request->getController() === 'main') {
+            } else if ($controller === 'main') {
                 $this->request->redirect(Utils::getURL('panel'));
             }
         }
