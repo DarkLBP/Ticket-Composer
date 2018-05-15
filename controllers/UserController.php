@@ -94,7 +94,7 @@ class UserController extends Controller
             $userModel = $this->getModel('users');
             $user = $userModel->findOne($userId);
             if (!empty($user)) {
-                $this->request->setViewParam('user', $user);
+                $this->request->setViewParam('user', $user, true);
                 if ($this->request->isPost()) {
                     $userModel->delete([
                         ['id', '=', $userId]
@@ -208,8 +208,8 @@ class UserController extends Controller
             }
             $this->request->setViewParam('errors', $errors);
         }
-        $this->request->setViewParam('user', $user);
-        $this->request->setViewParam('departments', $departmentList);
+        $this->request->setViewParam('user', $user, true);
+        $this->request->setViewParam('departments', $departmentList, true);
         $this->renderView('edit');
     }
 

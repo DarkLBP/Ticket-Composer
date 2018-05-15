@@ -61,7 +61,7 @@ class PanelController extends Controller
             $departments = [];
             $departmentCount = 0;
         }
-        $this->request->setViewParam('departments', $departments);
+        $this->request->setViewParam('departments', $departments, true);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);
@@ -183,7 +183,7 @@ spl_autoload_register(function (\$class) {
             $tickets = [];
             $ticketCount = 0;
         }
-        $this->request->setViewParam('tickets', $tickets);
+        $this->request->setViewParam('tickets', $tickets, true);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);
@@ -234,7 +234,7 @@ spl_autoload_register(function (\$class) {
             $users = [];
             $userCount = 0;
         }
-        $this->request->setViewParam('users', $users);
+        $this->request->setViewParam('users', $users, true);
         $this->request->setViewParam('sortOrder', $sortOrder, true);
         $this->request->setViewParam('sortBy', $sortBy, true);
         $this->request->setViewParam('searchTerm', $searchTerm, true);

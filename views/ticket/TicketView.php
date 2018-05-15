@@ -43,7 +43,7 @@ use Core\Utils;
         echo "<h4>$post[createdName] $post[createdSurname]</h4>";
         echo "<h5>On <time>$post[created]</time></h5>";
         echo "</header>";
-        echo "<p class='ticket-content'>" . str_replace(["\n", "\r\n"], '<br>', htmlspecialchars($post['content'])) . "</p>";
+        echo "<p class='ticket-content'>" . str_replace(["\n", "\r\n"], '<br>', $post['content']) . "</p>";
         echo "<footer class='ticket-footer'>";
         if (!empty($post['attachments'])) {
             echo '<h5>Attachments:</h5>';

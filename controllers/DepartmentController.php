@@ -46,7 +46,7 @@ class DepartmentController extends Controller
                     ]);
                     $this->request->redirect(Utils::getURL('panel', 'departments'));
                 }
-                $this->request->setViewParam('department', $exists);
+                $this->request->setViewParam('department', $exists, true);
                 $this->renderView('delete');
             }
         }
@@ -83,7 +83,7 @@ class DepartmentController extends Controller
                     }
                     $this->request->setViewParam('error', $error);
                 }
-                $this->request->setViewParam('department', $exists);
+                $this->request->setViewParam('department', $exists, true);
                 $this->renderView('edit');
             }
         }

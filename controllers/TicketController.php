@@ -211,8 +211,8 @@ class TicketController extends Controller
                         ['postId', '=', $post['id']]
                     ]);
                 }
-                $this->request->setViewParam('ticket', $ticket);
-                $this->request->setViewParam('ticketPosts', $ticketPosts);
+                $this->request->setViewParam('ticket', $ticket, true);
+                $this->request->setViewParam('ticketPosts', $ticketPosts, true);
                 $this->renderView('ticket');
             }
         }
