@@ -296,17 +296,22 @@ window.onload = function () {
     } else if (controller === 'user') {
         if (action === 'register') {
             const emailField = document.querySelector('#email');
+            const nameField = document.querySelector('#name');
+            const surnameField = document.querySelector('#surname');
             const emailRegexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            const invalidName = /[^A-Za-z ]/g;
+            const sessionToken = getCookie('userToken');
+            const requestURL = EasyMVC.getURL('api', 'email');
+            const headers = {
+                "Session-Token": sessionToken,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            };
             if (emailField != null) {
                 emailField.oninput = function() {
                     //Validate email
-                    if (emailRegexp.test(this.value.toLowerCase())) {
-                        const sessionToken = getCookie('userToken');
-                        const requestURL = EasyMVC.getURL('api', 'email');
-                        const headers = {
-                            "Session-Token": sessionToken,
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        };
+                    const test = emailRegexp.test(this.value.toLowerCase());
+                    if (test) {
+                        emailField.setCustomValidity('');
                         performAJAXRequest(requestURL, 'POST', function () {
                             if (this.readyState === 4 && this.status === 200) {
                                 const response = JSON.parse(this.responseText);
@@ -317,6 +322,30 @@ window.onload = function () {
                                 }
                             }
                         }, headers, 'email=' + this.value);
+                    } else {
+                        emailField.setCustomValidity('Invalid email');
+                    }
+                }
+            }
+            if (nameField != null) {
+                nameField.oninput = function() {
+                    const test = invalidName.test(this.value);
+                    if (test) {
+                        nameField.setCustomValidity('Invalid name');
+                        console.log("PASA");
+                    } else {
+                        nameField.setCustomValidity('');
+                        console.log("NO PASA");
+                    }
+                }
+            }
+            if (surnameField != null) {
+                surnameField.oninput = function() {
+                    const test = invalidName.test(this.value);
+                    if (test) {
+                        surnameField.setCustomValidity('Surname name');
+                    } else {
+                        surnameField.setCustomValidity('');
                     }
                 }
             }

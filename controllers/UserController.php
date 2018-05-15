@@ -26,9 +26,13 @@ class UserController extends Controller
             $departments = $this->request->getPostParam('departments');
             if (empty($name)) {
                 $errors[] = 'Name is empty';
+            } else if (ctype_alpha(str_replace(' ', '', $name)) === false) {
+                $errors[] = 'Name must contain letters and spaces only';
             }
             if (empty($surname)) {
                 $errors[] = 'Surname is empty';
+            } else if (ctype_alpha(str_replace(' ', '', $name)) === false) {
+                $errors[] = 'Surname must contain letters and spaces only';
             }
             if (empty($email)) {
                 $errors[] = 'Email is empty';
@@ -423,9 +427,13 @@ class UserController extends Controller
 
             if (empty($name)) {
                 $errors[] = 'Name is empty';
+            } else if (ctype_alpha(str_replace(' ', '', $name)) === false) {
+                $errors[] = 'Name must contain letters and spaces only';
             }
             if (empty($surname)) {
                 $errors[] = 'Surname is empty';
+            } else if (ctype_alpha(str_replace(' ', '', $name)) === false) {
+                $errors[] = 'Surname must contain letters and spaces only';
             }
             if (empty($email)) {
                 $errors[] = 'Email is empty';
