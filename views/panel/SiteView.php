@@ -15,11 +15,13 @@ use Core\Utils;
     </form>
     <br>
     <h3>Export Data</h3>
-    <a href="<?= Utils::getURL('export', 'posts') ?>" class="button">Posts</a>
-    <a href="<?= Utils::getURL('export', 'tickets') ?>" class="button">Tickets</a>
-    <a href="<?= Utils::getURL('export', 'users') ?>" class="button">Users</a>
-    <a href="<?= Utils::getURL('export', 'attachments') ?>" class="button">Attachments</a>
-    <a href="<?= Utils::getURL('export', 'departments') ?>" class="button">Departments</a>
+    <div class="row">
+        <a href="<?= Utils::getURL('export', 'posts') ?>" class="button">Posts</a>
+        <a href="<?= Utils::getURL('export', 'tickets') ?>" class="button">Tickets</a>
+        <a href="<?= Utils::getURL('export', 'users') ?>" class="button">Users</a>
+        <a href="<?= Utils::getURL('export', 'attachments') ?>" class="button">Attachments</a>
+        <a href="<?= Utils::getURL('export', 'departments') ?>" class="button">Departments</a>
+    </div>
     <h3>Other Operations</h3>
     <a href="<?= Utils::getURL('print', 'overview') ?>" class="button" target="_blank">Generate Site Overview PDF</a>
 </div>

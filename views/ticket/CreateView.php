@@ -14,7 +14,7 @@ use Core\Utils;
         <label for="title">Title</label><br>
         <input type="text" name="title" id="title" required><br>
         <label for="department">Department</label><br>
-        <select id="department" name="department">
+        <select id="department" name="department" required>
             <option value="">Select a department</option>
             <?php
             foreach ($departments as $department) {

@@ -292,6 +292,10 @@ input[type=button].danger:active {
     flex-wrap: wrap;
 }
 
+.row > * {
+    margin: 0.1em;
+}
+
 .row > *:not(:last-child) {
     margin-right: 1%;
 }
