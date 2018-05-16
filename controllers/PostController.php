@@ -18,7 +18,7 @@ class PostController extends Controller
         if (isset($params[0])) {
             $postId = $params[0];
             $postsModel = $this->getModel('posts');
-            $post = $postsModel->findOne($postId, 'id');
+            $post = $postsModel->findOne($postId);
             if (!empty($post)) {
                 if ($this->request->getSessionParam('loggedUser')['op'] != 1) {
                     $this->renderView('forbidden');
@@ -41,6 +41,16 @@ class PostController extends Controller
                     $postsModel->delete([
                         ['id', '=', $postId]
                     ]);
+                    $ticketPosts = $postsModel->count([
+                        ['ticketId', '=', $post['ticketId']]
+                    ]);
+                    if ($ticketPosts === 0) {
+                        $ticketsModel = $this->getModel('tickets');
+                        $ticketsModel->delete([
+                            ['id', '=', $post['ticketId']]
+                        ]);
+                        $this->request->redirect(Utils::getURL('panel', 'tickets'));
+                    }
                     $this->request->redirect(Utils::getURL('ticket', 'view', [$post['ticketId']]));
                 } else {
                     $this->renderView('error');
