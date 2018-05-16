@@ -218,7 +218,11 @@ class UserController extends Controller
                             ]);
                         }
                     }
-                    $this->request->redirect(Utils::getURL('user', 'edit', $params));
+                    if ($loggedUser['id'] == $user['id']) {
+                        $this->request->redirect(Utils::getURL('user', 'edit', $params));
+                    } else {
+                        $this->request->redirect(Utils::getURL('panel', 'users', $params));
+                    }
                 }
             }
             $this->request->setViewParam('errors', $errors);
