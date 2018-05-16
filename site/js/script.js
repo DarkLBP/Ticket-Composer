@@ -334,10 +334,8 @@ window.onload = function () {
                     const test = invalidName.test(this.value);
                     if (test) {
                         nameField.setCustomValidity('Invalid name');
-                        console.log("PASA");
                     } else {
                         nameField.setCustomValidity('');
-                        console.log("NO PASA");
                     }
                 }
             }
