@@ -484,7 +484,7 @@ class UserController extends Controller
             if ($password !== $confirm) {
                 $errors[] = 'Passwords do not match';
             }
-            if (!empty($accept)) {
+            if (empty($accept)) {
                 $errors[] = 'You need to accept the cookie policy';
             }
             if (empty($errors)) {
