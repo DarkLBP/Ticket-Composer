@@ -356,7 +356,15 @@ window.onload = function () {
     //Convert dates to current timezone
     const currentDate = new Date();
     const currentTimezoneOffset = currentDate.getTimezoneOffset();
-    const serverClientDiff = Math.abs(serverTimezoneOffset) + Math.abs(currentTimezoneOffset);
+    let serverClientDiff = 0;
+    if (serverTimezoneOffset < 0) {
+        serverClientDiff += Math.abs(serverTimezoneOffset) - currentTimezoneOffset;
+        serverClientDiff *= -1;
+    } else if (serverTimezoneOffset === 0) {
+        serverClientDiff = currentTimezoneOffset;
+    } else {
+        serverClientDiff += serverTimezoneOffset + currentTimezoneOffset;
+    }
     const timeElements = document.querySelectorAll('time');
     for (let i = 0; i < timeElements.length; i++) {
         let element = timeElements[i];
